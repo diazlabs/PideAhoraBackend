@@ -16,7 +16,9 @@
 
   <ItemGroup>
     <Folder Include="Common\Security\" />
-    <Folder Include="Tenants\Commands\" />
+    <Folder Include="Tenants\Commands\DeleteTenant\" />
+    <Folder Include="Tenants\Commands\SetActiveTenant\" />
+    <Folder Include="Tenants\Commands\UpdateTenant\" />
   </ItemGroup>
 
 </Project>

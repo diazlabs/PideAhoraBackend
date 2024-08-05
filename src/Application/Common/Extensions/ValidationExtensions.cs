@@ -41,6 +41,13 @@ namespace Application.Common.Extensions
                 .WithMessage("{PropertyValue} no es un país válido");
         }
 
+        public static IRuleBuilderOptions<T, string> ValidateTenantCategory<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder
+                .Must(category => Category.Categories.Any(c => c == Category))
+                .WithMessage("{PropertyValue} no es una categoría válido");
+        }
+
         public static IRuleBuilderOptions<T, string> ValidateRequiredProperty<T>
             (this IRuleBuilder<T, string> ruleBuilder, string property, int min = 2, int max = 100)
         {
