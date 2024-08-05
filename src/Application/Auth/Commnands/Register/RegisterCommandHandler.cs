@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Extensions;
+using Application.Common.Interfaces;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -45,8 +46,7 @@ namespace Application.Auth.Commnands.Register
                 };
             }
 
-            IEnumerable<string> errors = result.Errors.Select(x => x.Description);
-            return Result.Error(new ErrorList(errors));
+            return result.ToErrorResult();
         }
     }
 }

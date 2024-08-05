@@ -12,6 +12,12 @@ namespace Infrastructure.Repositories
         {
             _userManager = userManager;
         }
+
+        public async Task<User?> FindById(Guid id)
+        {
+            return await _userManager.FindByIdAsync(id);
+        }
+
         public async Task<User?> FindByEmail(string email)
         {
             return await _userManager.FindByEmailAsync(email);

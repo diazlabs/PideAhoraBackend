@@ -52,5 +52,14 @@ namespace Application.Common.Extensions
                 .Length(min, max)
                 .WithMessage($"Debes ingresar {property} de {min}-{max} caracteres");
         }
+
+        public static IRuleBuilderOptions<T, Guid> RequireGuid<T>(this IRuleBuilder<T, Guid> ruleBuilder)
+        {
+            return ruleBuilder
+                .NotEmpty()
+                .WithMessage("Este campo es requerido")
+                .NotNull()
+                .WithMessage("Este campo es requerido");
+        }
     }
 }

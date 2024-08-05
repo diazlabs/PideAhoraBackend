@@ -4,6 +4,7 @@ namespace Application.Common.Interfaces
 {
     public interface IUserRepository
     {
+        Task<User?> FindById(Guid id);
         Task<User?> FindByEmail(string email);
         Task<User?> FindByUserName(string userName);
         Task<User?> FindByEmailOrUserName(string emailOrUserName);
