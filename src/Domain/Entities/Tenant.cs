@@ -11,6 +11,7 @@ namespace Domain.Entities
         public string Description { get; set; } = default!;
         public string Logo { get; set; } = default!;
         public bool Enabled { get; set; }
+        public bool Deleted { get; set; }
         public string Category { get; set; } = default!;
         public Guid ActiveTemplateId { get; set; }
         public DateTime LastPayment { get; set; }

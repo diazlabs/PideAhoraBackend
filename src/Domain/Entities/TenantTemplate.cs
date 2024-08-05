@@ -9,6 +9,7 @@ namespace Domain.Entities
         public string Header { get; set; } = default!;
         public string Description { get; set; } = default!;
         public string Logo { get; set; } = default!;
+        public bool Deleted { get; set; }
         public Guid Creator { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid? Modifier { get; set; }
