@@ -37,7 +37,7 @@ namespace Infrastructure.Repositories
             tenant.Deleted = true;
 
             int rows = await _context.SaveChangesAsync();
-            if ( rows > 0 )
+            if (rows > 0)
             {
                 return Result.Success();
             }
@@ -70,7 +70,7 @@ namespace Infrastructure.Repositories
 
             tenant.ActiveTemplateId = tenantTemplateId;
             int rows = await _context.SaveChangesAsync();
-            if ( rows > 0 )
+            if (rows > 0)
             {
                 return Result.Success();
             }
@@ -90,7 +90,7 @@ namespace Infrastructure.Repositories
             _context.Tenants.Update(tenantToUpdate);
 
             int rows = await _context.SaveChangesAsync();
-            if ( rows > 0 )
+            if (rows > 0)
             {
                 return Result.Success();
             }
