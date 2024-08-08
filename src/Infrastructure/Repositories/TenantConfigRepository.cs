@@ -13,6 +13,12 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
+
+        public async Task<bool> ConfigExist(string configName)
+        {
+            return await _context.TenantConfigs.AnyAsync(x => x.ConfigName == configName);
+        }
+
         public async Task<Result<TenantConfig>> Create(TenantConfig tenantConfig)
         {
             _context.TenantConfigs.Add(tenantConfig);
@@ -60,7 +66,7 @@ namespace Infrastructure.Repositories
             return configs;
         }
 
-        public async Task<Result> ToggleConfig(Guid tenantConfigId)
+        public async Task<Result> ToggleConfig(Guid tenantConfigId, bool enabled)
         {
             TenantConfig? config = await FindTenantConfigById(tenantConfigId);
             if (config == null)
@@ -68,7 +74,7 @@ namespace Infrastructure.Repositories
                 return Result.NotFound();
             }
 
-            config.Enabled = config.Enabled!;
+            config.Enabled = enabled;
 
             int rows = await _context.SaveChangesAsync();
             if (rows > 0)

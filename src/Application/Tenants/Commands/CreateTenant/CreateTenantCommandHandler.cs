@@ -16,7 +16,13 @@ namespace Application.Tenants.Commands.CreateTenant
         {
             Tenant newTenant = new()
             {
-
+                Path = request.Path,
+                PageTitle = request.PageTitle,
+                UserId = request.UserId,
+                Name = request.Name,
+                Logo = "",//request.Logo,
+                TenantId = Guid.NewGuid(),
+                Category = request.Category,
             };
 
             var result = await _tenantRepository.Create(newTenant);

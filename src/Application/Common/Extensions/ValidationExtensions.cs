@@ -44,7 +44,7 @@ namespace Application.Common.Extensions
         public static IRuleBuilderOptions<T, string> ValidateTenantCategory<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             return ruleBuilder
-                .Must(category => Category.Categories.Any(c => c == Category))
+                .Must(category => TenantCategory.Categories.Any(c => c == category))
                 .WithMessage("{PropertyValue} no es una categoría válido");
         }
 
