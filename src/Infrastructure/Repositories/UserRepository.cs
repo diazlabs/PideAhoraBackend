@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
 
         public async Task<User?> FindById(Guid id)
         {
-            return await _userManager.FindByIdAsync(id);
+            return await _userManager.FindByIdAsync(id.ToString());
         }
 
         public async Task<User?> FindByEmail(string email)

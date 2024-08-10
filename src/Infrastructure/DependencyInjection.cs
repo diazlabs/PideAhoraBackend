@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
+using Infrastructure.Common.Services;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +16,7 @@ namespace Infrastructure
         {
             services.AddDbContext<ApplicationContext>(options =>
                 options
-                .UseNpgsql(configuration.GetConnectionString("AppContext"))
+                .UseNpgsql(configuration.GetConnectionString("Database"))
                 .UseSnakeCaseNamingConvention());
 
             services.AddIdentity<User, Role>()
@@ -23,6 +24,10 @@ namespace Infrastructure
                 .AddSignInManager<SignInManager<User>>();
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITenantRepository, TenantRepository>();
+            services.AddScoped<ITenantConfigRepository, TenantConfigRepository>();
+            services.AddScoped<ITenantTemplateRepository, TenantTemplateRepository>();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

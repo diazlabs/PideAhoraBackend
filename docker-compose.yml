@@ -1,0 +1,22 @@
+version: '3.4'
+
+name: pidelo-compose
+services:
+  pidelo.api:
+    image: ${DOCKER_REGISTRY-}presentation
+    container_name: pidelo.api
+    build:
+      context: .
+      dockerfile: src/Presentation/Dockerfile
+
+  pidelo.database:
+    image: postgres:latest
+    container_name: pidelo.database
+    environment:
+      - POSTGRES_DB=pidelo
+      - POSTGRES_USER=pidelo
+      - POSTGRES_PASSWORD=pidelo
+    volumes:
+      - ./.containers/pidelo_db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432 

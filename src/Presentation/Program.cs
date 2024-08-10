@@ -1,6 +1,7 @@
 using Application;
 using Application.Auth.Commnands.Login;
 using Infrastructure;
+using Infrastructure.Common.Extensions;
 using MediatR;
 using System.Text.Json;
 
@@ -28,6 +29,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection()
