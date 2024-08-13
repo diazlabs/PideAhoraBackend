@@ -1,12 +1,11 @@
 ﻿using Application.Auth.Commnands.Login;
-using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
-    public class AuthController(ISender _mediator) : ApiController
+    public class AuthController(ISender _mediator, ILogger<AuthController> _logger) : ApiController
     {
         [HttpPost("Login")]
         public async Task<ActionResult> Login(LoginCommand command)
@@ -14,6 +13,13 @@ namespace Presentation.Controllers
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);
+        }
+
+        [HttpGet("test")]
+        public async Task<ActionResult> test()
+        {
+            _logger.LogInformation("testing");
+            return Ok(new { text = "dasdasdasd"});
         }
     }
 }

@@ -1,8 +1,7 @@
 using Application;
-using Application.Auth.Commnands.Login;
 using Infrastructure;
 using Infrastructure.Common.Extensions;
-using MediatR;
+using Serilog;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +21,8 @@ builder.Services.AddControllers();
 builder.Services.AddApplication()
     .AddInfrastructure(builder.Configuration);
 
+builder.Host.UseSerilog(Log.Logger);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,17 +33,10 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-app.UseHttpsRedirection()
-    .UseInfrastructure();
+app.UseHttpsRedirection();
+app.UseInfrastructure();
 
-app.MapPost("/weatherforecast", async (IMediator mediator, LoginCommand command) =>
-{
-    var response = await mediator.Send(command);
-    return response;
-})
-.RequireAuthorization("")
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+app.MapHealthCheckz();
 
 app.MapControllers();
 

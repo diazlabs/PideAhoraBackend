@@ -1,6 +1,5 @@
 version: '3.4'
 
-name: pidelo-compose
 services:
   pidelo.api:
     image: ${DOCKER_REGISTRY-}presentation
@@ -8,6 +7,11 @@ services:
     build:
       context: .
       dockerfile: src/Presentation/Dockerfile
+    depends_on:
+    - pidelo.elasticsearch
+    - pidelo.database
+    networks:
+    - elastic
 
   pidelo.database:
     image: postgres:latest
@@ -19,4 +23,39 @@ services:
     volumes:
       - ./.containers/pidelo_db:/var/lib/postgresql/data
     ports:
-      - 5432:5432 
+      - 5432:5432
+    networks:
+    - elastic
+
+  pidelo.elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    ports:
+     - 9200:9200
+     - 9300:9300
+    volumes:
+     - ./.containers/elasticsearch_data:/usr/share/elasticsearch/data
+    environment:
+     - cluster.name=es
+     - xpack.security.enabled=false
+     - xpack.watcher.enabled=false
+     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+     - discovery.type=single-node
+    networks:
+     - elastic
+   
+  pidelo.kibana:
+     container_name: kibana
+     image: docker.elastic.co/kibana/kibana:8.15.0
+     ports:
+      - 5601:5601
+     depends_on:
+      - pidelo.elasticsearch
+     environment:
+      - ELASTICSEARCH_URL=http://localhost:9200
+     networks:
+      - elastic
+
+networks:
+  elastic:
+    driver: bridge
