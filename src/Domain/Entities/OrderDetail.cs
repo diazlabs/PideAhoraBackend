@@ -6,7 +6,7 @@ namespace Domain.Entities
         public int OrderDetailId { get; set; }
         public Guid OrderId { get; set; }
         public int ProductId { get; set; }
-        public int ProductDiscountId { get; set; }
+        public int? ProductDiscountId { get; set; }
         public int Quantity { get; set; }
         public double ProductPrice { get; set; }
         public Order Order { get; set; } = default!;

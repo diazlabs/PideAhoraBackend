@@ -7,6 +7,7 @@ namespace Domain.Entities
         public int ProductDiscountId { get; set; }
         public int ProductId { get; set; }
         public double Discount { get; set; }
+        public string DiscountCode { get; set; } = default!;
         public DateTime Since { get; set; }
         public DateTime Until { get; set;}
         public bool Enabled { get; set; }

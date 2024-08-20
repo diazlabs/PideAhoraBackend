@@ -16,9 +16,8 @@ namespace Domain.Entities
         public string? DeliveryAddress { get; set; }
         public DateTime? DeliveryDate { get; set; }
         public string? DeliveryNotes { get; set; }
-        public DateTime PlacedAt { get; set; } = DateTime.Now;
         public string Status { get; set; } = OrderStatus.Created;
-        public decimal Total { get; set; }
+        public double Total { get; set; }
         public Guid Creator { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid? Modifier { get; set; }
