@@ -16,6 +16,9 @@ namespace Infrastructure.Persistence
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductChoice> ProductChoices { get; set; }
         public DbSet<ChoiceOption> ChoiceOptions { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderDetailOption> OrderDetailOptions { get; set; }
         public DbSet<ProductDiscount> ProductDiscounts { get; set; }
         public ApplicationContext(DbContextOptions options) : base(options)
         {

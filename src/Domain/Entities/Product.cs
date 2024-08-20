@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class Product : IAudit
+    public class Product : IAudit, ISoftDelete
     {
         public int ProductId { get; set; }
         public Guid TenandId { get; set; }
@@ -12,6 +12,8 @@ namespace Domain.Entities
         public double ProductPrice { get; set; }
         public bool Visible { get; set; }
         public bool Deleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public Guid? DeletedBy { get; set; }
         public Guid Creator { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid? Modifier { get; set; }

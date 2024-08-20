@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class Tenant : IAudit
+    public class Tenant : IAudit, ISoftDelete
     {
         public Guid TenantId { get; set; }
         public Guid UserId { get; set; }
@@ -13,6 +13,8 @@ namespace Domain.Entities
         public string Logo { get; set; } = default!;
         public bool Enabled { get; set; }
         public bool Deleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public Guid? DeletedBy { get; set; }
         public string Category { get; set; } = default!;
         public Guid ActiveTemplateId { get; set; }
         public DateTime LastPayment { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class TemplateSection : IAudit
+    public class TemplateSection : IAudit, ISoftDelete
     {
         public int TemplateSectionId { get; set; }
         public Guid TemplateId { get; set; }
@@ -10,6 +10,8 @@ namespace Domain.Entities
         public int Order {  get; set; }
         public bool Visible { get; set; }
         public bool Deleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public Guid? DeletedBy { get; set; }
         public Guid Creator { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid? Modifier { get; set; }

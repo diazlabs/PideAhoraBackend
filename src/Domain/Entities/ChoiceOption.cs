@@ -14,5 +14,6 @@ namespace Domain.Entities
         public DateTime? UpdatedAt { get; set; }
         public Product Product { get; set; } = default!;    
         public ProductChoice ProductChoice { get; set; } = default!;
+        public List<OrderDetailOption>? OrderDetailOptions { get; set; }
     }
 }
