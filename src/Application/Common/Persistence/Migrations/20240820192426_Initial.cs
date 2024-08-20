@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Infrastructure.Persistence.Migrations
+namespace Application.Common.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -31,9 +31,12 @@ namespace Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    last_name = table.Column<string>(type: "text", nullable: false),
+                    country = table.Column<string>(type: "text", nullable: false),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -168,16 +171,20 @@ namespace Infrastructure.Persistence.Migrations
                     tenant_id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     path = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
                     page_title = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     logo = table.Column<string>(type: "text", nullable: false),
                     enabled = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
                     category = table.Column<string>(type: "text", nullable: false),
                     active_template_id = table.Column<Guid>(type: "uuid", nullable: false),
                     last_payment = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -189,6 +196,45 @@ namespace Infrastructure.Persistence.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "orders",
+                columns: table => new
+                {
+                    order_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: true),
+                    phone_number = table.Column<int>(type: "integer", nullable: true),
+                    email = table.Column<string>(type: "text", nullable: true),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    order_notes = table.Column<string>(type: "text", nullable: true),
+                    delivery_type = table.Column<string>(type: "text", nullable: false),
+                    delivery_address = table.Column<string>(type: "text", nullable: true),
+                    delivery_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    delivery_notes = table.Column<string>(type: "text", nullable: true),
+                    placed_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    status = table.Column<string>(type: "text", nullable: false),
+                    total = table.Column<decimal>(type: "numeric", nullable: false),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_orders", x => x.order_id);
+                    table.ForeignKey(
+                        name: "fk_orders_tenants_tenant_id",
+                        column: x => x.tenant_id,
+                        principalTable: "tenants",
+                        principalColumn: "tenant_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_orders_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -204,9 +250,11 @@ namespace Infrastructure.Persistence.Migrations
                     product_price = table.Column<double>(type: "double precision", nullable: false),
                     visible = table.Column<bool>(type: "boolean", nullable: false),
                     deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
@@ -230,9 +278,9 @@ namespace Infrastructure.Persistence.Migrations
                     config_name = table.Column<string>(type: "text", nullable: false),
                     config_value = table.Column<string>(type: "text", nullable: false),
                     enabled = table.Column<bool>(type: "boolean", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -255,9 +303,12 @@ namespace Infrastructure.Persistence.Migrations
                     header = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     logo = table.Column<string>(type: "text", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -301,9 +352,9 @@ namespace Infrastructure.Persistence.Migrations
                     choice = table.Column<string>(type: "text", nullable: false),
                     quantity = table.Column<int>(type: "integer", nullable: false),
                     required = table.Column<bool>(type: "boolean", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -328,9 +379,9 @@ namespace Infrastructure.Persistence.Migrations
                     since = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     until = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     enabled = table.Column<bool>(type: "boolean", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -355,9 +406,11 @@ namespace Infrastructure.Persistence.Migrations
                     order = table.Column<int>(type: "integer", nullable: false),
                     visible = table.Column<bool>(type: "boolean", nullable: false),
                     deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     tenant_template_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
@@ -381,9 +434,9 @@ namespace Infrastructure.Persistence.Migrations
                     choice_id = table.Column<int>(type: "integer", nullable: false),
                     product_id = table.Column<int>(type: "integer", nullable: false),
                     option_price = table.Column<double>(type: "double precision", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     product_choice_id = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -405,6 +458,41 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "order_details",
+                columns: table => new
+                {
+                    order_detail_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    order_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    product_id = table.Column<int>(type: "integer", nullable: false),
+                    product_discount_id = table.Column<int>(type: "integer", nullable: false),
+                    quantity = table.Column<int>(type: "integer", nullable: false),
+                    product_price = table.Column<double>(type: "double precision", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_order_details", x => x.order_detail_id);
+                    table.ForeignKey(
+                        name: "fk_order_details_orders_order_id",
+                        column: x => x.order_id,
+                        principalTable: "orders",
+                        principalColumn: "order_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_order_details_product_discounts_product_discount_id",
+                        column: x => x.product_discount_id,
+                        principalTable: "product_discounts",
+                        principalColumn: "product_discount_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_order_details_products_product_id",
+                        column: x => x.product_id,
+                        principalTable: "products",
+                        principalColumn: "product_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "section_configs",
                 columns: table => new
                 {
@@ -413,9 +501,9 @@ namespace Infrastructure.Persistence.Migrations
                     template_section_id = table.Column<int>(type: "integer", nullable: false),
                     section_config_name = table.Column<string>(type: "text", nullable: false),
                     section_config_value = table.Column<string>(type: "text", nullable: false),
-                    creator = table.Column<string>(type: "text", nullable: false),
+                    creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<string>(type: "text", nullable: true),
+                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -453,6 +541,35 @@ namespace Infrastructure.Persistence.Migrations
                         column: x => x.template_section_id,
                         principalTable: "template_sections",
                         principalColumn: "template_section_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "order_detail_options",
+                columns: table => new
+                {
+                    order_detail_option_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    order_detail_id = table.Column<int>(type: "integer", nullable: false),
+                    option_id = table.Column<int>(type: "integer", nullable: false),
+                    quantity = table.Column<int>(type: "integer", nullable: false),
+                    product_price = table.Column<double>(type: "double precision", nullable: false),
+                    choice_option_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_order_detail_options", x => x.order_detail_option_id);
+                    table.ForeignKey(
+                        name: "fk_order_detail_options_choice_options_choice_option_id",
+                        column: x => x.choice_option_id,
+                        principalTable: "choice_options",
+                        principalColumn: "choice_option_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_order_detail_options_order_details_order_detail_id",
+                        column: x => x.order_detail_id,
+                        principalTable: "order_details",
+                        principalColumn: "order_detail_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -502,6 +619,41 @@ namespace Infrastructure.Persistence.Migrations
                 name: "ix_choice_options_product_id",
                 table: "choice_options",
                 column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_order_detail_options_choice_option_id",
+                table: "order_detail_options",
+                column: "choice_option_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_order_detail_options_order_detail_id",
+                table: "order_detail_options",
+                column: "order_detail_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_order_details_order_id",
+                table: "order_details",
+                column: "order_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_order_details_product_discount_id",
+                table: "order_details",
+                column: "product_discount_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_order_details_product_id",
+                table: "order_details",
+                column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_orders_tenant_id",
+                table: "orders",
+                column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_orders_user_id",
+                table: "orders",
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_product_categories_product_id",
@@ -578,13 +730,10 @@ namespace Infrastructure.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "choice_options");
+                name: "order_detail_options");
 
             migrationBuilder.DropTable(
                 name: "product_categories");
-
-            migrationBuilder.DropTable(
-                name: "product_discounts");
 
             migrationBuilder.DropTable(
                 name: "section_configs");
@@ -599,16 +748,28 @@ namespace Infrastructure.Persistence.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "product_choices");
+                name: "choice_options");
+
+            migrationBuilder.DropTable(
+                name: "order_details");
 
             migrationBuilder.DropTable(
                 name: "template_sections");
 
             migrationBuilder.DropTable(
-                name: "products");
+                name: "product_choices");
+
+            migrationBuilder.DropTable(
+                name: "orders");
+
+            migrationBuilder.DropTable(
+                name: "product_discounts");
 
             migrationBuilder.DropTable(
                 name: "tenant_templates");
+
+            migrationBuilder.DropTable(
+                name: "products");
 
             migrationBuilder.DropTable(
                 name: "tenants");

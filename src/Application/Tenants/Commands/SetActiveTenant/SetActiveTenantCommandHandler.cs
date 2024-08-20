@@ -6,14 +6,14 @@ namespace Application.Tenants.Commands.SetActiveTenant
 {
     public class SetActiveTenantCommandHandler : IRequestHandler<SetActiveTenantCommand, Result<SetActiveTenantResponse>>
     {
-        private readonly ITenantRepository _tenantRepository;
-        public SetActiveTenantCommandHandler(ITenantRepository tenantRepository)
+        private readonly ITenantService _tenantService;
+        public SetActiveTenantCommandHandler(ITenantService tenantService)
         {
-            _tenantRepository = tenantRepository;
+            _tenantService = tenantService;
         }
         public async Task<Result<SetActiveTenantResponse>> Handle(SetActiveTenantCommand request, CancellationToken cancellationToken)
         {
-            return await _tenantRepository.SetActiveTemplateForTenantId(request.TenantId, request.TemplateId);
+            return await _tenantService.SetActiveTemplateForTenantId(request.TenantId, request.TemplateId);
         }
     }
 }

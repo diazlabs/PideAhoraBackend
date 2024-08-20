@@ -1,20 +1,26 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Persistence;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.TenantConfigs.Commands.CreateTenantConfig
 {
     public class CreateTenantConfigCommandHandler : IRequestHandler<CreateTenantConfigCommand, Result<CreateTenantConfigResponse>>
     {
-        private readonly ITenantConfigRepository _tenantConfigRepository;
-        public CreateTenantConfigCommandHandler(ITenantConfigRepository tenantConfigRepository)
+        private readonly ITenantConfigService _tenantConfigService;
+        private readonly ApplicationContext _context;
+        public CreateTenantConfigCommandHandler(ITenantConfigService tenantConfigService, ApplicationContext context)
         {
-            _tenantConfigRepository = tenantConfigRepository;
+            _tenantConfigService = tenantConfigService;
+            _context = context;
         }
         public async Task<Result<CreateTenantConfigResponse>> Handle(CreateTenantConfigCommand request, CancellationToken cancellationToken)
         {
-            if (await _tenantConfigRepository.ConfigExist(request.ConfigName))
+            bool existConfig = await _context.TenantConfigs.AnyAsync(x => x.ConfigName == request.ConfigName);
+
+            if (existConfig)
             {
                 return Result.Conflict();
             }
@@ -30,7 +36,7 @@ namespace Application.TenantConfigs.Commands.CreateTenantConfig
                 TenantConfigId = Guid.NewGuid(),
             };
 
-            var result = await _tenantConfigRepository.Create(newConfig);
+            var result = await _tenantConfigService.Create(newConfig);
             if (result.IsSuccess)
             {
                 return new CreateTenantConfigResponse(result.Value);

@@ -18,7 +18,7 @@ builder.Services.ConfigureHttpJsonOptions(options => {
 
 builder.Services.AddControllers();
 
-builder.Services.AddApplication()
+builder.Services.AddApplication(builder.Configuration)
     .AddInfrastructure(builder.Configuration);
 
 builder.Host.UseSerilog(Log.Logger);

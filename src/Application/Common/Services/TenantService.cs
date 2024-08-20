@@ -1,15 +1,15 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Persistence;
 using Ardalis.Result;
 using Domain.Entities;
-using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Application.Common.Services
 {
-    public class TenantRepository : ITenantRepository
+    public class TenantService : ITenantService
     {
         private readonly ApplicationContext _context;
-        public TenantRepository(ApplicationContext context)
+        public TenantService(ApplicationContext context)
         {
             _context = context;
         }
@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Result> Delete(Guid tenantId)
         {
-           Tenant? tenant = await FindTenantById(tenantId);
+            Tenant? tenant = await FindTenantById(tenantId);
             if (tenant == null)
             {
                 return Result.NotFound();
@@ -81,7 +81,7 @@ namespace Infrastructure.Repositories
         public async Task<Result> Update(Tenant tenant)
         {
             Tenant? tenantToUpdate = await FindTenantById(tenant.TenantId);
-            if (tenantToUpdate == null) 
+            if (tenantToUpdate == null)
             {
                 return Result.NotFound();
             }

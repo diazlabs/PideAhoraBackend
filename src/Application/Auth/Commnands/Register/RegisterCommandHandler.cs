@@ -10,11 +10,11 @@ namespace Application.Auth.Commnands.Register
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterCommandResponse>>
     {
         private readonly UserManager<User> _userManager;
-        private readonly IUserRepository _userRepository;
-        public RegisterCommandHandler(UserManager<User> userManager, IUserRepository userRepository)
+        private readonly IUserService _userService;
+        public RegisterCommandHandler(UserManager<User> userManager, IUserService userService)
         {
             _userManager = userManager;
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ namespace Application.Auth.Commnands.Register
                 Creator = userId,
             };
 
-            string[] validationErrors = await _userRepository.IsUserInUse(newUser);
+            string[] validationErrors = await _userService.IsUserInUse(newUser);
             if (validationErrors.Length != 0)
             {
                 return Result.Conflict(validationErrors);

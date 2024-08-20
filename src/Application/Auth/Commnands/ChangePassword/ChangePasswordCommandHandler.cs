@@ -10,16 +10,16 @@ namespace Application.Auth.Commnands.ChangePassword
     public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, Result<ChangePasswordResponse>>
     {
         private readonly UserManager<User> _userManager;
-        private readonly IUserRepository _userRepository;
-        public ChangePasswordCommandHandler(UserManager<User> userManager, IUserRepository userRepository)
+        private readonly IUserService _userService;
+        public ChangePasswordCommandHandler(UserManager<User> userManager, IUserService userService)
         {
             _userManager = userManager;
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         public async Task<Result<ChangePasswordResponse>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            User? user = await _userRepository.FindById(request.UserId);
+            User? user = await _userService.FindById(request.UserId);
             if (user == null)
             {
                 return Result.NotFound();

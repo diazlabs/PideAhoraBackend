@@ -2,7 +2,7 @@
 
 namespace Application.Common.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserService
     {
         Task<User?> FindById(Guid id);
         Task<User?> FindByEmail(string email);

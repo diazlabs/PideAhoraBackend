@@ -3,12 +3,12 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Application.Common.Services
 {
-    public class UserRepository : IUserRepository
+    public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
-        public UserRepository(UserManager<User> userManager)
+        public UserService(UserManager<User> userManager)
         {
             _userManager = userManager;
         }

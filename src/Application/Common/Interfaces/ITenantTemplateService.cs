@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Common.Interfaces
 {
-    public interface ITenantTemplateRepository
+    public interface ITenantTemplateService
     {
         Task<TenantTemplate?> FindTenantTemplateById(Guid tenantTempalteId);
         Task<List<TenantTemplate>> GetTenantTemplatesByTenantId(Guid tenantId);

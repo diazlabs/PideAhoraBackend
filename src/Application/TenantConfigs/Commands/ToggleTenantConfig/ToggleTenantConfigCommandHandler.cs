@@ -6,14 +6,14 @@ namespace Application.TenantConfigs.Commands.ToggleTenantConfig
 {
     public class ToggleTenantConfigCommandHandler : IRequestHandler<ToggleTenantConfigCommand, Result<ToggleTenantConfigResponse>>
     {
-        private readonly ITenantConfigRepository _tenantConfigRepository;
-        public ToggleTenantConfigCommandHandler(ITenantConfigRepository tenantConfigRepository)
+        private readonly ITenantConfigService _tenantConfigService;
+        public ToggleTenantConfigCommandHandler(ITenantConfigService tenantConfigService)
         {
-            _tenantConfigRepository = tenantConfigRepository;
+            _tenantConfigService = tenantConfigService;
         }
         public async Task<Result<ToggleTenantConfigResponse>> Handle(ToggleTenantConfigCommand request, CancellationToken cancellationToken)
         {
-            Result result = await _tenantConfigRepository.ToggleConfig(request.TenantConfigId, request.Enabled);
+            Result result = await _tenantConfigService.ToggleConfig(request.TenantConfigId, request.Enabled);
 
             return result;
         }

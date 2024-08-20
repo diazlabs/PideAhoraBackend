@@ -7,10 +7,10 @@ namespace Application.Tenants.Commands.CreateTenant
 {
     public class CreateTenantCommandHandler : IRequestHandler<CreateTenantCommand, Result<CreateTenantResponse>>
     {
-        private readonly ITenantRepository _tenantRepository;
-        public CreateTenantCommandHandler(ITenantRepository tenantRepository)
+        private readonly ITenantService _tenantService;
+        public CreateTenantCommandHandler(ITenantService tenantService)
         {
-            _tenantRepository = tenantRepository;
+            _tenantService = tenantService;
         }
         public async Task<Result<CreateTenantResponse>> Handle(CreateTenantCommand request, CancellationToken cancellationToken)
         {
@@ -25,7 +25,7 @@ namespace Application.Tenants.Commands.CreateTenant
                 Category = request.Category,
             };
 
-            var result = await _tenantRepository.Create(newTenant);
+            var result = await _tenantService.Create(newTenant);
             if (result.IsSuccess)
             {
                 return new CreateTenantResponse(result.Value);

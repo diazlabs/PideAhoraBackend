@@ -1,15 +1,15 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Persistence;
 using Ardalis.Result;
 using Domain.Entities;
-using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Application.Common.Services
 {
-    public class TenantTemplateRepository : ITenantTemplateRepository
+    public class TenantTemplateService : ITenantTemplateService
     {
         private readonly ApplicationContext _context;
-        public TenantTemplateRepository(ApplicationContext context)
+        public TenantTemplateService(ApplicationContext context)
         {
             _context = context;
         }
@@ -63,7 +63,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Result> Update(TenantTemplate tenantTemplate)
         {
-            TenantTemplate? entityToUpdate = await FindTenantTemplateById(tenantTemplate.TenantTemplateId); 
+            TenantTemplate? entityToUpdate = await FindTenantTemplateById(tenantTemplate.TenantTemplateId);
             if (entityToUpdate == null)
             {
                 return Result.NotFound();
@@ -78,7 +78,8 @@ namespace Infrastructure.Repositories
                 return Result.Success();
             }
 
-            return Result.Error("Error al actualziar, intente de nuevo.");    
+            return Result.Error("Error al actualziar, intente de nuevo.");
+
         }
     }
 }

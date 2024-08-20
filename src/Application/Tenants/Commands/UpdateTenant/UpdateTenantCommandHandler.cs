@@ -7,14 +7,14 @@ namespace Application.Tenants.Commands.UpdateTenant
 {
     public class UpdateTenantCommandHandler : IRequestHandler<UpdateTenantCommand, Result<UpdateTenantResponse>>
     {
-        private readonly ITenantRepository _tenantRepository;
-        public UpdateTenantCommandHandler(ITenantRepository tenantRepository)
+        private readonly ITenantService _tenantService;
+        public UpdateTenantCommandHandler(ITenantService tenantService)
         {
-            _tenantRepository = tenantRepository;
+            _tenantService = tenantService;
         }
         public async Task<Result<UpdateTenantResponse>> Handle(UpdateTenantCommand request, CancellationToken cancellationToken)
         {
-            Tenant? tenant = await _tenantRepository.FindTenantById(request.TenantId);
+            Tenant? tenant = await _tenantService.FindTenantById(request.TenantId);
             if (tenant == null)
             {
                 return Result.NotFound();
@@ -30,7 +30,7 @@ namespace Application.Tenants.Commands.UpdateTenant
             tenant.Name = request.Name;
             tenant.Logo = "logo";
 
-            var result = await _tenantRepository.Update(tenant);
+            var result = await _tenantService.Update(tenant);
             if (result.IsSuccess)
             {
                 return new UpdateTenantResponse();

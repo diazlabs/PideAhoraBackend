@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Common.Interfaces
 {
-    public interface ITenantRepository
+    public interface ITenantService
     {
         Task<Tenant?> FindTenantById(Guid tenantId);
         Task<List<Tenant>> GetTenantsByUserId(Guid userId);

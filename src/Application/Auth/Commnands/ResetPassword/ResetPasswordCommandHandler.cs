@@ -10,16 +10,16 @@ namespace Application.Auth.Commnands.ResetPassword
     public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, Result<ResetPasswordResponse>>
     {
         private readonly UserManager<User> _userManager;
-        private readonly IUserRepository _userRepository;
-        public ResetPasswordCommandHandler(UserManager<User> userManager, IUserRepository userRepository)
+        private readonly IUserService _userService;
+        public ResetPasswordCommandHandler(UserManager<User> userManager, IUserService userService)
         {
             _userManager = userManager;
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         public async Task<Result<ResetPasswordResponse>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
-            User? user = await _userRepository.FindById(request.UserId);
+            User? user = await _userService.FindById(request.UserId);
 
             if (user == null)
             {

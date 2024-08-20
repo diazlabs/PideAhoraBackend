@@ -7,14 +7,14 @@ namespace Application.Tenants.Queries.GetTenantById
 {
     public class GetTenantByIdQueryHandler : IRequestHandler<GetTenantByIdQuery, Result<GetTenantByIdResponse>>
     {
-        private readonly ITenantRepository _tenantRepository;
-        public GetTenantByIdQueryHandler(ITenantRepository tenantRepository)
+        private readonly ITenantService _tenantService;
+        public GetTenantByIdQueryHandler(ITenantService tenantService)
         {
-            _tenantRepository = tenantRepository;
+            _tenantService = tenantService;
         }
         public async Task<Result<GetTenantByIdResponse>> Handle(GetTenantByIdQuery request, CancellationToken cancellationToken)
         {
-            Tenant? tenant = await _tenantRepository.FindTenantById(request.TenantId);
+            Tenant? tenant = await _tenantService.FindTenantById(request.TenantId);
 
             if (tenant == null)
             {

@@ -6,14 +6,14 @@ namespace Application.Tenants.Commands.DeleteTenant
 {
     public class DeleteTenantCommandHandler : IRequestHandler<DeleteTenantCommand, Result<DeleteTenantResponse>>
     {
-        private readonly ITenantRepository _tenantRepository;
-        public DeleteTenantCommandHandler(ITenantRepository tenantRepository)
+        private readonly ITenantService _tenantService;
+        public DeleteTenantCommandHandler(ITenantService tenantService)
         {
-            _tenantRepository = tenantRepository;
+            _tenantService = tenantService;
         }
         public async Task<Result<DeleteTenantResponse>> Handle(DeleteTenantCommand request, CancellationToken cancellationToken)
         {
-            return await _tenantRepository.Delete(request.TenantId);
+            return await _tenantService.Delete(request.TenantId);
         }
     }
 }

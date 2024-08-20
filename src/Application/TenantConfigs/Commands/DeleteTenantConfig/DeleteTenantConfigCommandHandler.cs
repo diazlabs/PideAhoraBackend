@@ -1,21 +1,37 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Persistence;
 using Ardalis.Result;
+using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.TenantConfigs.Commands.DeleteTenantConfig
 {
     public class DeleteTenantConfigCommandHandler : IRequestHandler<DeleteTenantConfigCommand, Result<DeleteTenantConfigResponse>>
     {
-        private readonly ITenantConfigRepository _tenantConfigRepository;
-        public DeleteTenantConfigCommandHandler(ITenantConfigRepository tenantConfigRepository)
+        private readonly ITenantConfigService _tenantConfigService;
+        private readonly ApplicationContext _context;
+        public DeleteTenantConfigCommandHandler(ITenantConfigService tenantConfigService, ApplicationContext context)
         {
-            _tenantConfigRepository = tenantConfigRepository;
+            _tenantConfigService = tenantConfigService;
+            _context = context;
         }
         public async Task<Result<DeleteTenantConfigResponse>> Handle(DeleteTenantConfigCommand request, CancellationToken cancellationToken)
         {
-            Result result = await _tenantConfigRepository.Delete(request.TenantConfigId);
+            TenantConfig? config = await _tenantConfigService.FindTenantConfigById(request.TenantConfigId);
+            if (config == null)
+            {
+                return Result.NotFound();
+            }
+            _context.TenantConfigs.Remove(config);
 
-            return result;
+            int rows = await _context.SaveChangesAsync();
+            if (rows > 0)
+            {
+                return Result.Success();
+            }
+
+            return Result.Error("No se pudo borrar la configuración, intentan de nuevo.");
         }
     }
 }

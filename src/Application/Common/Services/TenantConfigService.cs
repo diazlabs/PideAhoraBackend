@@ -1,22 +1,17 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Persistence;
 using Ardalis.Result;
 using Domain.Entities;
-using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Application.Common.Services
 {
-    public class TenantConfigRepository : ITenantConfigRepository
+    public class TenantConfigService : ITenantConfigService
     {
         private readonly ApplicationContext _context;
-        public TenantConfigRepository(ApplicationContext context)
+        public TenantConfigService(ApplicationContext context)
         {
             _context = context;
-        }
-
-        public async Task<bool> ConfigExist(string configName)
-        {
-            return await _context.TenantConfigs.AnyAsync(x => x.ConfigName == configName);
         }
 
         public async Task<Result<TenantConfig>> Create(TenantConfig tenantConfig)
@@ -30,25 +25,6 @@ namespace Infrastructure.Repositories
             }
 
             return Result.Error("No se pudo crear la configuración, intenta de nuevo.");
-        }
-
-        public async Task<Result> Delete(Guid tenantConfigId)
-        {
-            TenantConfig? config = await FindTenantConfigById(tenantConfigId);
-            if (config == null)
-            {
-                return Result.NotFound();
-            }
-
-            _context.TenantConfigs.Remove(config);
-
-            int rows = await _context.SaveChangesAsync();
-            if (rows > 0)
-            {
-                return Result.Success();
-            }
-
-            return Result.Error("No se pudo borrar la configuración, intentan de nuevo.");
         }
 
         public async Task<TenantConfig?> FindTenantConfigById(Guid tenantConfigId)

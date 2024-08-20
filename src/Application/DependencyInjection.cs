@@ -1,13 +1,29 @@
 ﻿using Application.Common.Behaviors;
+using Application.Common.Interfaces;
+using Application.Common.Persistence;
+using Application.Common.Services;
+using Domain.Entities;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services, ConfigurationManager configuration)
         {
+            services.AddDbContext<ApplicationContext>(options =>
+                options
+                .UseNpgsql(configuration.GetConnectionString("Database"))
+                .UseSnakeCaseNamingConvention());
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddSignInManager<SignInManager<User>>();
+
             services.AddMediatR(options =>
             {
                 options.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
@@ -16,6 +32,12 @@ namespace Application
             });
 
             services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
+
+            services.AddScoped<ITenantService, TenantService>();
+            services.AddScoped<ITenantTemplateService, TenantTemplateService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITenantConfigService, TenantConfigService>();
+
             return services;
         }
     }

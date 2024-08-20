@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Persistence
+namespace Application.Common.Persistence
 {
     public class ApplicationContext : IdentityDbContext<User, Role, Guid>
     {

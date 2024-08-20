@@ -1,4 +1,4 @@
-﻿using Infrastructure.Persistence;
+﻿using Application.Common.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
