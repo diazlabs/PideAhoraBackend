@@ -11,7 +11,7 @@ namespace Application.Auth.Commnands.Register
         public string LastName { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string Password { get; set; } = default!;
-        public int PhoneNumber { get; set; } = default!;
+        public string PhoneNumber { get; set; } = default!;
         public string Country { get; set; } = default!;
     }
 
@@ -22,7 +22,7 @@ namespace Application.Auth.Commnands.Register
             RuleFor(x => x.FirstName).ValidateRequiredProperty("tu nombre", 2, 100);
             RuleFor(x => x.LastName).ValidateRequiredProperty("tu apellido", 2, 100);
             RuleFor(x => x.Email).ValidateEmail();
-            RuleFor(x => x.PhoneNumber.ToString()).ValidatePhoneNumber();
+            RuleFor(x => x.PhoneNumber).ValidatePhoneNumber();
             RuleFor(x => x.Password).ValidatePassword();
             RuleFor(x => x.Country).ValidateCountry();
         }

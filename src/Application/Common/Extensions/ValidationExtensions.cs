@@ -23,7 +23,7 @@ namespace Application.Common.Extensions
                 .WithMessage("Por favor ingresa un correo electrónico válido");
         }
 
-        public static IRuleBuilderOptions<T, string> ValidatePhoneNumber<T>(this IRuleBuilder<T, string> ruleBuilder)
+        public static IRuleBuilderOptions<T, string?> ValidatePhoneNumber<T>(this IRuleBuilder<T, string?> ruleBuilder)
         {
             return ruleBuilder
                 .NotEmpty()
@@ -48,8 +48,8 @@ namespace Application.Common.Extensions
                 .WithMessage("{PropertyValue} no es una categoría válido");
         }
 
-        public static IRuleBuilderOptions<T, string> ValidateRequiredProperty<T>
-            (this IRuleBuilder<T, string> ruleBuilder, string property, int min = 2, int max = 100)
+        public static IRuleBuilderOptions<T, string?> ValidateRequiredProperty<T>
+            (this IRuleBuilder<T, string?> ruleBuilder, string property, int min = 2, int max = 100)
         {
             return ruleBuilder
                 .NotEmpty()
@@ -67,6 +67,11 @@ namespace Application.Common.Extensions
                 .WithMessage("Este campo es requerido")
                 .NotNull()
                 .WithMessage("Este campo es requerido");
+        }
+
+        public static IRuleBuilderOptions<T, double> PriceGuard<T>(this IRuleBuilder<T, double> ruleBuilder)
+        {
+            return ruleBuilder.GreaterThan(x => 0);
         }
     }
 }

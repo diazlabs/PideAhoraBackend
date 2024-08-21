@@ -3,9 +3,6 @@ using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Application.Orders.Commands.CreateOrder
 {
@@ -47,7 +44,7 @@ namespace Application.Orders.Commands.CreateOrder
                     var selectedIds = detail.OrderDetailOptions.Select(x => x.OptionId);
                     var selectedOptions = await _context.ChoiceOptions.Where(x => selectedIds.Contains(x.ChoiceOptionId)).ToListAsync(cancellationToken);
 
-                    var hasAllOptions = selectedOptions.Any(s => selectedIds.Contains(s.ChoiceOptionId));
+                    var hasAllOptions = selectedOptions.All(s => selectedIds.Contains(s.ChoiceOptionId));
 
                     if (selectedIds.Count() != selectedOptions.Count || !hasAllOptions)
                     {
@@ -86,7 +83,7 @@ namespace Application.Orders.Commands.CreateOrder
             };
             _context.Orders.Add(order);
 
-            var rows = await _context.SaveChangesAsync();
+            var rows = await _context.SaveChangesAsync(cancellationToken);
             if (rows > 0)
             {
                 return new CreateOrderResponse();

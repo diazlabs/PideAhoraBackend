@@ -8,7 +8,7 @@ namespace Domain.Entities
         public Guid OrderId { get; set; }
         public Guid TenantId { get; set; }
         public string? Name { get; set; }
-        public int? PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public Guid? UserId { get; set; }
         public string? OrderNotes { get; set; }

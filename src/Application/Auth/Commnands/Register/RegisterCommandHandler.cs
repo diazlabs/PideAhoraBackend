@@ -27,7 +27,7 @@ namespace Application.Auth.Commnands.Register
                 LastName = request.LastName,
                 Email = request.Email,
                 Country = request.Country,
-                PhoneNumber = request.PhoneNumber.ToString(),
+                PhoneNumber = request.PhoneNumber,
                 UserName = request.Email,
                 Creator = userId,
             };
