@@ -23,7 +23,7 @@ namespace Application.Orders.Commands.CreateOrder
             {
                 var product = await _context.Products
                     .Include(x => x.ProductDiscounts)
-                    .FirstOrDefaultAsync(x => x.ProductId == detail.ProductId, cancellationToken);
+                    .FirstOrDefaultAsync(x => x.ProductId == detail.ProductId && x.TenantId == request.TenantId, cancellationToken);
 
                 if (product == null) 
                 {
@@ -83,7 +83,7 @@ namespace Application.Orders.Commands.CreateOrder
             };
             _context.Orders.Add(order);
 
-            var rows = await _context.SaveChangesAsync(cancellationToken);
+            int rows = await _context.SaveChangesAsync(cancellationToken);
             if (rows > 0)
             {
                 return new CreateOrderResponse();

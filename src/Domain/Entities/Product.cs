@@ -5,9 +5,9 @@ namespace Domain.Entities
     public class Product : IAudit, ISoftDelete
     {
         public int ProductId { get; set; }
-        public Guid TenandId { get; set; }
+        public Guid TenantId { get; set; }
         public string ProductName { get; set; } = default!;
-        public string? ProdcutDescription { get; set; }
+        public string? ProductDescription { get; set; }
         public string? Image { get; set; }
         public double ProductPrice { get; set; }
         public bool Visible { get; set; }

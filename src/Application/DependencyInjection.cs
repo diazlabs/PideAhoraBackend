@@ -37,6 +37,7 @@ namespace Application
             services.AddScoped<ITenantTemplateService, TenantTemplateService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITenantConfigService, TenantConfigService>();
+            services.AddScoped<IProductService, ProductService>();
 
             return services;
         }

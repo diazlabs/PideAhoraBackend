@@ -20,15 +20,15 @@ namespace Application.Products.Commands.CreateProduct
                 Deleted = false,
                 Image = request.Image,
                 ProductName = request.ProductName,
-                ProdcutDescription = request.ProdcutDescription,
+                ProductDescription = request.ProductDescription,
                 Visible = request.Visible,
-                TenandId = request.TenandId,
+                TenantId = request.TenantId,
                 ProductPrice = request.ProductPrice,
             };
 
             _context.Products.Add(product);
 
-            var rows = await _context.SaveChangesAsync();
+            int rows = await _context.SaveChangesAsync();
             if (rows > 0)
             {
                 return new CreateProductResponse();

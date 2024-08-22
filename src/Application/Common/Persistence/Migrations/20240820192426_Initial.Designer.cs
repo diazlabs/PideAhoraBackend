@@ -289,7 +289,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("modifier");
 
-                    b.Property<string>("ProdcutDescription")
+                    b.Property<string>("ProductDescription")
                         .HasColumnType("text")
                         .HasColumnName("prodcut_description");
 
@@ -302,7 +302,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("double precision")
                         .HasColumnName("product_price");
 
-                    b.Property<Guid>("TenandId")
+                    b.Property<Guid>("TenantId")
                         .HasColumnType("uuid")
                         .HasColumnName("tenand_id");
 

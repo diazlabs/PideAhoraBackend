@@ -23,11 +23,10 @@
   <ItemGroup>
     <Folder Include="Common\Security\" />
     <Folder Include="Orders\Queries\" />
+    <Folder Include="ProductChoices\Queries\" />
     <Folder Include="SectionProducts\" />
     <Folder Include="SectionConfigs\" />
     <Folder Include="ProductChoicesOptions\" />
-    <Folder Include="ProductChoices\" />
-    <Folder Include="Products\" />
     <Folder Include="TenantConfigs\Queries\" />
   </ItemGroup>
 
