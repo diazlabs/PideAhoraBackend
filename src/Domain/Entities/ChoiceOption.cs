@@ -8,6 +8,7 @@ namespace Domain.Entities
         public int ChoiceId { get; set; }
         public int ProductId { get; set; }
         public double OptionPrice { get; set; }
+        public bool Visible { get; set; }
         public Guid Creator { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid? Modifier { get; set; }

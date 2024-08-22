@@ -9,6 +9,7 @@ namespace Domain.Entities
         public string Choice { get; set; } = default!;
         public int Quantity { get; set; }
         public bool Required { get; set; }
+        public bool Visible { get; set; }
         public Guid Creator { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid? Modifier { get; set; }

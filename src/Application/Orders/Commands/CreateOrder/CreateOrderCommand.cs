@@ -4,7 +4,6 @@ using Ardalis.Result;
 using Domain.Common.Enums;
 using FluentValidation;
 using MediatR;
-using System.Linq;
 
 namespace Application.Orders.Commands.CreateOrder
 {
