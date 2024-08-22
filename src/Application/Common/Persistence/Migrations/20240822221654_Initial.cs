@@ -13,24 +13,24 @@ namespace Application.Common.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AspNetRoles",
+                name: "roles",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    role_id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     concurrency_stamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_asp_net_roles", x => x.id);
+                    table.PrimaryKey("pk_roles", x => x.role_id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
+                name: "users",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     country = table.Column<string>(type: "text", nullable: false),
@@ -55,14 +55,14 @@ namespace Application.Common.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_asp_net_users", x => x.id);
+                    table.PrimaryKey("pk_users", x => x.user_id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
+                name: "role_claims",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
+                    role_claim_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     role_id = table.Column<Guid>(type: "uuid", nullable: false),
                     claim_type = table.Column<string>(type: "text", nullable: true),
@@ -70,97 +70,12 @@ namespace Application.Common.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_asp_net_role_claims", x => x.id);
+                    table.PrimaryKey("pk_role_claims", x => x.role_claim_id);
                     table.ForeignKey(
-                        name: "fk_asp_net_role_claims_asp_net_roles_role_id",
+                        name: "fk_role_claims_roles_role_id",
                         column: x => x.role_id,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    claim_type = table.Column<string>(type: "text", nullable: true),
-                    claim_value = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_asp_net_user_claims", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_asp_net_user_claims_asp_net_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    login_provider = table.Column<string>(type: "text", nullable: false),
-                    provider_key = table.Column<string>(type: "text", nullable: false),
-                    provider_display_name = table.Column<string>(type: "text", nullable: true),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_asp_net_user_logins", x => new { x.login_provider, x.provider_key });
-                    table.ForeignKey(
-                        name: "fk_asp_net_user_logins_asp_net_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    role_id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_asp_net_user_roles", x => new { x.user_id, x.role_id });
-                    table.ForeignKey(
-                        name: "fk_asp_net_user_roles_asp_net_roles_role_id",
-                        column: x => x.role_id,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_asp_net_user_roles_asp_net_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
-                {
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    login_provider = table.Column<string>(type: "text", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    value = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_asp_net_user_tokens", x => new { x.user_id, x.login_provider, x.name });
-                    table.ForeignKey(
-                        name: "fk_asp_net_user_tokens_asp_net_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "id",
+                        principalTable: "roles",
+                        principalColumn: "role_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -193,8 +108,93 @@ namespace Application.Common.Persistence.Migrations
                     table.ForeignKey(
                         name: "fk_tenants_users_user_id",
                         column: x => x.user_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "id",
+                        principalTable: "users",
+                        principalColumn: "user_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_claims",
+                columns: table => new
+                {
+                    user_claims_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    claim_type = table.Column<string>(type: "text", nullable: true),
+                    claim_value = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_user_claims", x => x.user_claims_id);
+                    table.ForeignKey(
+                        name: "fk_user_claims_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "user_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_logins",
+                columns: table => new
+                {
+                    login_provider = table.Column<string>(type: "text", nullable: false),
+                    provider_key = table.Column<string>(type: "text", nullable: false),
+                    provider_display_name = table.Column<string>(type: "text", nullable: true),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_user_logins", x => new { x.login_provider, x.provider_key });
+                    table.ForeignKey(
+                        name: "fk_user_logins_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "user_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_roles",
+                columns: table => new
+                {
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    role_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_user_roles", x => new { x.user_id, x.role_id });
+                    table.ForeignKey(
+                        name: "fk_user_roles_roles_role_id",
+                        column: x => x.role_id,
+                        principalTable: "roles",
+                        principalColumn: "role_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_user_roles_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "user_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_tokens",
+                columns: table => new
+                {
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    login_provider = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    value = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_user_tokens", x => new { x.user_id, x.login_provider, x.name });
+                    table.ForeignKey(
+                        name: "fk_user_tokens_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -205,7 +205,7 @@ namespace Application.Common.Persistence.Migrations
                     order_id = table.Column<Guid>(type: "uuid", nullable: false),
                     tenant_id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: true),
-                    phone_number = table.Column<int>(type: "integer", nullable: true),
+                    phone_number = table.Column<string>(type: "text", nullable: true),
                     email = table.Column<string>(type: "text", nullable: true),
                     user_id = table.Column<Guid>(type: "uuid", nullable: true),
                     order_notes = table.Column<string>(type: "text", nullable: true),
@@ -213,9 +213,8 @@ namespace Application.Common.Persistence.Migrations
                     delivery_address = table.Column<string>(type: "text", nullable: true),
                     delivery_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     delivery_notes = table.Column<string>(type: "text", nullable: true),
-                    placed_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     status = table.Column<string>(type: "text", nullable: false),
-                    total = table.Column<decimal>(type: "numeric", nullable: false),
+                    total = table.Column<double>(type: "double precision", nullable: false),
                     creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modifier = table.Column<Guid>(type: "uuid", nullable: true),
@@ -233,8 +232,8 @@ namespace Application.Common.Persistence.Migrations
                     table.ForeignKey(
                         name: "fk_orders_users_user_id",
                         column: x => x.user_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "id");
+                        principalTable: "users",
+                        principalColumn: "user_id");
                 });
 
             migrationBuilder.CreateTable(
@@ -243,20 +242,19 @@ namespace Application.Common.Persistence.Migrations
                 {
                     product_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    tenand_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false),
                     product_name = table.Column<string>(type: "text", nullable: false),
-                    prodcut_description = table.Column<string>(type: "text", nullable: true),
+                    product_description = table.Column<string>(type: "text", nullable: true),
                     image = table.Column<string>(type: "text", nullable: true),
                     product_price = table.Column<double>(type: "double precision", nullable: false),
                     visible = table.Column<bool>(type: "boolean", nullable: false),
                     deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
                     creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modifier = table.Column<Guid>(type: "uuid", nullable: true),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    deleted_by = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -352,10 +350,7 @@ namespace Application.Common.Persistence.Migrations
                     choice = table.Column<string>(type: "text", nullable: false),
                     quantity = table.Column<int>(type: "integer", nullable: false),
                     required = table.Column<bool>(type: "boolean", nullable: false),
-                    creator = table.Column<Guid>(type: "uuid", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    visible = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -376,6 +371,7 @@ namespace Application.Common.Persistence.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     product_id = table.Column<int>(type: "integer", nullable: false),
                     discount = table.Column<double>(type: "double precision", nullable: false),
+                    discount_code = table.Column<string>(type: "text", nullable: false),
                     since = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     until = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     enabled = table.Column<bool>(type: "boolean", nullable: false),
@@ -434,10 +430,7 @@ namespace Application.Common.Persistence.Migrations
                     choice_id = table.Column<int>(type: "integer", nullable: false),
                     product_id = table.Column<int>(type: "integer", nullable: false),
                     option_price = table.Column<double>(type: "double precision", nullable: false),
-                    creator = table.Column<Guid>(type: "uuid", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    modifier = table.Column<Guid>(type: "uuid", nullable: true),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    visible = table.Column<bool>(type: "boolean", nullable: false),
                     product_choice_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -465,7 +458,7 @@ namespace Application.Common.Persistence.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     order_id = table.Column<Guid>(type: "uuid", nullable: false),
                     product_id = table.Column<int>(type: "integer", nullable: false),
-                    product_discount_id = table.Column<int>(type: "integer", nullable: false),
+                    product_discount_id = table.Column<int>(type: "integer", nullable: true),
                     quantity = table.Column<int>(type: "integer", nullable: false),
                     product_price = table.Column<double>(type: "double precision", nullable: false)
                 },
@@ -482,8 +475,7 @@ namespace Application.Common.Persistence.Migrations
                         name: "fk_order_details_product_discounts_product_discount_id",
                         column: x => x.product_discount_id,
                         principalTable: "product_discounts",
-                        principalColumn: "product_discount_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "product_discount_id");
                     table.ForeignKey(
                         name: "fk_order_details_products_product_id",
                         column: x => x.product_id,
@@ -574,43 +566,6 @@ namespace Application.Common.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_asp_net_role_claims_role_id",
-                table: "AspNetRoleClaims",
-                column: "role_id");
-
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "normalized_name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "ix_asp_net_user_claims_user_id",
-                table: "AspNetUserClaims",
-                column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_asp_net_user_logins_user_id",
-                table: "AspNetUserLogins",
-                column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_asp_net_user_roles_role_id",
-                table: "AspNetUserRoles",
-                column: "role_id");
-
-            migrationBuilder.CreateIndex(
-                name: "EmailIndex",
-                table: "AspNetUsers",
-                column: "normalized_email");
-
-            migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "AspNetUsers",
-                column: "normalized_user_name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "ix_choice_options_product_choice_id",
                 table: "choice_options",
                 column: "product_choice_id");
@@ -676,6 +631,17 @@ namespace Application.Common.Persistence.Migrations
                 column: "tenant_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_role_claims_role_id",
+                table: "role_claims",
+                column: "role_id");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "roles",
+                column: "normalized_name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "ix_section_configs_template_section_id",
                 table: "section_configs",
                 column: "template_section_id");
@@ -709,31 +675,45 @@ namespace Application.Common.Persistence.Migrations
                 name: "ix_tenants_user_id",
                 table: "tenants",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_user_claims_user_id",
+                table: "user_claims",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_user_logins_user_id",
+                table: "user_logins",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_user_roles_role_id",
+                table: "user_roles",
+                column: "role_id");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "users",
+                column: "normalized_email");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "users",
+                column: "normalized_user_name",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
                 name: "order_detail_options");
 
             migrationBuilder.DropTable(
                 name: "product_categories");
+
+            migrationBuilder.DropTable(
+                name: "role_claims");
 
             migrationBuilder.DropTable(
                 name: "section_configs");
@@ -745,7 +725,16 @@ namespace Application.Common.Persistence.Migrations
                 name: "tenant_configs");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "user_claims");
+
+            migrationBuilder.DropTable(
+                name: "user_logins");
+
+            migrationBuilder.DropTable(
+                name: "user_roles");
+
+            migrationBuilder.DropTable(
+                name: "user_tokens");
 
             migrationBuilder.DropTable(
                 name: "choice_options");
@@ -755,6 +744,9 @@ namespace Application.Common.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "template_sections");
+
+            migrationBuilder.DropTable(
+                name: "roles");
 
             migrationBuilder.DropTable(
                 name: "product_choices");
@@ -775,7 +767,7 @@ namespace Application.Common.Persistence.Migrations
                 name: "tenants");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "users");
         }
     }
 }

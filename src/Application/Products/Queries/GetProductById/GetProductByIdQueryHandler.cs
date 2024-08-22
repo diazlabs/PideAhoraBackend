@@ -14,7 +14,7 @@ namespace Application.Products.Queries.GetProductById
         }
         public async Task<Result<GetProductByIdResponse>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            Product? product = await _productService.FindProductById(request.ProductId, request.TenantId, cancellationToken);
+            Product? product = await _productService.FindProductById(request.ProductId, request.TenantId, cancellationToken, true);
 
             if (product == null)
             {

@@ -38,6 +38,7 @@ namespace Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITenantConfigService, TenantConfigService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             return services;
         }

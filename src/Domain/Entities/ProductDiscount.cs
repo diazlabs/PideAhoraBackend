@@ -16,6 +16,6 @@ namespace Domain.Entities
         public Guid? Modifier { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public Product Product { get; set; } = default!;
-        public List<OrderDetail>? OrderDetails { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; } = [];
     }
 }

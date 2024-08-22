@@ -24,8 +24,6 @@ namespace Application.ProductChoices.Commands.UpdateChoice
                 return Result.NotFound();
             }
 
-            productChoice.UpdatedAt = DateTime.UtcNow;
-            productChoice.Modifier = request.Modifier;
             productChoice.Required = request.Required;
             productChoice.Quantity = request.Quantity;
             productChoice.Choice = request.Choice;

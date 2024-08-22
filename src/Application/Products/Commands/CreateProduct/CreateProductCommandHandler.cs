@@ -2,37 +2,23 @@
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Products.Commands.CreateProduct
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Result<CreateProductResponse>>
     {
         private readonly ApplicationContext _context;
-        public CreateProductCommandHandler(ApplicationContext context)
+        private readonly ILogger<CreateProductCommandHandler> _logger;
+        public CreateProductCommandHandler(ApplicationContext context, ILogger<CreateProductCommandHandler> logger)
         {
             _context = context;
+            _logger = logger;
         }
         public async Task<Result<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var currentDate = DateTime.UtcNow;
-            var choices = request.Choices?.Select(c => new ProductChoice
-            {
-                Choice = c.Choice,
-                CreatedAt = currentDate,
-                Creator = request.Creator,
-                Quantity = c.Quantity,
-                Required = c.Required,
-                Visible = c.Visible,
-                ChoiceOptions = c.Options.Select(o => new ChoiceOption
-                {
-                    CreatedAt = currentDate,
-                    Creator = request.Creator,
-                    OptionPrice = o.OptionPrice,
-                    ProductId = o.ProductId,
-                    Visible = o.Visible,
-                }).ToList(),
-            }).ToList();
-
+            
             Product product = new()
             {
                 Creator = request.Creator,
@@ -43,19 +29,69 @@ namespace Application.Products.Commands.CreateProduct
                 Visible = request.Visible,
                 TenantId = request.TenantId,
                 ProductPrice = request.ProductPrice,
-                ProductChoices = choices,
                 CreatedAt = currentDate,
             };
 
             _context.Products.Add(product);
 
-            int rows = await _context.SaveChangesAsync();
-            if (rows > 0)
+            _logger.LogInformation("Creatring product {product}", product);
+
+            using var transaaction = _context.Database.BeginTransaction();
+            try
             {
-                return new CreateProductResponse();
+                int rows = await _context.SaveChangesAsync();
+                if (rows < 0)
+                {
+                    return Result.Error("Error al guardar el producto, intenta de nuevo.");
+                }
+
+                if (request.Choices != null)
+                {
+                    var result =  await CreateChoices(request.Choices, product.ProductId, cancellationToken);
+                    if (!result.IsSuccess)
+                    {
+                        transaaction.Rollback();
+                        return Result.Error("Error al guardar el producto, intenta de nuevo.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "Error when creating product {request}", request);
+
+                transaaction.Rollback();
+                return Result.Error("Error al guardar el producto, intenta de nuevo.");
             }
 
-            return Result.Error("Error al guardar el producto, intenta de nuevo.");
+
+            return new CreateProductResponse();
+        }
+
+        public async Task<Result> CreateChoices(List<ChoicesDto> choices, int productId, CancellationToken canellationToken)
+        {
+            _logger.LogInformation("Creatring choices {choices} for productId {productId}", choices, productId);
+            var productChoices = choices.Select(c => new ProductChoice
+            {
+                Choice = c.Choice,
+                Quantity = c.Quantity,
+                Required = c.Required,
+                Visible = c.Visible,
+                ProductId = productId,
+                ChoiceOptions = c.Options.Select(o => new ChoiceOption
+                {
+                    OptionPrice = o.OptionPrice,
+                    ProductId = productId,
+                    Visible = o.Visible,
+                }).ToList(),
+            }).ToList();
+
+            int rows = await _context.SaveChangesAsync(canellationToken);
+            if (rows > 0)
+            {
+                return Result.Success();
+            }
+
+            return Result.Error();
         }
     }
 }

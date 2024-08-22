@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Ardalis.Result;
+using Serilog;
 
 namespace Infrastructure.Common.Services
 {

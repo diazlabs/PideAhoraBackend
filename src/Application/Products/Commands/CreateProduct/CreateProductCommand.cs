@@ -28,7 +28,6 @@ namespace Application.Products.Commands.CreateProduct
 
     public class ChoiceOptionDto
     {
-        public int ProductId { get; set; }
         public double OptionPrice { get; set; }
         public bool Visible { get; set; }
     }
@@ -69,9 +68,7 @@ namespace Application.Products.Commands.CreateProduct
     {
         public ChoiceOptionValidator()
         {
-            RuleFor(x => x.ProductId).GreaterThan(0).WithMessage("No es un producto válido");
             RuleFor(x => x.OptionPrice).GreaterThanOrEqualTo(0).WithMessage("El producto debe poseer un precio mayor o igual a 0");
         }
     }
-
 }

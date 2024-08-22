@@ -12,6 +12,6 @@ namespace Domain.Entities
         public Order Order { get; set; } = default!;
         public Product Product { get; set; } = default!;
         public ProductDiscount? ProductDiscount { get; set; }
-        public List<OrderDetailOption>? OrderDetailOptions { get; set; }
+        public ICollection<OrderDetailOption> OrderDetailOptions { get; set; } = [];
     }
 }

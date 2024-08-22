@@ -17,6 +17,6 @@ namespace Domain.Entities
         public Guid? Modifier { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public Tenant Tenant { get; set; } = default!;
-        public List<TemplateSection>? TemplateSections { get; set; }
+        public ICollection<TemplateSection> TemplateSections { get; set; } = [];
     }
 }

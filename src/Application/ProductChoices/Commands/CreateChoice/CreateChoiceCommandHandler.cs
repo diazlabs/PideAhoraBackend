@@ -26,8 +26,6 @@ namespace Application.ProductChoices.Commands.CreateChoice
             var newChoice = new ProductChoice
             {
                 Choice = request.Choice,
-                CreatedAt = DateTime.UtcNow,
-                Creator = request.Creator,
                 ProductId = request.ProductId,
                 Quantity = request.Quantity,
                 Required = request.Required,

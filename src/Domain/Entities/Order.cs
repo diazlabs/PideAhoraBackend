@@ -24,6 +24,6 @@ namespace Domain.Entities
         public DateTime? UpdatedAt { get; set; }
         public Tenant Tenant { get; set; } = default!;
         public User? User { get; set; }
-        public List<OrderDetail>? OrderDetails { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; } = [];
     }
 }

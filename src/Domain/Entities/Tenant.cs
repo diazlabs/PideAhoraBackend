@@ -23,8 +23,8 @@ namespace Domain.Entities
         public Guid? Modifier { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public User User { get; set; } = default!;
-        public List<TenantConfig>? TenantConfigs { get; set; }
-        public List<TenantTemplate>? TenantTemplates{ get; set; }
-        public List<Order>? Orders { get; set; }
+        public ICollection<TenantConfig> TenantConfigs { get; set; } = [];
+        public ICollection<TenantTemplate> TenantTemplates{ get; set; } = [];
+        public ICollection<Order> Orders { get; set; } = [];
     }
 }

@@ -12,11 +12,20 @@ namespace Application.Common.Services
         {
             _context = context;
         }
-        public async Task<Product?> FindProductById(int productId, Guid tenantId, CancellationToken cancellationToken = default)
+        public async Task<Product?> 
+            FindProductById(int productId, Guid tenantId, CancellationToken cancellationToken = default, bool includeChoices = false)
         {
-            Product? product = await _context.Products
-                .Where(x => x.ProductId == productId && x.TenantId == tenantId && !x.Deleted)
-                .FirstOrDefaultAsync(cancellationToken);
+            var productQuery = _context.Products
+                .Where(x => x.ProductId == productId && x.TenantId == tenantId && !x.Deleted);
+
+            if (includeChoices)
+            {
+                productQuery = productQuery
+                    .Include(x => x.ProductChoices.Where(p => x.Visible))
+                    .ThenInclude(x => x.ChoiceOptions.Where(c => c.Visible));
+            }
+
+            Product? product = await productQuery.FirstOrDefaultAsync(cancellationToken);
 
             return product;
         }

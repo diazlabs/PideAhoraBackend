@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Application.Common.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240820192426_Initial")]
+    [Migration("20240822221654_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -38,18 +38,6 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("choice_id");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<Guid>("Creator")
-                        .HasColumnType("uuid")
-                        .HasColumnName("creator");
-
-                    b.Property<Guid?>("Modifier")
-                        .HasColumnType("uuid")
-                        .HasColumnName("modifier");
-
                     b.Property<double>("OptionPrice")
                         .HasColumnType("double precision")
                         .HasColumnName("option_price");
@@ -62,9 +50,9 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("product_id");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
+                    b.Property<bool>("Visible")
+                        .HasColumnType("boolean")
+                        .HasColumnName("visible");
 
                     b.HasKey("ChoiceOptionId")
                         .HasName("pk_choice_options");
@@ -126,13 +114,9 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("order_notes");
 
-                    b.Property<int?>("PhoneNumber")
-                        .HasColumnType("integer")
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text")
                         .HasColumnName("phone_number");
-
-                    b.Property<DateTime>("PlacedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("placed_at");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -143,8 +127,8 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("numeric")
+                    b.Property<double>("Total")
+                        .HasColumnType("double precision")
                         .HasColumnName("total");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -180,7 +164,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("order_id");
 
-                    b.Property<int>("ProductDiscountId")
+                    b.Property<int?>("ProductDiscountId")
                         .HasColumnType("integer")
                         .HasColumnName("product_discount_id");
 
@@ -291,7 +275,7 @@ namespace Application.Common.Persistence.Migrations
 
                     b.Property<string>("ProductDescription")
                         .HasColumnType("text")
-                        .HasColumnName("prodcut_description");
+                        .HasColumnName("product_description");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
@@ -301,10 +285,6 @@ namespace Application.Common.Persistence.Migrations
                     b.Property<double>("ProductPrice")
                         .HasColumnType("double precision")
                         .HasColumnName("product_price");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("tenand_id");
 
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid")
@@ -368,18 +348,6 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("choice");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<Guid>("Creator")
-                        .HasColumnType("uuid")
-                        .HasColumnName("creator");
-
-                    b.Property<Guid?>("Modifier")
-                        .HasColumnType("uuid")
-                        .HasColumnName("modifier");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("integer")
                         .HasColumnName("product_id");
@@ -392,9 +360,9 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("required");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
+                    b.Property<bool>("Visible")
+                        .HasColumnType("boolean")
+                        .HasColumnName("visible");
 
                     b.HasKey("ProductChoiceId")
                         .HasName("pk_product_choices");
@@ -425,6 +393,11 @@ namespace Application.Common.Persistence.Migrations
                     b.Property<double>("Discount")
                         .HasColumnType("double precision")
                         .HasColumnName("discount");
+
+                    b.Property<string>("DiscountCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("discount_code");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("boolean")
@@ -464,7 +437,7 @@ namespace Application.Common.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnName("role_id");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -482,13 +455,13 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnName("normalized_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_asp_net_roles");
+                        .HasName("pk_roles");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("roles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.SectionConfig", b =>
@@ -846,7 +819,7 @@ namespace Application.Common.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnName("user_id");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer")
@@ -941,7 +914,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnName("user_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_asp_net_users");
+                        .HasName("pk_users");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -950,7 +923,7 @@ namespace Application.Common.Persistence.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -958,7 +931,7 @@ namespace Application.Common.Persistence.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnName("role_claim_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -975,12 +948,12 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnName("role_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_asp_net_role_claims");
+                        .HasName("pk_role_claims");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_asp_net_role_claims_role_id");
+                        .HasDatabaseName("ix_role_claims_role_id");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("role_claims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -988,7 +961,7 @@ namespace Application.Common.Persistence.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnName("user_claims_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -1005,12 +978,12 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_asp_net_user_claims");
+                        .HasName("pk_user_claims");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_asp_net_user_claims_user_id");
+                        .HasDatabaseName("ix_user_claims_user_id");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("user_claims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -1032,12 +1005,12 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("LoginProvider", "ProviderKey")
-                        .HasName("pk_asp_net_user_logins");
+                        .HasName("pk_user_logins");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_asp_net_user_logins_user_id");
+                        .HasDatabaseName("ix_user_logins_user_id");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("user_logins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -1051,12 +1024,12 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnName("role_id");
 
                     b.HasKey("UserId", "RoleId")
-                        .HasName("pk_asp_net_user_roles");
+                        .HasName("pk_user_roles");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_asp_net_user_roles_role_id");
+                        .HasDatabaseName("ix_user_roles_role_id");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("user_roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -1078,9 +1051,9 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("UserId", "LoginProvider", "Name")
-                        .HasName("pk_asp_net_user_tokens");
+                        .HasName("pk_user_tokens");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("user_tokens", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ChoiceOption", b =>
@@ -1135,8 +1108,6 @@ namespace Application.Common.Persistence.Migrations
                     b.HasOne("Domain.Entities.ProductDiscount", "ProductDiscount")
                         .WithMany("OrderDetails")
                         .HasForeignKey("ProductDiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("fk_order_details_product_discounts_product_discount_id");
 
                     b.HasOne("Domain.Entities.Product", "Product")
@@ -1310,7 +1281,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_role_claims_asp_net_roles_role_id");
+                        .HasConstraintName("fk_role_claims_roles_role_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -1320,7 +1291,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_claims_asp_net_users_user_id");
+                        .HasConstraintName("fk_user_claims_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -1330,7 +1301,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_logins_asp_net_users_user_id");
+                        .HasConstraintName("fk_user_logins_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -1340,14 +1311,14 @@ namespace Application.Common.Persistence.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_roles_asp_net_roles_role_id");
+                        .HasConstraintName("fk_user_roles_roles_role_id");
 
                     b.HasOne("Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_roles_asp_net_users_user_id");
+                        .HasConstraintName("fk_user_roles_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -1357,7 +1328,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
+                        .HasConstraintName("fk_user_tokens_users_user_id");
                 });
 
             modelBuilder.Entity("Domain.Entities.ChoiceOption", b =>

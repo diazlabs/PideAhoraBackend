@@ -12,7 +12,7 @@ namespace Domain.Entities
         public DateTime CreatedAt { get; set; }
         public Guid? Modifier { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public List<Tenant>? Tenants { get; set; }
-        public List<Order>? Orders { get; set; }
+        public ICollection<Tenant> Tenants { get; set; } = [];
+        public ICollection<Order> Orders { get; set; } = [];
     }
 }
