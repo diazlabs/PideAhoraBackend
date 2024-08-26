@@ -3,20 +3,22 @@ using Ardalis.Result;
 using FluentValidation;
 using MediatR;
 
-namespace Application.Tenants.Commands.SetActiveTenant
+namespace Application.TenantTemplates.Commands.DeleteTemplate
 {
-    public class SetActiveTenantCommand : IRequest<Result<SetActiveTenantResponse>>
+    public class DeleteTemplateCommand : IRequest<Result>
     {
         public Guid TenantId { get; set; }
         public Guid TemplateId { get; set; }
+        public Guid DeletedBy { get; set; }
     }
 
-    public class SetActiveTenantValidator : AbstractValidator<SetActiveTenantCommand> 
+    public class DeleteTemplateValidator : AbstractValidator<DeleteTemplateCommand>
     {
-        public SetActiveTenantValidator()
+        public DeleteTemplateValidator()
         {
             RuleFor(x => x.TenantId).RequireGuid();
             RuleFor(x => x.TemplateId).RequireGuid();
+            RuleFor(x => x.DeletedBy).RequireGuid();
         }
     }
 }

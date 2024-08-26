@@ -29,44 +29,33 @@ namespace Application.Common.Persistence
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<User>(b =>
-            {
-                b.ToTable("users");
-                b.Property(x => x.Id).HasColumnName("user_id");
-            });
+            builder.Entity<User>()
+                .ToTable("users")
+                .Property(x => x.Id).HasColumnName("user_id");
 
-            builder.Entity<Role>(b =>
-            {
-                b.ToTable("roles");
-                b.Property(x => x.Id).HasColumnName("role_id");
-            });
+            builder.Entity<Role>()
+                .ToTable("roles")
+                .Property(x => x.Id).HasColumnName("role_id");
 
-            builder.Entity<IdentityRoleClaim<Guid>>(b =>
-            {
-                b.ToTable("role_claims");
-                b.Property(x => x.Id).HasColumnName("role_claim_id");
-            });
+            builder.Entity<IdentityRoleClaim<Guid>>()
+                .ToTable("role_claims")
+                .Property(x => x.Id).HasColumnName("role_claim_id");
 
-            builder.Entity<IdentityUserRole<Guid>>(b =>
-            {
-                b.ToTable("user_roles");
-            });
+            builder.Entity<IdentityUserRole<Guid>>()
+                .ToTable("user_roles");
 
-            builder.Entity<IdentityUserClaim<Guid>>(b =>
-            {
-                b.ToTable("user_claims");
-                b.Property(x => x.Id).HasColumnName("user_claims_id");
-            });
+            builder.Entity<IdentityUserClaim<Guid>>()
+                .ToTable("user_claims")
+                .Property(x => x.Id).HasColumnName("user_claims_id");
 
-            builder.Entity<IdentityUserLogin<Guid>>(b =>
-            {
-                b.ToTable("user_logins");
-            });
+            builder.Entity<IdentityUserLogin<Guid>>()
+                .ToTable("user_logins");
 
-            builder.Entity<IdentityUserToken<Guid>>(b =>
-            {
-                b.ToTable("user_tokens");
-            });
+            builder.Entity<IdentityUserToken<Guid>>()
+                .ToTable("user_tokens");
+
+            builder.Entity<SectionProduct>()
+                .HasAlternateKey(x => new { x.Order, x.ProductId });
         }
     }
 }

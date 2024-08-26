@@ -1,4 +1,4 @@
 ﻿namespace Application.Tenants.Commands.SetActiveTenant
 {
-    public record SetActiveTenantResponse();
+    public record SetActiveTemplateResponse();
 }

@@ -26,15 +26,17 @@ namespace Application.Common.Services
             return Result.Error("No se pudo crear el template, intente de nuevo.");
         }
 
-        public async Task<Result> Delete(Guid tenantTempalteId)
+        public async Task<Result> Delete(Guid tenantTempalteId, Guid tenantId, Guid deletedBy)
         {
-            TenantTemplate? template = await FindTenantTemplateById(tenantTempalteId);
+            TenantTemplate? template = await FindTenantTemplateById(tenantTempalteId, tenantId);
             if (template == null)
             {
                 return Result.NotFound();
             }
 
             template.Deleted = true;
+            template.DeletedBy = deletedBy;
+            template.DeletedAt = DateTime.UtcNow;
 
             int rows = await _context.SaveChangesAsync();
             if (rows > 0)
@@ -45,9 +47,12 @@ namespace Application.Common.Services
             return Result.Error("No se pudo eliminar o puede que ya se haya eliminado, intente de nuevo.");
         }
 
-        public async Task<TenantTemplate?> FindTenantTemplateById(Guid tenantTempalteId)
+        public async Task<TenantTemplate?> FindTenantTemplateById(Guid tenantTempalteId, Guid tenantId, CancellationToken cancellationToken = default)
         {
-            TenantTemplate? template = await _context.TenantTemplates.FindAsync(tenantTempalteId);
+            TenantTemplate? template = await _context.TenantTemplates
+                .Where(x => x.TenantTemplateId == tenantTempalteId && x.TenantId == tenantId && !x.Deleted)
+                .FirstOrDefaultAsync(cancellationToken);
+
             return template;
         }
 
@@ -63,7 +68,7 @@ namespace Application.Common.Services
 
         public async Task<Result> Update(TenantTemplate tenantTemplate)
         {
-            TenantTemplate? entityToUpdate = await FindTenantTemplateById(tenantTemplate.TenantTemplateId);
+            TenantTemplate? entityToUpdate = await FindTenantTemplateById(tenantTemplate.TenantTemplateId, tenantTemplate.TenantId);
             if (entityToUpdate == null)
             {
                 return Result.NotFound();

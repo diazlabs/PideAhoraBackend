@@ -4,14 +4,14 @@ using MediatR;
 
 namespace Application.Tenants.Commands.SetActiveTenant
 {
-    public class SetActiveTenantCommandHandler : IRequestHandler<SetActiveTenantCommand, Result<SetActiveTenantResponse>>
+    public class SetActiveTemplateCommandHandler : IRequestHandler<SetActiveTemplateCommand, Result<SetActiveTemplateResponse>>
     {
         private readonly ITenantService _tenantService;
-        public SetActiveTenantCommandHandler(ITenantService tenantService)
+        public SetActiveTemplateCommandHandler(ITenantService tenantService)
         {
             _tenantService = tenantService;
         }
-        public async Task<Result<SetActiveTenantResponse>> Handle(SetActiveTenantCommand request, CancellationToken cancellationToken)
+        public async Task<Result<SetActiveTemplateResponse>> Handle(SetActiveTemplateCommand request, CancellationToken cancellationToken)
         {
             return await _tenantService.SetActiveTemplateForTenantId(request.TenantId, request.TemplateId);
         }
