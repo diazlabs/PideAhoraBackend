@@ -12,7 +12,7 @@ namespace Infrastructure.Common
 {
     internal class Logger
     {
-        public static void CreateLogger(ConfigurationManager configuration)
+        public static void CreateLogger(IConfiguration configuration)
         {
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()

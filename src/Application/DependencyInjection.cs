@@ -15,14 +15,8 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services, ConfigurationManager configuration)
         {
-            services.AddDbContext<ApplicationContext>(options =>
-                options
-                .UseNpgsql(configuration.GetConnectionString("Database"))
-                .UseSnakeCaseNamingConvention());
-
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<ApplicationContext>()
-                .AddSignInManager<SignInManager<User>>();
+            services.AddServices()
+                .AddPersistence(configuration);
 
             services.AddMediatR(options =>
             {
@@ -33,6 +27,25 @@ namespace Application
 
             services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
 
+            return services;
+        }
+
+        private static IServiceCollection AddPersistence(this IServiceCollection services, ConfigurationManager configuration)
+        {
+            services.AddDbContext<ApplicationContext>(options =>
+                options
+                .UseNpgsql(configuration.GetConnectionString("Database"))
+                .UseSnakeCaseNamingConvention());
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddSignInManager<SignInManager<User>>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddServices(this IServiceCollection services)
+        {
             services.AddScoped<ITenantService, TenantService>();
             services.AddScoped<ITenantTemplateService, TenantTemplateService>();
             services.AddScoped<IUserService, UserService>();
