@@ -5,13 +5,11 @@ using MediatR;
 
 namespace Application.Auth.Commnands.ChangePassword
 {
-    public class ChangePasswordCommand : IRequest<Result<ChangePasswordResponse>>
-    {
-        public string OldPassword { get; set; } = default!;
-        public string NewPassword { get; set; } = default!;
-        public string ConfirmPassword { get; set; } = default!;
-        public Guid UserId { get; set; } = default!;
-    }
+    public record ChangePasswordCommand(
+        string OldPassword,
+        string NewPassword,
+        string ConfirmPassword,
+        Guid UserId) : IRequest<Result<ChangePasswordResponse>>;
 
     public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
     {

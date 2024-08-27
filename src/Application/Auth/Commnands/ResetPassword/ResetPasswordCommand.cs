@@ -5,12 +5,10 @@ using MediatR;
 
 namespace Application.Auth.Commnands.ResetPassword
 {
-    public class ResetPasswordCommand : IRequest<Result<ResetPasswordResponse>>
-    {
-        public Guid UserId { get; set; }
-        public string Password { get; set; } = default!;
-        public string Token { get; set; } = default!;
-    }
+    public record ResetPasswordCommand(
+        Guid UserId,
+        string Password,
+        string Token) : IRequest<Result<ResetPasswordResponse>>;
 
     public class ResetPasswordValidator : AbstractValidator<ResetPasswordCommand>
     {

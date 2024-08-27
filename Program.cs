@@ -9,16 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.CustomSchemaIds(type => type.FullName);
-});
+builder.Services.AddSwaggerGen();
 builder.Services.ConfigureHttpJsonOptions(options => {
     options.SerializerOptions.WriteIndented = true;
     options.SerializerOptions.IncludeFields = true;
     options.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
 });
-builder.Services.AddRouting(x => x.LowercaseUrls = true);
+
 builder.Services.AddControllers();
 
 builder.Services.AddApplication(builder.Configuration)

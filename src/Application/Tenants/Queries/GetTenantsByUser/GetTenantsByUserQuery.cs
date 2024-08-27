@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Tenants.Queries.GetTenantsByUser
 {
-    public class GetTenantsByUserQuery : IRequest<Result<GetTenantsByUserResponse>>
+    public class GetTenantsByUserQuery : IRequest<IEnumerable<GetTenantsByUserResponse>>
     {
         public Guid UserId { get; set; }
     }

@@ -5,15 +5,13 @@ using MediatR;
 
 namespace Application.Auth.Commnands.Register
 {
-    public class RegisterCommand : IRequest<Result<RegisterCommandResponse>>
-    {
-        public string FirstName { get; set; } = default!;
-        public string LastName { get; set; } = default!;
-        public string Email { get; set; } = default!;
-        public string Password { get; set; } = default!;
-        public string PhoneNumber { get; set; } = default!;
-        public string Country { get; set; } = default!;
-    }
+    public record RegisterCommand(
+        string FirstName,
+        string LastName,
+        string Email,
+        string Password,
+        string PhoneNumber,
+        string Country) : IRequest<Result<RegisterCommandResponse>>;
 
     public class RegisterValidator : AbstractValidator<RegisterCommand>
     {

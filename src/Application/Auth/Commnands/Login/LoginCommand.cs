@@ -5,11 +5,7 @@ using MediatR;
 
 namespace Application.Auth.Commnands.Login
 {
-    public class LoginCommand : IRequest<Result<LoginCommandResponse>>
-    {
-        public string UsernameOrEmail { get; set; } = default!;
-        public string Password { get; set; } = default!;
-    }
+    public record LoginCommand(string UsernameOrEmail, string Password) : IRequest<Result<LoginCommandResponse>>;
 
     public class LoginValidator : AbstractValidator<LoginCommand>
     {
