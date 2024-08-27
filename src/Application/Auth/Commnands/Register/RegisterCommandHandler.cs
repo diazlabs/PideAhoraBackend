@@ -11,10 +11,12 @@ namespace Application.Auth.Commnands.Register
     {
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
-        public RegisterCommandHandler(UserManager<User> userManager, IUserService userService)
+        private readonly IEmailService _emailService;
+        public RegisterCommandHandler(UserManager<User> userManager, IUserService userService, IEmailService emailService)
         {
             _userManager = userManager;
             _userService = userService;
+            _emailService = emailService;
         }
 
         public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -39,14 +41,17 @@ namespace Application.Auth.Commnands.Register
             }
 
             IdentityResult result = await _userManager.CreateAsync(newUser);
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                return new RegisterCommandResponse
-                {
-                };
+                return result.ToErrorResult();
             }
 
-            return result.ToErrorResult();
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+
+            await _emailService.SendConfirmationEmail(newUser.Email, token);
+            return new RegisterCommandResponse
+            {
+            };
         }
     }
 }

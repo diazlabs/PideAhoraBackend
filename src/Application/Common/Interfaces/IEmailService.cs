@@ -4,6 +4,7 @@ namespace Application.Common.Interfaces
 {
     public interface IEmailService
     {
-        Task<Result> SendEmail(string to, string subject, string content);
+        Task<Result> SendConfirmationEmail(string to, string token);
+        Task<Result> SendResetPasswordEmail(string to, string token);
     }
 }

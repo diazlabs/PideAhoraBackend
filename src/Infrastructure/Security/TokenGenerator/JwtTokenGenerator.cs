@@ -16,24 +16,20 @@ namespace Infrastructure.Security.TokenGenerator
             string firstName,
             string lastName,
             string email,
-            List<string> tenants,
-            List<string> permissions,
-            List<string> roles)
+            IEnumerable<string> tenants,
+            List<Claim> claims,
+            IEnumerable<string> roles)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new List<Claim>
-        {
-            new(JwtRegisteredClaimNames.Name, firstName),
-            new(JwtRegisteredClaimNames.FamilyName, lastName),
-            new(JwtRegisteredClaimNames.Email, email),
-            new("id", UserId.ToString()),
-        };
-
-            roles.ForEach(role => claims.Add(new(ClaimTypes.Role, role)));
-            permissions.ForEach(permission => claims.Add(new("permissions", permission)));
-            tenants.ForEach(tenant => claims.Add(new("tenants", tenant)));
+            claims.Add(new(ClaimTypes.Name, firstName));
+            claims.Add(new(ClaimTypes.Surname, lastName));
+            claims.Add(new(ClaimTypes.Email, email));
+            claims.Add(new(ClaimTypes.NameIdentifier, UserId.ToString()));
+        
+            claims.AddRange(tenants.Select(tenant => new Claim("tenant", tenant)));
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var token = new JwtSecurityToken(
                 _jwtSettings.Issuer,

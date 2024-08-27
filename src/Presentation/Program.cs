@@ -1,34 +1,21 @@
 using Application;
 using Infrastructure;
 using Infrastructure.Common.Extensions;
+using Presentation;
 using Serilog;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.CustomSchemaIds(type => type.FullName);
-});
-builder.Services.ConfigureHttpJsonOptions(options => {
-    options.SerializerOptions.WriteIndented = true;
-    options.SerializerOptions.IncludeFields = true;
-    options.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-});
-builder.Services.AddRouting(x => x.LowercaseUrls = true);
-builder.Services.AddControllers();
-
-builder.Services.AddApplication(builder.Configuration)
+builder.Services
+    .AddPresentation()
+    .AddApplication(builder.Configuration)
     .AddInfrastructure(builder.Configuration);
 
+builder.Logging.ClearProviders();
 builder.Host.UseSerilog(Log.Logger);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -39,6 +26,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseInfrastructure();
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapHealthCheckz();
 
 app.MapControllers();

@@ -1,11 +1,16 @@
 ﻿using Application.Common.Interfaces;
 using Infrastructure.Common;
+using Infrastructure.Common.Email;
 using Infrastructure.Common.Services;
 using Infrastructure.Security.TokenGenerator;
 using Infrastructure.Security.TokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Mail;
+using System.Net;
+using Application.Common.Security;
+using Infrastructure.Security;
 
 namespace Infrastructure
 {
@@ -15,11 +20,12 @@ namespace Infrastructure
         {
             Logger.CreateLogger(configuration);
 
-            services.AddAuthentication(configuration);
+            services
+                .AddHttpContextAccessor()
+                .AddAuthentication(configuration)
+                .AddEmailService(configuration);
 
             services.AddHealthChecks();
-
-            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }
@@ -29,11 +35,32 @@ namespace Infrastructure
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.Section));
 
             services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddSingleton<ICurrentUserProvider, CurrentUserProvider>();
 
             services
                 .ConfigureOptions<JwtBearerTokenValidationConfiguration>()
                 .AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer();
+
+            return services;
+        }
+
+        private static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration configuration)
+        {
+            EmailSettings emailSettings = new();
+            configuration.Bind(EmailSettings.Section, emailSettings);
+
+            services
+                .AddFluentEmail(emailSettings.DefaultFromEmail)
+                .AddSmtpSender(new SmtpClient(emailSettings.SmtpSettings.Server)
+                {
+                    Port = emailSettings.SmtpSettings.Port,
+                    Credentials = new NetworkCredential(
+                        emailSettings.SmtpSettings.Username,
+                        emailSettings.SmtpSettings.Password),
+                });
+
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

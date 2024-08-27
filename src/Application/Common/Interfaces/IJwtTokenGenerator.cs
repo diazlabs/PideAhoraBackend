@@ -1,4 +1,6 @@
-﻿namespace Application.Common.Interfaces
+﻿using System.Security.Claims;
+
+namespace Application.Common.Interfaces
 {
     public interface IJwtTokenGenerator
     {
@@ -7,8 +9,8 @@
            string firstName,
            string lastName,
            string email,
-           List<string> tenants,
-           List<string> permissions,
-           List<string> roles);
+           IEnumerable<string> tenants,
+           List<Claim> cliams,
+           IEnumerable<string> roles);
     }
 }

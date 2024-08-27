@@ -1,4 +1,5 @@
 ﻿using Application.Auth.Commnands.ChangePassword;
+using Application.Auth.Commnands.ConfirmEmail;
 using Application.Auth.Commnands.Login;
 using Application.Auth.Commnands.Register;
 using Application.Auth.Commnands.ResetPassword;
@@ -70,6 +71,16 @@ namespace Presentation.Controllers
         [HttpGet("send-reset-password")]
         public async Task<ActionResult> SendResetPassword(SendResetPasswordCommand command)
         {
+            var result = await _mediator.Send(command);
+
+            return ToActionResult(result);
+        }
+
+        [HttpPost("confirm-email")]
+        public async Task<ActionResult> ConfirmEmail(ConfirmEmailRequest request)
+        {
+            var command = new ConfirmEmailCommand(request.Token, request.Email);
+
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);
