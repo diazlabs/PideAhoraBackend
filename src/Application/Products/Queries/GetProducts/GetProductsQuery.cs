@@ -1,14 +1,10 @@
 ﻿using Application.Common.Extensions;
-using Ardalis.Result;
 using FluentValidation;
 using MediatR;
 
 namespace Application.Products.Queries.GetProducts
 {
-    public class GetProductsQuery : IRequest<List<GetProductsResponse>>
-    {
-        public Guid TenantId { get; set; }
-    }
+    public record GetProductsQuery(Guid TenantId) : IRequest<List<GetProductsResponse>>;
 
     public class GetProductsQueryValidator : AbstractValidator<GetProductsQuery>
     {

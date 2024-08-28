@@ -28,7 +28,7 @@ namespace Application.Auth.Commnands.SendResetPassword
             }
 
             string token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _emailService.SendEmail(request.Email, "Restablecer contraseña", $"{token}");
+            var result = await _emailService.SendResetPasswordEmail(request.Email, token);
 
             return result;
         }

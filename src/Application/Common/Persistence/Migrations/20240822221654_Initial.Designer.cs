@@ -586,7 +586,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("section_variant_id");
 
-                    b.Property<Guid>("TemplateId")
+                    b.Property<Guid>("TenantTemplateId")
                         .HasColumnType("uuid")
                         .HasColumnName("template_id");
 
@@ -618,7 +618,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
 
-                    b.Property<Guid>("ActiveTemplateId")
+                    b.Property<Guid>("ActiveTenantTemplateId")
                         .HasColumnType("uuid")
                         .HasColumnName("active_template_id");
 

@@ -1,6 +1,5 @@
 ﻿using Application.Common.Security;
 using Microsoft.AspNetCore.Http;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Infrastructure.Security
@@ -22,6 +21,11 @@ namespace Infrastructure.Security
             var email = GetSingleClaimValue(ClaimTypes.Email);
 
             return new CurrentUser(id, firstName, lastName, email, tenants, roles);
+        }
+
+        public Guid GetUserId()
+        {
+            return Guid.Parse(GetSingleClaimValue(ClaimTypes.NameIdentifier));
         }
 
         private List<string> GetClaimValues(string claimType) =>

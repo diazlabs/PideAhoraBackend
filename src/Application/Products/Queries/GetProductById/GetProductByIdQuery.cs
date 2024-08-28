@@ -5,11 +5,7 @@ using MediatR;
 
 namespace Application.Products.Queries.GetProductById
 {
-    public class GetProductByIdQuery : IRequest<Result<GetProductByIdResponse>>
-    {
-        public int ProductId { get; set; }
-        public Guid TenantId { get; set; }
-    }
+    public record GetProductByIdQuery(int ProductId, Guid TenantId) : IRequest<Result<GetProductByIdResponse>>;
 
     public class GetProductByIdValidator : AbstractValidator<GetProductByIdQuery>
     {

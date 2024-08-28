@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Persistence;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -11,21 +12,23 @@ namespace Application.TemplateSections.Commands.UpdateSection
     {
         private readonly ApplicationContext _context;
         private readonly ITenantTemplateService _tenantTemplateService;
-        public UpdateSectionCommandHandler(ApplicationContext context, ITenantTemplateService tenantTemplateService)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public UpdateSectionCommandHandler(ApplicationContext context, ITenantTemplateService tenantTemplateService, ICurrentUserProvider currentUserProvider)
         {
             _context = context;
             _tenantTemplateService = tenantTemplateService;
+            _currentUserProvider = currentUserProvider;
         }
         public async Task<Result<UpdateSectionResponse>> Handle(UpdateSectionCommand request, CancellationToken cancellationToken)
         {
-            TenantTemplate? template = await _tenantTemplateService.FindTenantTemplateById(request.TemplateId, request.TenantId, cancellationToken);
+            TenantTemplate? template = await _tenantTemplateService.FindTenantTemplateById(request.TenantTemplateId, request.TenantId, cancellationToken);
             if (template == null)
             {
                 return Result.NotFound();
             }
 
             var section = await _context.TemplateSections
-                .Where(x => x.TemplateSectionId == request.TemplateSectionId && x.TemplateId == request.TemplateId)
+                .Where(x => x.TemplateSectionId == request.TemplateSectionId && x.TenantTemplateId == request.TenantTemplateId)
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (section == null)
@@ -34,7 +37,7 @@ namespace Application.TemplateSections.Commands.UpdateSection
             }
 
             section.Visible = request.Visible;
-            section.Modifier = request.Modifier;
+            section.Modifier = _currentUserProvider.GetUserId();
             section.UpdatedAt = DateTime.UtcNow;
             section.SectionProducts = request.Products.Select(x => new SectionProduct
             {

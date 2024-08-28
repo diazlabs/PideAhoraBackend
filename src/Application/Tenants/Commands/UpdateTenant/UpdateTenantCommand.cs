@@ -15,7 +15,6 @@ namespace Application.Tenants.Commands.UpdateTenant
         public string Description { get; set; } = default!;
         public IFormFile? Logo { get; set; }
         public string Category { get; set; } = default!;
-        public Guid UserId { get; set; }
     }
 
     public class UpdateTenantValidator : AbstractValidator<UpdateTenantCommand>
@@ -25,7 +24,6 @@ namespace Application.Tenants.Commands.UpdateTenant
             RuleFor(x => x.TenantId).RequireGuid();
             RuleFor(x => x.PageTitle).ValidateRequiredProperty("el titúlo de la página", 2, 50);
             RuleFor(x => x.Path).ValidateRequiredProperty("el path de la página", 2, 50);
-            RuleFor(x => x.UserId).RequireGuid();
             RuleFor(x => x.Name).ValidateRequiredProperty("el nombre de la página");
             RuleFor(x => x.Category).ValidateTenantCategory();
             RuleFor(x => x.Description).ValidateRequiredProperty("la descripción de la página");

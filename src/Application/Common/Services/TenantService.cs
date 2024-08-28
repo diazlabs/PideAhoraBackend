@@ -60,7 +60,7 @@ namespace Application.Common.Services
             return tenants;
         }
 
-        public async Task<Result> SetActiveTemplateForTenantId(Guid tenantId, Guid tenantTemplateId)
+        public async Task<Result> SetActiveTemplateForTenantId(Guid tenantId, Guid tenantTemplateId, Guid modifier)
         {
             Tenant? tenant = await FindTenantById(tenantId);
             if (tenant == null)
@@ -68,7 +68,10 @@ namespace Application.Common.Services
                 return Result.NotFound();
             }
 
-            tenant.ActiveTemplateId = tenantTemplateId;
+            tenant.ActiveTenantTemplateId = tenantTemplateId;
+            tenant.Modifier = modifier;
+            tenant.UpdatedAt = DateTime.UtcNow;
+
             int rows = await _context.SaveChangesAsync();
             if (rows > 0)
             {

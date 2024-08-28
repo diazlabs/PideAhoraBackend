@@ -10,6 +10,6 @@ namespace Application.Common.Interfaces
         Task<Result<Tenant>> Create(Tenant tenant);
         Task<Result> Update(Tenant tenant);
         Task<Result> Delete(Guid tenantId);
-        Task<Result> SetActiveTemplateForTenantId(Guid tenantId, Guid tenantTemplateId);
+        Task<Result> SetActiveTemplateForTenantId(Guid tenantId, Guid tenantTemplateId, Guid modifier);
     }
 }

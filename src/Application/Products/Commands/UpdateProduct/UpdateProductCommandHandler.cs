@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Persistence;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -12,12 +13,14 @@ namespace Application.Products.Commands.UpdateProduct
         private readonly ApplicationContext _context;
         private readonly IProductService _productService;
         private readonly ILogger<UpdateProductCommandHandler> _logger;
+        private readonly ICurrentUserProvider _currentUserProvider;
         public UpdateProductCommandHandler(
-            ApplicationContext context, IProductService productService, ILogger<UpdateProductCommandHandler> logger)
+            ApplicationContext context, IProductService productService, ILogger<UpdateProductCommandHandler> logger, ICurrentUserProvider currentUserProvider)
         {
             _context = context;
             _productService = productService;
             _logger = logger;
+            _currentUserProvider = currentUserProvider;
         }
         public async Task<Result<UpdateProductResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
@@ -31,7 +34,7 @@ namespace Application.Products.Commands.UpdateProduct
             _logger.LogInformation("Updating product {product} with request {request}", product, request);
 
             product.UpdatedAt = DateTime.UtcNow;
-            product.Modifier = request.Modifier;
+            product.Modifier = _currentUserProvider.GetUserId();
             product.ProductPrice = request.ProductPrice;
             product.ProductDescription = request.ProductDescription;
             product.ProductName = request.ProductName;

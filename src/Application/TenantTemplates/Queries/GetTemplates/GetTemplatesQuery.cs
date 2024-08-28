@@ -4,10 +4,7 @@ using MediatR;
 
 namespace Application.TenantTemplates.Queries.GetTemplates
 {
-    public class GetTemplatesQuery : IRequest<IEnumerable<GetTemplatesResponse>>
-    {
-        public Guid TenantId { get; set; }
-    }
+    public record GetTemplatesQuery(Guid TenantId) : IRequest<IEnumerable<GetTemplatesResponse>>;
 
     public class GetTemplatesQueryValidator : AbstractValidator<GetTemplatesQuery>
     {

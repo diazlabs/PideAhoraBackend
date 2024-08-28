@@ -11,7 +11,7 @@ namespace Application.Auth.Commnands.ConfirmEmail
         public ConfirmEmailValidator()
         {
             RuleFor(x => x.Token).NotEmpty().WithMessage("El link de confirmación ha expirado");
-            RuleFor(x => x.email).NotEmpty().WithMessage("El email es requerido");
+            RuleFor(x => x.Email).NotEmpty().WithMessage("El email es requerido");
         }
     }
 }

@@ -11,7 +11,6 @@ namespace Application.TenantTemplates.Commands.CreateTemplate
         public string Header { get; set; } = default!;
         public string Description { get; set; } = default!;
         public string Logo { get; set; } = default!;
-        public Guid Creator { get; set; }
     }
 
     public class CreateTemplateValidator : AbstractValidator<CreateTemplateCommand>
@@ -22,7 +21,6 @@ namespace Application.TenantTemplates.Commands.CreateTemplate
             RuleFor(x => x.Header).ValidateRequiredProperty("el titulo del template");
             RuleFor(x => x.Description).ValidateRequiredProperty("la descripción del template");
             RuleFor(x => x.Logo).ValidateRequiredProperty("el logo");
-            RuleFor(x => x.Creator).RequireGuid();
         }
     }
 }

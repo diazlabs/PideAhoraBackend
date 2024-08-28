@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -8,9 +9,11 @@ namespace Application.TenantTemplates.Commands.CreateTemplate
     public class CreateTemplateCommandHandler : IRequestHandler<CreateTemplateCommand, Result<CreateTemplateResponse>>
     {
         private readonly ITenantTemplateService _tenantTemplateService;
-        public CreateTemplateCommandHandler(ITenantTemplateService tenantTemplateService)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public CreateTemplateCommandHandler(ITenantTemplateService tenantTemplateService, ICurrentUserProvider currentUserProvider)
         {
             _tenantTemplateService = tenantTemplateService;
+            _currentUserProvider = currentUserProvider;
         }
 
         public async Task<Result<CreateTemplateResponse>> Handle(CreateTemplateCommand request, CancellationToken cancellationToken)
@@ -18,7 +21,7 @@ namespace Application.TenantTemplates.Commands.CreateTemplate
             TenantTemplate tenantTemplate = new()
             {
                 CreatedAt = DateTime.UtcNow,
-                Creator = request.Creator,
+                Creator = _currentUserProvider.GetUserId(),
                 Description = request.Description,
                 Logo = request.Logo,
                 Header = request.Header,

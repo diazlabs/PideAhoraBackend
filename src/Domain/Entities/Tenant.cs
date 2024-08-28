@@ -16,7 +16,7 @@ namespace Domain.Entities
         public DateTime? DeletedAt { get; set; }
         public Guid? DeletedBy { get; set; }
         public string Category { get; set; } = default!;
-        public Guid ActiveTemplateId { get; set; }
+        public Guid ActiveTenantTemplateId { get; set; }
         public DateTime LastPayment { get; set; }
         public Guid Creator { get; set; }
         public DateTime CreatedAt { get; set; }

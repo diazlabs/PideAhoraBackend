@@ -3,5 +3,6 @@
     public interface ICurrentUserProvider
     {
         CurrentUser GetCurrentUser();
+        Guid GetUserId();
     }
 }

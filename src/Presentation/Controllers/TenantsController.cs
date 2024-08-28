@@ -23,27 +23,26 @@ namespace Presentation.Controllers
         public async Task<ActionResult> Update(Guid tenantId, UpdateTenantCommand command)
         {
             command.TenantId = tenantId;
+
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);
         }
 
         [HttpDelete("{tenantId:guid}")]
-        public async Task<ActionResult> Update(Guid tenantId)
+        public async Task<ActionResult> Delete(Guid tenantId)
         {
-            var command = new DeleteTenantCommand();
-            command.TenantId = tenantId;
+            var command = new DeleteTenantCommand(tenantId);
+
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);
         }
 
         [HttpPatch("{tenantId:guid}")]
-        public async Task<ActionResult> SetActiveTenant(Guid tenantId, Guid templateId)
+        public async Task<ActionResult> SetActiveTenant(Guid tenantId, Guid TenantTemplateId)
         {
-            var command = new SetActiveTemplateCommand();
-            command.TenantId = tenantId;
-            command.TemplateId = templateId;
+            var command = new SetActiveTemplateCommand(tenantId, TenantTemplateId);
 
             var result = await _mediator.Send(command);
 
@@ -53,8 +52,7 @@ namespace Presentation.Controllers
         [HttpGet("{tenantId:guid}")]
         public async Task<ActionResult> GetTenantById(Guid tenantId)
         {
-            var command = new GetTenantByIdQuery();
-            command.TenantId = tenantId;
+            var command = new GetTenantByIdQuery(tenantId);
 
             var result = await _mediator.Send(command);
 
@@ -65,7 +63,6 @@ namespace Presentation.Controllers
         public async Task<ActionResult> GetTenants()
         {
             var command = new GetTenantsByUserQuery();
-            command.UserId = (Guid)UserId!;
 
             var tenants = await _mediator.Send(command);
 

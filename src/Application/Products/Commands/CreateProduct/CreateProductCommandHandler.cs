@@ -1,4 +1,5 @@
 ﻿using Application.Common.Persistence;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -10,10 +11,12 @@ namespace Application.Products.Commands.CreateProduct
     {
         private readonly ApplicationContext _context;
         private readonly ILogger<CreateProductCommandHandler> _logger;
-        public CreateProductCommandHandler(ApplicationContext context, ILogger<CreateProductCommandHandler> logger)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public CreateProductCommandHandler(ApplicationContext context, ILogger<CreateProductCommandHandler> logger, ICurrentUserProvider currentUserProvider)
         {
             _context = context;
             _logger = logger;
+            _currentUserProvider = currentUserProvider;
         }
         public async Task<Result<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
@@ -21,7 +24,7 @@ namespace Application.Products.Commands.CreateProduct
             
             Product product = new()
             {
-                Creator = request.Creator,
+                Creator = _currentUserProvider.GetUserId(),
                 Deleted = false,
                 Image = request.Image,
                 ProductName = request.ProductName,

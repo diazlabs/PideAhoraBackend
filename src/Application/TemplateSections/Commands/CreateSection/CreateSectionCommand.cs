@@ -8,11 +8,10 @@ namespace Application.TemplateSections.Commands.CreateSection
     public class CreateSectionCommand : IRequest<Result<CreateSectionResponse>>
     {
             public Guid TenantId { get; set; }
-            public Guid TemplateId { get; set; }
+            public Guid TenantTemplateId { get; set; }
             public int SectionVariantId { get; set; }
             public int Order { get; set; }
             public bool Visible { get; set; }
-            public Guid Creator { get; set; }
             public List<CreateSectionProduct> Products { get; set; } = [];
     }
 
@@ -28,8 +27,7 @@ namespace Application.TemplateSections.Commands.CreateSection
         {
             RuleFor(x => x.SectionVariantId).GreaterThan(0).WithMessage("La variante no esta definida");
             RuleFor(x => x.TenantId).RequireGuid();
-            RuleFor(x => x.TemplateId).RequireGuid();
-            RuleFor(x => x.Creator).RequireGuid();
+            RuleFor(x => x.TenantTemplateId).RequireGuid();
 
             RuleForEach(x => x.Products).SetValidator(new SectionProductValidator());
         }

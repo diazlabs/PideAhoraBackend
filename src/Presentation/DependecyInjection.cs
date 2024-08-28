@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Microsoft.OpenApi.Models;
+using System.Text.Json;
 
 namespace Presentation
 {
@@ -10,6 +11,30 @@ namespace Presentation
             services.AddSwaggerGen(options =>
             {
                 options.CustomSchemaIds(type => type.FullName);
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type= ReferenceType.SecurityScheme,
+                                Id= "Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
             });
 
             services.ConfigureHttpJsonOptions(options => {
@@ -20,7 +45,6 @@ namespace Presentation
 
             services.AddRouting(x => x.LowercaseUrls = true);
             services.AddControllers();
-
 
             return services;
         }

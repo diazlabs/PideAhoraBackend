@@ -14,7 +14,7 @@ namespace Application.TemplateSections.Queries.GetTemplateSections
         public async Task<IEnumerable<GetTemplateSectionsResponse>> Handle(GetTemplateSectionsQuery request, CancellationToken cancellationToken)
         {
             var templateSections = await _context.TemplateSections
-                .Where(x => x.TemplateId == request.TemplateId && x.TenantTemplate.TenantId == request.TenantId && !x.Deleted)
+                .Where(x => x.TenantTemplateId == request.TenantTemplateId && x.TenantTemplate.TenantId == request.TenantId && !x.Deleted)
                 .Select(x => new GetTemplateSectionsResponse(
                     x.SectionVariantId,
                     x.Order,

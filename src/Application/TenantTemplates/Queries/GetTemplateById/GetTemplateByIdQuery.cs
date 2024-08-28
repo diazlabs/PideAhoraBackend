@@ -5,11 +5,7 @@ using MediatR;
 
 namespace Application.TenantTemplates.Queries.GetTemplateById
 {
-    public class GetTemplateByIdQuery : IRequest<Result<GetTemplateByIdResponse>>
-    {
-        public Guid TenantTemplateId { get; set; }
-        public Guid TenantId { get; set; }
-    }
+    public record GetTemplateByIdQuery(Guid TenantTemplateId, Guid TenantId) : IRequest<Result<GetTemplateByIdResponse>>;
 
     public class GetTemplateByIdValidator : AbstractValidator<GetTemplateByIdQuery>
     {

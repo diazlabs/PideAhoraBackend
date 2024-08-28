@@ -5,10 +5,7 @@ using MediatR;
 
 namespace Application.Tenants.Commands.DeleteTenant
 {
-    public class DeleteTenantCommand : IRequest<Result<DeleteTenantResponse>>
-    {
-        public Guid TenantId { get; set; }
-    }
+    public record DeleteTenantCommand(Guid TenantId) : IRequest<Result<DeleteTenantResponse>>;
 
     public class DeleteTenantValidator : AbstractValidator<DeleteTenantCommand>
     {

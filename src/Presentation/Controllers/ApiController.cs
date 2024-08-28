@@ -10,16 +10,6 @@ namespace Presentation.Controllers
     [Route("api/[controller]")]
     public class ApiController : ControllerBase
     {
-        public readonly Guid? UserId;
-
-        public ApiController()
-        {
-            string? claim = User.Claims.FirstOrDefault(x => x.Type == "id")?.Value;
-            if (!string.IsNullOrEmpty(claim))
-            {
-                UserId = Guid.Parse(claim);
-            }
-        }
         public ActionResult ToActionResult<T>(Result<T> result)
         {
             var response = new Response<T>()

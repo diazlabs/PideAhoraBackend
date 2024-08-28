@@ -7,7 +7,6 @@ namespace Application.Products.Commands.CreateProduct
 {
     public class CreateProductCommand : IRequest<Result<CreateProductResponse>>
     {
-        public Guid Creator {  get; set; }
         public Guid TenantId { get; set; }
         public string ProductName { get; set; } = default!;
         public string? ProductDescription { get; set; }
@@ -36,7 +35,6 @@ namespace Application.Products.Commands.CreateProduct
     {
         public CreateProductValidator()
         {
-            RuleFor(x => x.Creator).RequireGuid();
             RuleFor(x => x.TenantId).RequireGuid();
             RuleFor(x => x.ProductPrice).PriceGuard();
             RuleFor(x => x.ProductDescription).MinimumLength(0).MaximumLength(500);

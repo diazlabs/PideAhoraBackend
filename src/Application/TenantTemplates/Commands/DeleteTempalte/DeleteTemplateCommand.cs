@@ -5,20 +5,14 @@ using MediatR;
 
 namespace Application.TenantTemplates.Commands.DeleteTemplate
 {
-    public class DeleteTemplateCommand : IRequest<Result>
-    {
-        public Guid TenantId { get; set; }
-        public Guid TemplateId { get; set; }
-        public Guid DeletedBy { get; set; }
-    }
+    public record DeleteTemplateCommand(Guid TenantId, Guid TenantTemplateId) : IRequest<Result>;
 
     public class DeleteTemplateValidator : AbstractValidator<DeleteTemplateCommand>
     {
         public DeleteTemplateValidator()
         {
             RuleFor(x => x.TenantId).RequireGuid();
-            RuleFor(x => x.TemplateId).RequireGuid();
-            RuleFor(x => x.DeletedBy).RequireGuid();
+            RuleFor(x => x.TenantTemplateId).RequireGuid();
         }
     }
 }

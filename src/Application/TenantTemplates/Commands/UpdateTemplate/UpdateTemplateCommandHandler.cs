@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -8,9 +9,11 @@ namespace Application.TenantTemplates.Commands.UpdateTemplate
     public class UpdateTemplateCommandHandler : IRequestHandler<UpdateTemplateCommand, Result<UpdateTemplateResponse>>
     {
         private readonly ITenantTemplateService _tenantTemplateService;
-        public UpdateTemplateCommandHandler(ITenantTemplateService tenantTemplateService)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public UpdateTemplateCommandHandler(ITenantTemplateService tenantTemplateService, ICurrentUserProvider currentUserProvider)
         {
             _tenantTemplateService = tenantTemplateService;
+            _currentUserProvider = currentUserProvider;
         }
 
         public async Task<Result<UpdateTemplateResponse>> Handle(UpdateTemplateCommand request, CancellationToken cancellationToken)
@@ -18,13 +21,12 @@ namespace Application.TenantTemplates.Commands.UpdateTemplate
             TenantTemplate tenantTemplate = new()
             {
                 CreatedAt = DateTime.UtcNow,
-                Creator = request.Modifier,
                 Description = request.Description,
                 Logo = request.Logo,
                 Header = request.Header,
                 TenantId = request.TenantId,
-                Modifier = request.Modifier,
-                TenantTemplateId = request.TemplateId,
+                Modifier = _currentUserProvider.GetUserId(),
+                TenantTemplateId = request.TenantTemplateId,
                 UpdatedAt = DateTime.UtcNow
             };
 

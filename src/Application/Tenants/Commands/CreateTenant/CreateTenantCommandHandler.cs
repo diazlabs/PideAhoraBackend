@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -8,9 +9,11 @@ namespace Application.Tenants.Commands.CreateTenant
     public class CreateTenantCommandHandler : IRequestHandler<CreateTenantCommand, Result<CreateTenantResponse>>
     {
         private readonly ITenantService _tenantService;
-        public CreateTenantCommandHandler(ITenantService tenantService)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public CreateTenantCommandHandler(ITenantService tenantService, ICurrentUserProvider currentUserProvider)
         {
             _tenantService = tenantService;
+            _currentUserProvider = currentUserProvider;
         }
         public async Task<Result<CreateTenantResponse>> Handle(CreateTenantCommand request, CancellationToken cancellationToken)
         {
@@ -18,7 +21,7 @@ namespace Application.Tenants.Commands.CreateTenant
             {
                 Path = request.Path,
                 PageTitle = request.PageTitle,
-                UserId = request.UserId,
+                UserId = _currentUserProvider.GetUserId(),
                 Name = request.Name,
                 Logo = "",//request.Logo,
                 TenantId = Guid.NewGuid(),

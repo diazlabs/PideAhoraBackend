@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Persistence;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -10,11 +11,12 @@ namespace Application.Products.Commands.DeleteProduct
     {
         private readonly ApplicationContext _context;
         private readonly IProductService _productService;
-
-        public DeleteProductCommandHandler(ApplicationContext context, IProductService productService)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public DeleteProductCommandHandler(ApplicationContext context, IProductService productService, ICurrentUserProvider currentUserProvider)
         {
             _context = context;
             _productService = productService;
+            _currentUserProvider = currentUserProvider;
         }
         public async Task<Result<DeleteProductResponse>> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
@@ -25,7 +27,7 @@ namespace Application.Products.Commands.DeleteProduct
             }
 
             product.Deleted = true;
-            product.DeletedBy = request.UserId;
+            product.DeletedBy = _currentUserProvider.GetUserId();
             product.DeletedAt = DateTime.UtcNow;
 
             int rows = await _context.SaveChangesAsync();

@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
-    public class SectionsContoller(ISender _mediator) : ApiController
+    [Route("api/[controller]/{tenantId:guid}")]
+    public class SectionsController(ISender _mediator) : ApiController
     {
-        [HttpPost("{tenantId:guid}")]
+        [HttpPost]
         public async Task<ActionResult> Create(Guid tenantId, CreateSectionCommand command)
         {
-            command.Creator = (Guid)UserId!;
             command.TenantId = tenantId;
 
             var result = await _mediator.Send(command);
@@ -20,10 +20,9 @@ namespace Presentation.Controllers
             return ToActionResult(result);
         }
 
-        [HttpPut("{tenantId:guid}")]
+        [HttpPut("{templateSectionId:int}")]
         public async Task<ActionResult> Update(Guid tenantId, int templateSectionId, UpdateSectionCommand command)
         {
-            command.Modifier = (Guid)UserId!;
             command.TenantId = tenantId;
             command.TemplateSectionId = templateSectionId;
 
@@ -32,27 +31,27 @@ namespace Presentation.Controllers
             return ToActionResult(result);
         }
 
-        [HttpDelete("{tenantId:guid}")]
-        public async Task<ActionResult> Delete(Guid tenantId, int templateSectionId, Guid templateId)
+        [HttpDelete("{templateSectionId:int}")]
+        public async Task<ActionResult> Delete(Guid tenantId, int templateSectionId, Guid TenantTemplateId)
         {
-            var command = new DeleteSectionCommand();   
-            command.DeletedBy = (Guid)UserId!;
+            var command = new DeleteSectionCommand();
+
             command.TenantId = tenantId;
             command.SectionId = templateSectionId;
-            command.TemplateId = templateId;
+            command.TenantTemplateId = TenantTemplateId;
 
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);
         }
 
-        [HttpGet("{tenantId:guid}")]
-        public async Task<ActionResult> GetTemplateSections(Guid tenantId, Guid templateId)
+        [HttpGet]
+        public async Task<ActionResult> GetTemplateSections(Guid tenantId, Guid TenantTemplateId)
         {
             var command = new GetTemplateSectionsQuery();
            
             command.TenantId = tenantId;
-            command.TemplateId = templateId;
+            command.TenantTemplateId = TenantTemplateId;
 
             var sections = await _mediator.Send(command);
 

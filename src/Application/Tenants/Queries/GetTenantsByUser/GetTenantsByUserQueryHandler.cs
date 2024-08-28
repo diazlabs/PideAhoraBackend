@@ -1,5 +1,5 @@
 ﻿using Application.Common.Interfaces;
-using Ardalis.Result;
+using Application.Common.Security;
 using MediatR;
 
 namespace Application.Tenants.Queries.GetTenantsByUser
@@ -7,13 +7,15 @@ namespace Application.Tenants.Queries.GetTenantsByUser
     public class GetTenantsByUserQueryHandler : IRequestHandler<GetTenantsByUserQuery, IEnumerable<GetTenantsByUserResponse>>
     {
         private readonly ITenantService _tenantService;
-        public GetTenantsByUserQueryHandler(ITenantService tenantService)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public GetTenantsByUserQueryHandler(ITenantService tenantService, ICurrentUserProvider currentUserProvider)
         {
             _tenantService = tenantService;
+            _currentUserProvider = currentUserProvider;
         }
         public async Task<IEnumerable<GetTenantsByUserResponse>> Handle(GetTenantsByUserQuery request, CancellationToken cancellationToken)
         {
-            var tenants = await _tenantService.GetTenantsByUserId(request.UserId);
+            var tenants = await _tenantService.GetTenantsByUserId(_currentUserProvider.GetUserId());
 
             return Enumerable.Empty<GetTenantsByUserResponse>();
         }

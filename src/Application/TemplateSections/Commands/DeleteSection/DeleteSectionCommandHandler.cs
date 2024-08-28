@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Persistence;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -11,21 +12,23 @@ namespace Application.TemplateSections.Commands.DeleteSection
     {
         private readonly ApplicationContext _context;
         private readonly ITenantTemplateService _tenantTemplateService;
-        public DeleteSectionCommandHandler(ApplicationContext context, ITenantTemplateService tenantTemplateService)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public DeleteSectionCommandHandler(ApplicationContext context, ITenantTemplateService tenantTemplateService, ICurrentUserProvider currentUserProvider)
         {
             _context = context;
             _tenantTemplateService = tenantTemplateService;
+            _currentUserProvider = currentUserProvider;
         }
         public async Task<Result> Handle(DeleteSectionCommand request, CancellationToken cancellationToken)
         {
-            TenantTemplate? template = await _tenantTemplateService.FindTenantTemplateById(request.TemplateId, request.TenantId, cancellationToken);
+            TenantTemplate? template = await _tenantTemplateService.FindTenantTemplateById(request.TenantTemplateId, request.TenantId, cancellationToken);
             if (template == null)
             {
                 return Result.NotFound();
             }
 
             var section = await _context.TemplateSections
-                .Where(x => x.TemplateSectionId == request.SectionId && x.TemplateId == request.TemplateId)
+                .Where(x => x.TemplateSectionId == request.SectionId && x.TenantTemplateId == request.TenantTemplateId)
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (section == null)
@@ -34,7 +37,7 @@ namespace Application.TemplateSections.Commands.DeleteSection
             }
 
             section.DeletedAt = DateTime.UtcNow;
-            section.DeletedBy = request.DeletedBy;
+            section.DeletedBy = _currentUserProvider.GetUserId();
 
             int rows = await _context.SaveChangesAsync(cancellationToken);
             if (rows > 0)

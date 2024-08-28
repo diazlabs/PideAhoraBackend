@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Security\" />
     <Folder Include="SectionConfigs\" />
     <Folder Include="TenantConfigs\Queries\" />
   </ItemGroup>
