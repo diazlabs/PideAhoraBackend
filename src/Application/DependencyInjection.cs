@@ -39,7 +39,8 @@ namespace Application
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationContext>()
-                .AddSignInManager<SignInManager<User>>();
+                .AddSignInManager<SignInManager<User>>()
+                .AddDefaultTokenProviders();
 
             return services;
         }

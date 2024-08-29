@@ -20,7 +20,7 @@ namespace Application.Common.Extensions
                 .NotNull()
                 .WithMessage("Por favor ingresa un correo electrónico válido")
                 .EmailAddress()
-                .WithMessage("Por favor ingresa un correo electrónico válido");
+                .WithMessage("Por favor ingresa un correo electrónico válidos");
         }
 
         public static IRuleBuilderOptions<T, string?> ValidatePhoneNumber<T>(this IRuleBuilder<T, string?> ruleBuilder)
@@ -31,7 +31,7 @@ namespace Application.Common.Extensions
                 .NotNull()
                 .WithMessage("Por favor ingresa tu número de teléfono")
                 .Matches(Regexs.PhoneRegex)
-                .WithMessage("Por faovr ingresa tu número de teléfono sin espacios ni guiones");
+                .WithMessage("Por favor ingresa tu número de teléfono sin espacios ni guiones");
         }
 
         public static IRuleBuilderOptions<T, string> ValidateCountry<T>(this IRuleBuilder<T, string> ruleBuilder)

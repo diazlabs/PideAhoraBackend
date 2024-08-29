@@ -15,14 +15,14 @@ namespace Infrastructure.Common
         public static void CreateLogger(IConfiguration configuration)
         {
             Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithEnvironmentName()
                 .Enrich.WithElasticApmCorrelationInfo()
                 .Enrich.WithProperty("Application", "pidelo-api")
-                .Filter.ByExcluding(
-                Matching.WithProperty<string>("RequestPath", path =>
+                .Filter.ByExcluding(Matching.WithProperty<string>("RequestPath", path =>
                 {
                     string[] excludedPaths = ["/swagger", "/healthz"];
 
@@ -43,7 +43,6 @@ namespace Infrastructure.Common
                             };
                         };
                     })
-                .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }
     }

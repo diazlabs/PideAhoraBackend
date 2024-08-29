@@ -11,7 +11,6 @@ builder.Services
     .AddApplication(builder.Configuration)
     .AddInfrastructure(builder.Configuration);
 
-builder.Logging.ClearProviders();
 builder.Host.UseSerilog(Log.Logger);
 
 var app = builder.Build();

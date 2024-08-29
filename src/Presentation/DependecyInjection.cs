@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 using System.Text.Json;
 
 namespace Presentation
@@ -7,6 +8,11 @@ namespace Presentation
     {
         public static IServiceCollection AddPresentation(this IServiceCollection services)
         {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(options =>
             {

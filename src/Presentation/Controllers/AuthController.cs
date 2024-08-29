@@ -69,8 +69,10 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("send-reset-password")]
-        public async Task<ActionResult> SendResetPassword(SendResetPasswordCommand command)
+        public async Task<ActionResult> SendResetPassword(string email)
         {
+            var command = new SendResetPasswordCommand() { Email = email};
+
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);

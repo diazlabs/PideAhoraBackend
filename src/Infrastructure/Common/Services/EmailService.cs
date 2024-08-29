@@ -25,7 +25,7 @@ namespace Infrastructure.Common.Services
 
         public async Task<Result> SendConfirmationEmail(string to, string token)
         {
-            string confirmationLink = $"{GetBaseAddress}?token={token}";
+            string confirmationLink = $"{GetBaseAddress()}?token={token}";
             var response = await _fluentEmail
                 .To(to)
                 .Subject("Confirma tu correo electrónico")
@@ -44,7 +44,7 @@ namespace Infrastructure.Common.Services
 
         public async Task<Result> SendResetPasswordEmail(string to, string token)
         {
-            string resetLink = $"{GetBaseAddress}?token={token}";
+            string resetLink = $"{GetBaseAddress()}?token={token}";
             var response = await _fluentEmail
                 .To(to)
                 .Subject("Restablecer contraseña")

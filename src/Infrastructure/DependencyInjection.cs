@@ -11,6 +11,7 @@ using System.Net.Mail;
 using System.Net;
 using Application.Common.Security;
 using Infrastructure.Security;
+using Serilog;
 
 namespace Infrastructure
 {

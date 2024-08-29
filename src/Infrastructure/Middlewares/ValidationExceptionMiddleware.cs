@@ -29,6 +29,7 @@ namespace Infrastructure.Middlewares
                 if (exception.Errors is not null)
                 {
                     response.Errors = exception.Errors
+                        .DistinctBy(x => x.ErrorMessage)
                         .GroupBy(x => x.PropertyName)
                         .Select(x => new Dictionary<string, string[]>()
                         {
