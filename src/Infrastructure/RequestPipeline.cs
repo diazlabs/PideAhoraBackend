@@ -14,6 +14,7 @@ namespace Infrastructure
             app.UseSerilogRequestLogging();
 
             app.UseMiddleware<ValidationExceptionMiddleware>();
+            app.UseExceptionHandler();
 
             return app;
         }

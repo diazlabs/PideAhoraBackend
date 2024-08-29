@@ -11,8 +11,7 @@ using System.Net.Mail;
 using System.Net;
 using Application.Common.Security;
 using Infrastructure.Security;
-using Serilog;
-
+using Infrastructure.Middlewares;
 namespace Infrastructure
 {
     public static class DependencyInjection
@@ -24,7 +23,8 @@ namespace Infrastructure
             services
                 .AddHttpContextAccessor()
                 .AddAuthentication(configuration)
-                .AddEmailService(configuration);
+                .AddEmailService(configuration)
+                .AddExceptionHandler<GlobalExceptionHandler>();
 
             services.AddHealthChecks();
 
