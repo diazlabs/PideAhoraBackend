@@ -32,6 +32,7 @@ namespace Application.Auth.Commnands.Register
                 PhoneNumber = request.PhoneNumber,
                 UserName = request.Email,
                 Creator = userId,
+                CreatedAt = DateTime.UtcNow
             };
 
             string[] validationErrors = await _userService.IsUserInUse(newUser);
@@ -40,7 +41,7 @@ namespace Application.Auth.Commnands.Register
                 return Result.Conflict(validationErrors);
             }
 
-            IdentityResult result = await _userManager.CreateAsync(newUser);
+            IdentityResult result = await _userManager.CreateAsync(newUser, request.Password);
             if (!result.Succeeded)
             {
                 return result.ToErrorResult();

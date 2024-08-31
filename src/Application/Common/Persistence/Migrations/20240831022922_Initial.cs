@@ -95,7 +95,7 @@ namespace Application.Common.Persistence.Migrations
                     deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     deleted_by = table.Column<Guid>(type: "uuid", nullable: true),
                     category = table.Column<string>(type: "text", nullable: false),
-                    active_template_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    active_tenant_template_id = table.Column<Guid>(type: "uuid", nullable: false),
                     last_payment = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -397,7 +397,7 @@ namespace Application.Common.Persistence.Migrations
                 {
                     template_section_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    template_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    tenant_template_id = table.Column<Guid>(type: "uuid", nullable: false),
                     section_variant_id = table.Column<int>(type: "integer", nullable: false),
                     order = table.Column<int>(type: "integer", nullable: false),
                     visible = table.Column<bool>(type: "boolean", nullable: false),
@@ -407,8 +407,7 @@ namespace Application.Common.Persistence.Migrations
                     creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modifier = table.Column<Guid>(type: "uuid", nullable: true),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    tenant_template_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -522,6 +521,7 @@ namespace Application.Common.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_section_products", x => x.section_product_id);
+                    table.UniqueConstraint("ak_section_products_order_product_id", x => new { x.order, x.product_id });
                     table.ForeignKey(
                         name: "fk_section_products_products_product_id",
                         column: x => x.product_id,

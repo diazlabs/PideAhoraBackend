@@ -12,6 +12,7 @@ using System.Net;
 using Application.Common.Security;
 using Infrastructure.Security;
 using Infrastructure.Middlewares;
+
 namespace Infrastructure
 {
     public static class DependencyInjection
@@ -23,6 +24,7 @@ namespace Infrastructure
             services
                 .AddHttpContextAccessor()
                 .AddAuthentication(configuration)
+                .AddAuthorization()
                 .AddEmailService(configuration)
                 .AddExceptionHandler<GlobalExceptionHandler>();
 

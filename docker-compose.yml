@@ -7,50 +7,50 @@ networks:
     driver: bridge
 
 services:
-  pidelo.api:
+  pide.ahora.api:
     image: ${DOCKER_REGISTRY-}presentation
-    container_name: pidelo.api
+    container_name: pide.ahora.api
     build:
       context: .
       dockerfile: src/Presentation/Dockerfile
     depends_on:
-    - pidelo.elasticsearch
-    - pidelo.database
-    - pidelo.loki
+    - pide.ahora.elasticsearch
+    - pide.ahora.database
+    - pide.ahora.loki
     networks:
     - observability
     - database
     - papercut
 
-  pidelo.database:
+  pide.ahora.database:
     image: postgres:latest
-    container_name: pidelo.database
+    container_name: pide.ahora.database
     restart: always
     environment:
-      - POSTGRES_DB=pidelo
-      - POSTGRES_USER=pidelo
-      - POSTGRES_PASSWORD=pidelo
+      - POSTGRES_DB=pideahora
+      - POSTGRES_USER=pideahora
+      - POSTGRES_PASSWORD=pideahora
     volumes:
-      - ./.containers/pidelo_db:/var/lib/postgresql/data
+      - ./.containers/pide_ahora_db:/var/lib/postgresql/data
     ports:
       - 5432:5432
     networks:
      - database
 
-  pidelo.database.admin:
+  pide.ahora.database.admin:
     image: dpage/pgadmin4
-    container_name: pidelo.database.admin
+    container_name: pide.ahora.database.admin
     environment:
-      - PGADMIN_DEFAULT_EMAIL=pidelo@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=pidelo
+      - PGADMIN_DEFAULT_EMAIL=pide.ahora@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=pide.ahora
     ports:
       - 54321:80
     depends_on:
-      - pidelo.database
+      - pide.ahora.database
     networks:
      - database
 
-  pidelo.elasticsearch:
+  pide.ahora.elasticsearch:
     container_name: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
     ports:
@@ -67,20 +67,20 @@ services:
     networks:
      - observability
    
-  pidelo.kibana:
+  pide.ahora.kibana:
      container_name: kibana
      image: docker.elastic.co/kibana/kibana:8.15.0
      ports:
       - 5601:5601
      depends_on:
-      - pidelo.elasticsearch
+      - pide.ahora.elasticsearch
      environment:
       - ELASTICSEARCH_URL=http://localhost:9200
      networks:
       - observability
 
-  pidelo.loki:
-    container_name: pidelo.loki
+  pide.ahora.loki:
+    container_name: pide.ahora.loki
     image: grafana/loki:2.9.2
     ports:
       - 3100:3100
@@ -88,8 +88,8 @@ services:
     networks:
       - observability
 
-  pidelo.promtail:
-    container_name: pidelo.promtail
+  pide.ahora.promtail:
+    container_name: pide.ahora.promtail
     image: grafana/promtail:2.9.2
     volumes:
       - ./.containers/grafana:/var/log
@@ -97,8 +97,8 @@ services:
     networks:
       - observability
 
-  pidelo.grafana:
-    container_name: pidelo.grafana
+  pide.ahora.grafana:
+    container_name: pide.ahora.grafana
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -115,7 +115,7 @@ services:
           type: loki
           access: proxy 
           orgId: 1
-          url: http://pidelo.loki:3100
+          url: http://pide.ahora.loki:3100
           basicAuth: false
           isDefault: true
           version: 1

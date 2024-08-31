@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\Persistence\Migrations\" />
     <Folder Include="SectionConfigs\" />
     <Folder Include="TenantConfigs\Queries\" />
   </ItemGroup>

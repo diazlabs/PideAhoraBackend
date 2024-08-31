@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Text.Json;
 
@@ -17,14 +18,14 @@ namespace Presentation
             services.AddSwaggerGen(options =>
             {
                 options.CustomSchemaIds(type => type.FullName);
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
                     Description = "Please enter token",
-                    Name = "Authorization",
+                    Name = "JWT Auth",
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
-                    Scheme = "bearer"
+                    Scheme = JwtBearerDefaults.AuthenticationScheme
                 });
 
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -35,7 +36,7 @@ namespace Presentation
                             Reference = new OpenApiReference
                             {
                                 Type= ReferenceType.SecurityScheme,
-                                Id= "Bearer"
+                                Id= JwtBearerDefaults.AuthenticationScheme
                             }
                         },
                         new string[]{}

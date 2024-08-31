@@ -21,7 +21,7 @@ namespace Infrastructure.Common
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithEnvironmentName()
                 .Enrich.WithElasticApmCorrelationInfo()
-                .Enrich.WithProperty("Application", "pidelo-api")
+                .Enrich.WithProperty("Application", "pide-ahora-api")
                 .Filter.ByExcluding(Matching.WithProperty<string>("RequestPath", path =>
                 {
                     string[] excludedPaths = ["/swagger", "/healthz"];
@@ -33,7 +33,7 @@ namespace Infrastructure.Common
                 .WriteTo.Elasticsearch([new Uri(configuration["ElasticConfiguration:Uri"]!)],
                     opts =>
                     {
-                        opts.DataStream = new DataStreamName($"logs-{DateTime.UtcNow:yyyy-MM}", "pidelo");
+                        opts.DataStream = new DataStreamName($"logs-{DateTime.UtcNow:yyyy-MM}", "pide-ahora");
                         opts.BootstrapMethod = BootstrapMethod.None;
                         opts.ConfigureChannel = channelOpts =>
                         {

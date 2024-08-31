@@ -49,7 +49,7 @@ namespace Application.Auth.Commnands.Login
                 );    
                 return new LoginCommandResponse
                 {
-                    Token = "token"
+                    Token = token
                 };
             }
 

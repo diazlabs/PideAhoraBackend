@@ -533,6 +533,9 @@ namespace Application.Common.Persistence.Migrations
                     b.HasKey("SectionProductId")
                         .HasName("pk_section_products");
 
+                    b.HasAlternateKey("Order", "ProductId")
+                        .HasName("ak_section_products_order_product_id");
+
                     b.HasIndex("ProductId")
                         .HasDatabaseName("ix_section_products_product_id");
 
@@ -585,10 +588,6 @@ namespace Application.Common.Persistence.Migrations
 
                     b.Property<Guid>("TenantTemplateId")
                         .HasColumnType("uuid")
-                        .HasColumnName("template_id");
-
-                    b.Property<Guid>("TenantTemplateId")
-                        .HasColumnType("uuid")
                         .HasColumnName("tenant_template_id");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -617,7 +616,7 @@ namespace Application.Common.Persistence.Migrations
 
                     b.Property<Guid>("ActiveTenantTemplateId")
                         .HasColumnType("uuid")
-                        .HasColumnName("active_template_id");
+                        .HasColumnName("active_tenant_template_id");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -1212,7 +1211,7 @@ namespace Application.Common.Persistence.Migrations
                         .HasConstraintName("fk_section_products_products_product_id");
 
                     b.HasOne("Domain.Entities.TemplateSection", "TemplateSection")
-                        .WithMany()
+                        .WithMany("SectionProducts")
                         .HasForeignKey("TemplateSectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -1369,6 +1368,8 @@ namespace Application.Common.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.TemplateSection", b =>
                 {
                     b.Navigation("SectionConfigs");
+
+                    b.Navigation("SectionProducts");
                 });
 
             modelBuilder.Entity("Domain.Entities.Tenant", b =>

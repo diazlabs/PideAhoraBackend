@@ -23,10 +23,10 @@ namespace Infrastructure.Security.TokenGenerator
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            claims.Add(new(ClaimTypes.Name, firstName));
-            claims.Add(new(ClaimTypes.Surname, lastName));
-            claims.Add(new(ClaimTypes.Email, email));
-            claims.Add(new(ClaimTypes.NameIdentifier, UserId.ToString()));
+            claims.Add(new(JwtRegisteredClaimNames.Name, firstName));
+            claims.Add(new(JwtRegisteredClaimNames.FamilyName, lastName));
+            claims.Add(new(JwtRegisteredClaimNames.Email, email));
+            claims.Add(new("id", UserId.ToString()));
         
             claims.AddRange(tenants.Select(tenant => new Claim("tenant", tenant)));
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
