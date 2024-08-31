@@ -1,5 +1,6 @@
 ﻿using Application.Common.Security;
 using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Infrastructure.Security
@@ -13,19 +14,19 @@ namespace Infrastructure.Security
                 throw new ArgumentNullException();
             }
 
-            var id = Guid.Parse(GetSingleClaimValue(ClaimTypes.NameIdentifier));
+            var id = GetUserId();
             var tenants = GetClaimValues("tenant");
             var roles = GetClaimValues(ClaimTypes.Role);
-            var firstName = GetSingleClaimValue(ClaimTypes.Name);
-            var lastName = GetSingleClaimValue(ClaimTypes.Surname);
-            var email = GetSingleClaimValue(ClaimTypes.Email);
+            var firstName = GetSingleClaimValue(JwtRegisteredClaimNames.Name);
+            var lastName = GetSingleClaimValue(JwtRegisteredClaimNames.FamilyName);
+            var email = GetSingleClaimValue(JwtRegisteredClaimNames.Email);
 
             return new CurrentUser(id, firstName, lastName, email, tenants, roles);
         }
 
         public Guid GetUserId()
         {
-            return Guid.Parse(GetSingleClaimValue(ClaimTypes.NameIdentifier));
+            return Guid.Parse(GetSingleClaimValue("id"));
         }
 
         private List<string> GetClaimValues(string claimType) =>

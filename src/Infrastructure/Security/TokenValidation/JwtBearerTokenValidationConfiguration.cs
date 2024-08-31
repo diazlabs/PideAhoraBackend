@@ -24,6 +24,7 @@ namespace Infrastructure.Security.TokenValidation
                 ValidIssuer = _jwtSettings.Issuer,
                 ValidAudience = _jwtSettings.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
+                AuthenticationType = JwtBearerDefaults.AuthenticationScheme,
             };
         }
     }

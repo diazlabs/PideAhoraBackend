@@ -42,7 +42,11 @@ namespace Infrastructure
 
             services
                 .ConfigureOptions<JwtBearerTokenValidationConfiguration>()
-                .AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer();
 
             return services;
