@@ -6,6 +6,7 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services
     .AddPresentation()
     .AddApplication(builder.Configuration)
@@ -22,6 +23,7 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
+app.UseCors("_myAllowSpecificOrigins");
 app.UseHttpsRedirection();
 app.UseInfrastructure();
 

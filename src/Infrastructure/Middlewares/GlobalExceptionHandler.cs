@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,8 @@ namespace Infrastructure.Middlewares
 
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
+            if (exception is ValidationException) return false;
+
             _logger.LogCritical(exception, "Exception middleware, traceId {traceId}", httpContext.TraceIdentifier);
 
             var response = new Response<string>

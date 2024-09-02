@@ -4,6 +4,7 @@ using Application.Auth.Commnands.Login;
 using Application.Auth.Commnands.Register;
 using Application.Auth.Commnands.ResetPassword;
 using Application.Auth.Commnands.SendResetPassword;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,19 +12,20 @@ using Presentation.Contracts.Auth;
 
 namespace Presentation.Controllers
 {
-    [AllowAnonymous]
     public class AuthController(ISender _mediator) : ApiController
     {
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginRequest request)
         {
-            var command = new LoginCommand(request.Username, request.Password);
+            var command = new LoginCommand(request.Email, request.Password);
 
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterRequest request)
         {
@@ -55,6 +57,7 @@ namespace Presentation.Controllers
             return ToActionResult(result);
         }
 
+        [AllowAnonymous]
         [HttpPost("reset-password")]
         public async Task<ActionResult> ResetPasswrod(ResetPasswordRequest request)
         {
@@ -68,20 +71,11 @@ namespace Presentation.Controllers
             return ToActionResult(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("send-reset-password")]
         public async Task<ActionResult> SendResetPassword(string email)
         {
             var command = new SendResetPasswordCommand() { Email = email};
-
-            var result = await _mediator.Send(command);
-
-            return ToActionResult(result);
-        }
-
-        [HttpPost("confirm-email")]
-        public async Task<ActionResult> ConfirmEmail(ConfirmEmailRequest request)
-        {
-            var command = new ConfirmEmailCommand(request.Token, request.Email);
 
             var result = await _mediator.Send(command);
 

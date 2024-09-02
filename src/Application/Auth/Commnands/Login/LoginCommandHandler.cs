@@ -20,15 +20,21 @@ namespace Application.Auth.Commnands.Login
 
         public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await _signInManager.UserManager.FindByEmailAsync(request.UsernameOrEmail);
-            if (user == null || !user.EmailConfirmed || !user.PhoneNumberConfirmed)
-            {
-                user = await _signInManager.UserManager.FindByNameAsync(request.UsernameOrEmail);
+            var user = await _signInManager.UserManager.FindByEmailAsync(request.Email);
 
-                if (user == null) 
-                {
-                    return Result.Error("Usuario o contreseña incorrecto");
-                }
+            if (user == null)
+            {
+                return Result.Error("Usuario o contreseña incorrecto");
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return Result.Error("Debes confirmar tu correo electrónico");
+            }
+
+            if (!user.PhoneNumberConfirmed)
+            {
+                return Result.Error("Debes confirmar tu número de teléfono");
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);

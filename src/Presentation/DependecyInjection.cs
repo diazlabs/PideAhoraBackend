@@ -14,6 +14,15 @@ namespace Presentation
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "_myAllowSpecificOrigins", policy =>
+                {
+                    policy.WithOrigins("https://localhost:5173", "http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                });
+            });
+
+
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(options =>
             {

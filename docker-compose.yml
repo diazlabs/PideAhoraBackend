@@ -21,6 +21,10 @@ services:
     - observability
     - database
     - papercut
+    ports:
+    - 31700:8080
+    - 31701:8081
+  
 
   pide.ahora.database:
     image: postgres:latest

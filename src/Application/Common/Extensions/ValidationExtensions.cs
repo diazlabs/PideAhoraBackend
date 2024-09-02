@@ -20,7 +20,7 @@ namespace Application.Common.Extensions
                 .NotNull()
                 .WithMessage("Por favor ingresa un correo electrónico válido")
                 .EmailAddress()
-                .WithMessage("Por favor ingresa un correo electrónico válidos");
+                .WithMessage("Por favor ingresa un correo electrónico válido");
         }
 
         public static IRuleBuilderOptions<T, string?> ValidatePhoneNumber<T>(this IRuleBuilder<T, string?> ruleBuilder)
