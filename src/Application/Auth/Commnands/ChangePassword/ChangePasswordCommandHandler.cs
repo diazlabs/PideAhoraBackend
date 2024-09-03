@@ -1,5 +1,6 @@
 ﻿using Application.Common.Extensions;
 using Application.Common.Interfaces;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -11,15 +12,18 @@ namespace Application.Auth.Commnands.ChangePassword
     {
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
-        public ChangePasswordCommandHandler(UserManager<User> userManager, IUserService userService)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public ChangePasswordCommandHandler(UserManager<User> userManager, IUserService userService, ICurrentUserProvider currentUserProvider)
         {
             _userManager = userManager;
             _userService = userService;
+            _currentUserProvider = currentUserProvider;
         }
 
         public async Task<Result<ChangePasswordResponse>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            User? user = await _userService.FindById(request.UserId);
+            var userId = _currentUserProvider.GetUserId();
+            User? user = await _userService.FindById(userId);
             if (user == null)
             {
                 return Result.NotFound();

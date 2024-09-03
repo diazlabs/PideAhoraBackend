@@ -3,6 +3,7 @@ using Application.Products.Commands.DeleteProduct;
 using Application.Products.Commands.UpdateProduct;
 using Application.Products.Queries.GetProductById;
 using Application.Products.Queries.GetProducts;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -58,7 +59,12 @@ namespace Presentation.Controllers
 
             var products = await _mediator.Send(command);
 
-            return Ok(products);
+            var response = new Response<IEnumerable<GetProductsResponse>>();
+
+            response.Ok = true;
+            response.Data = products;
+
+            return Ok(response);
         }
     }
 }

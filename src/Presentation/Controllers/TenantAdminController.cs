@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
-    public class TenantsController(ISender _mediator) : ApiController
+    [Route("api/admin/tenants")]
+    public class TenantAdminController(ISender _mediator) : ApiController
     {
         [HttpPost]
         public async Task<ActionResult> Create(CreateTenantCommand command)

@@ -6,7 +6,7 @@ using MediatR;
 namespace Application.Auth.Commnands.ResetPassword
 {
     public record ResetPasswordCommand(
-        Guid UserId,
+        string Email,
         string Password,
         string Token) : IRequest<Result<ResetPasswordResponse>>;
 
@@ -16,7 +16,7 @@ namespace Application.Auth.Commnands.ResetPassword
         {
             RuleFor(x => x.Password).ValidatePassword();
             RuleFor(x => x.Token).ValidateRequiredProperty("código");
-            RuleFor(x => x.UserId).RequireGuid();
+            RuleFor(x => x.Email).ValidateRequiredProperty("email");
         }
     }
 }

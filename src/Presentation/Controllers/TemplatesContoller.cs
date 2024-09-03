@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]/{tenantId:guid}")]
+    [Route("api/admin/[controller]/{tenantId:guid}")]
     public class TemplatesController(ISender _mediator) : ApiController
     {
         [HttpPost]
@@ -32,7 +32,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult> Update(Guid tenantId, Guid TenantTemplateId)
+        public async Task<ActionResult> Delete(Guid tenantId, Guid TenantTemplateId)
         {
             var command = new DeleteTemplateCommand(tenantId, TenantTemplateId);
 

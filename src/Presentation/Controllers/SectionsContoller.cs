@@ -2,6 +2,7 @@
 using Application.TemplateSections.Commands.DeleteSection;
 using Application.TemplateSections.Commands.UpdateSection;
 using Application.TemplateSections.Queries.GetTemplateSections;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,13 +33,13 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete("{templateSectionId:int}")]
-        public async Task<ActionResult> Delete(Guid tenantId, int templateSectionId, Guid TenantTemplateId)
+        public async Task<ActionResult> Delete(Guid tenantId, int templateSectionId, Guid tenantTemplateId)
         {
             var command = new DeleteSectionCommand();
 
             command.TenantId = tenantId;
             command.SectionId = templateSectionId;
-            command.TenantTemplateId = TenantTemplateId;
+            command.TenantTemplateId = tenantTemplateId;
 
             var result = await _mediator.Send(command);
 
@@ -55,7 +56,12 @@ namespace Presentation.Controllers
 
             var sections = await _mediator.Send(command);
 
-            return Ok(sections);
+            var response = new Response<IEnumerable<GetTemplateSectionsResponse>>();
+
+            response.Data = sections;
+            response.Ok = true;
+
+            return Ok(response);
         }
     }
 }

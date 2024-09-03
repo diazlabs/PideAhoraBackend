@@ -49,8 +49,7 @@ namespace Presentation.Controllers
             var command =  new ChangePasswordCommand(
                 request.OldPassword,
                 request.NewPassword,
-                request.ConfirmPassword,
-                request.UserId);
+                request.ConfirmPassword);
 
             var result = await _mediator.Send(command);
 
@@ -59,10 +58,10 @@ namespace Presentation.Controllers
 
         [AllowAnonymous]
         [HttpPost("reset-password")]
-        public async Task<ActionResult> ResetPasswrod(ResetPasswordRequest request)
+        public async Task<ActionResult> ResetPassword(ResetPasswordRequest request)
         {
             var command = new ResetPasswordCommand(
-                request.UserId,
+                request.Email,
                 request.Password,
                 request.Token);
 

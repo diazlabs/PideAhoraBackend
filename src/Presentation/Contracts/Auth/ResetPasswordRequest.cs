@@ -1,7 +1,7 @@
 ﻿namespace Presentation.Contracts.Auth
 {
     public record ResetPasswordRequest(
-        Guid UserId,
+        string Email,
         string Password,
         string Token
     );   

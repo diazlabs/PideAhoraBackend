@@ -19,7 +19,7 @@ namespace Application.Auth.Commnands.ResetPassword
 
         public async Task<Result<ResetPasswordResponse>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
-            User? user = await _userService.FindById(request.UserId);
+            User? user = await _userService.FindByEmail(request.Email);
 
             if (user == null)
             {
