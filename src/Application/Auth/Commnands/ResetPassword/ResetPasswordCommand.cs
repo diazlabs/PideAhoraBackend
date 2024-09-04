@@ -15,7 +15,7 @@ namespace Application.Auth.Commnands.ResetPassword
         public ResetPasswordValidator()
         {
             RuleFor(x => x.Password).ValidatePassword();
-            RuleFor(x => x.Token).ValidateRequiredProperty("código");
+            RuleFor(x => x.Token).ValidateRequiredProperty("código", 220, 250);
             RuleFor(x => x.Email).ValidateRequiredProperty("email");
         }
     }

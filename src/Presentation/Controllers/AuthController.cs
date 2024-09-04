@@ -5,6 +5,7 @@ using Application.Auth.Commnands.Register;
 using Application.Auth.Commnands.ResetPassword;
 using Application.Auth.Commnands.SendResetPassword;
 using Domain.Common;
+using Domain.Common.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +47,7 @@ namespace Presentation.Controllers
         [HttpPost("change-password")]
         public async Task<ActionResult> ChnagePassword(ChangePasswordRequest request)
         {
-            var command =  new ChangePasswordCommand(
+            var command = new ChangePasswordCommand(
                 request.OldPassword,
                 request.NewPassword,
                 request.ConfirmPassword);
@@ -74,11 +75,23 @@ namespace Presentation.Controllers
         [HttpGet("send-reset-password")]
         public async Task<ActionResult> SendResetPassword(string email)
         {
-            var command = new SendResetPasswordCommand() { Email = email};
+            var command = new SendResetPasswordCommand() { Email = email };
 
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("countries")]
+        public ActionResult GetCountries()
+        {
+            var response = new Response<IEnumerable<Country>>();
+
+            response.Data = Country.Countries;
+            response.Ok = true;
+
+            return Ok(response);
         }
     }
 }

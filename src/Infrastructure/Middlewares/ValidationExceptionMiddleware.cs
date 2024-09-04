@@ -31,10 +31,7 @@ namespace Infrastructure.Middlewares
                     response.Errors = exception.Errors
                         .DistinctBy(x => x.ErrorMessage)
                         .GroupBy(x => x.PropertyName)
-                        .Select(x => new Dictionary<string, string[]>()
-                        {
-                            { x.Key, x.Select(x => x.ErrorMessage).ToArray() }
-                        }).ToList();
+                        .ToDictionary(x => x.Key, x => x.Select(y => y.ErrorMessage).ToArray());
                 }
 
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;

@@ -29,9 +29,9 @@ namespace Application.Common.Extensions
                 .NotEmpty()
                 .WithMessage("Por favor ingresa tu número de teléfono")
                 .NotNull()
-                .WithMessage("Por favor ingresa tu número de teléfono")
-                .Matches(Regexs.PhoneRegex)
-                .WithMessage("Por favor ingresa tu número de teléfono sin espacios ni guiones");
+                .WithMessage("Por favor ingresa tu número de teléfono");
+                /*.Matches(Regexs.PhoneRegex)
+                .WithMessage("Por favor ingresa tu número de teléfono sin espacios ni guiones");*/
         }
 
         public static IRuleBuilderOptions<T, string> ValidateCountry<T>(this IRuleBuilder<T, string> ruleBuilder)

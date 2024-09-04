@@ -29,7 +29,7 @@ namespace Infrastructure.Common.Services
             var response = await _fluentEmail
                 .To(to)
                 .Subject("Confirma tu correo electrónico")
-                .Body($"Para continuar usando nuestro servicio<a href='{confirmationLink}'>confirma tu correo</a>")
+                .Body($"Para continuar usando nuestro servicio<a href=\"{confirmationLink}\">confirma tu correo</a>")
                 .SendAsync();
 
             if (response.Successful)
@@ -48,7 +48,7 @@ namespace Infrastructure.Common.Services
             var response = await _fluentEmail
                 .To(to)
                 .Subject("Restablecer contraseña")
-                .Body($"Para restablecer contraseña<a href='{resetLink}'>haz click aquí</a>")
+                .Body($"Para restablecer contraseña<a href=\"{resetLink}\">haz click aquí</a>")
                 .SendAsync();
 
             if (response.Successful)

@@ -13,8 +13,8 @@ namespace Infrastructure
         {
             app.UseSerilogRequestLogging();
 
-            app.UseMiddleware<ValidationExceptionMiddleware>();
             app.UseExceptionHandler(x => { });
+            app.UseMiddleware<ValidationExceptionMiddleware>();
 
             return app;
         }
