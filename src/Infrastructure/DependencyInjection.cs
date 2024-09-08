@@ -28,6 +28,7 @@ namespace Infrastructure
                 .AddEmailService(configuration)
                 .AddExceptionHandler<GlobalExceptionHandler>();
 
+            services.AddScoped<IImageService, ImageService>();
             services.AddHealthChecks();
 
             return services;

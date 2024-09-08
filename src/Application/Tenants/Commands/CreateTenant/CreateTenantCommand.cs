@@ -12,7 +12,7 @@ namespace Application.Tenants.Commands.CreateTenant
         public string PageTitle { get; set; } = default!;
         public string Path { get; set; } = default!;
         public string Description { get; set; } = default!;
-        public IFormFile? Logo { get; set; }
+        public IFormFile Logo { get; set; } = default!;
         public string Category { get; set; } = default!;
     }
 
@@ -25,7 +25,7 @@ namespace Application.Tenants.Commands.CreateTenant
             RuleFor(x => x.Name).ValidateRequiredProperty("el nombre de la página");
             RuleFor(x => x.Category).ValidateTenantCategory();
             RuleFor(x => x.Description).ValidateRequiredProperty("la descripción de la página");
-            RuleFor(x => x.Logo).Must(x => true).When(x => x.Logo != null);
+            RuleFor(x => x.Logo).ValidateImage().WithMessage("El logo es requerido");
         }
     }
 }

@@ -13,8 +13,7 @@ namespace Presentation.Controllers
         [HttpGet("categories")]
         public ActionResult GetCategories()
         {
-            var response = new Response<IEnumerable<string>>();
-
+            var response = new Response<TenantCategory[]>();
             response.Data = TenantCategory.Categories;
             response.Ok = true;
 

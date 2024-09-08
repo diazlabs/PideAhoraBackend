@@ -1,6 +1,13 @@
-﻿using Domain.Entities;
-
-namespace Application.Tenants.Queries.GetTenantById
+﻿namespace Application.Tenants.Queries.GetTenantById
 {
-    public record GetTenantByIdResponse(Tenant tenant);
+    public record GetTenantByIdResponse(
+        Guid TenantId,
+        Guid UserId,
+        string Path,
+        string Name,
+        string PageTitle,
+        string Description,
+        string Logo,
+        string Category
+    );
 }

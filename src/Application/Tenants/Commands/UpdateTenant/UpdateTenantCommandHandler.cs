@@ -10,10 +10,12 @@ namespace Application.Tenants.Commands.UpdateTenant
     {
         private readonly ITenantService _tenantService;
         private readonly ICurrentUserProvider _currentUserProvider;
-        public UpdateTenantCommandHandler(ITenantService tenantService, ICurrentUserProvider currentUserProvider)
+        private readonly IImageService _imageService;
+        public UpdateTenantCommandHandler(ITenantService tenantService, ICurrentUserProvider currentUserProvider, IImageService imageService)
         {
             _tenantService = tenantService;
             _currentUserProvider = currentUserProvider;
+            _imageService = imageService;
         }
         public async Task<Result<UpdateTenantResponse>> Handle(UpdateTenantCommand request, CancellationToken cancellationToken)
         {
@@ -23,15 +25,22 @@ namespace Application.Tenants.Commands.UpdateTenant
                 return Result.NotFound();
             }
 
-            tenant.UpdatedAt = DateTime.Now;
+            if (request.Logo != null)
+            {
+                var logo = await _imageService.UploadImageAsync(request.Logo, tenant.TenantId.ToString());
+                if (logo.Length <= 0)
+                {
+                    return Result.Error("Error al actuzliar el logo");
+                }
+            }
+
+            tenant.UpdatedAt = DateTime.UtcNow;
             tenant.Description = request.Description;
-            tenant.TenantId = request.TenantId;
             tenant.Modifier = _currentUserProvider.GetUserId();
             tenant.Category = request.Category;
             tenant.PageTitle = request.PageTitle;
             tenant.Path = request.Path;
             tenant.Name = request.Name;
-            tenant.Logo = "logo";
 
             var result = await _tenantService.Update(tenant);
             if (result.IsSuccess)

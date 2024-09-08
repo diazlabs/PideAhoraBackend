@@ -4,6 +4,7 @@ using Application.Tenants.Commands.SetActiveTenant;
 using Application.Tenants.Commands.UpdateTenant;
 using Application.Tenants.Queries.GetTenantById;
 using Application.Tenants.Queries.GetTenantsByUser;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,7 +68,13 @@ namespace Presentation.Controllers
 
             var tenants = await _mediator.Send(command);
 
-            return Ok(tenants);
+            var response = new Response<IEnumerable<GetTenantsByUserResponse>>()
+            {
+                Ok = true,
+                Data = tenants,
+            };
+
+            return Ok(response);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Domain.Common.Enums;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Common.Extensions
 {
@@ -44,7 +45,7 @@ namespace Application.Common.Extensions
         public static IRuleBuilderOptions<T, string> ValidateTenantCategory<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             return ruleBuilder
-                .Must(category => TenantCategory.Categories.Any(c => c == category))
+                .Must(category => TenantCategory.Categories.Any(c => c.Code == category))
                 .WithMessage("{PropertyValue} no es una categoría válido");
         }
 
@@ -72,6 +73,11 @@ namespace Application.Common.Extensions
         public static IRuleBuilderOptions<T, double> PriceGuard<T>(this IRuleBuilder<T, double> ruleBuilder)
         {
             return ruleBuilder.GreaterThan(x => 0);
+        }
+
+        public static IRuleBuilderOptions<T, IFormFile> ValidateImage<T>(this IRuleBuilder<T, IFormFile> ruleBuilder)
+        {
+            return ruleBuilder.NotNull().Must(x => Constants.ValidImagesExtensions.Contains(x.ContentType));
         }
     }
 }

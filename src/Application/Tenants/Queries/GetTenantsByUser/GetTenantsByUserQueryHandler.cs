@@ -17,7 +17,16 @@ namespace Application.Tenants.Queries.GetTenantsByUser
         {
             var tenants = await _tenantService.GetTenantsByUserId(_currentUserProvider.GetUserId());
 
-            return Enumerable.Empty<GetTenantsByUserResponse>();
+            return tenants.Select(x => new GetTenantsByUserResponse(
+                x.TenantId,
+                x.UserId,
+                x.Path,
+                x.Name,
+                x.PageTitle,
+                x.Description,
+                x.Logo,
+                x.Category)
+            );
         }
     }
 }

@@ -21,7 +21,16 @@ namespace Application.Tenants.Queries.GetTenantById
                 return Result.NotFound();
             }
 
-            return new GetTenantByIdResponse(tenant);
+            return new GetTenantByIdResponse(
+                tenant.TenantId,
+                tenant.UserId,
+                tenant.Path,
+                tenant.Name,
+                tenant.PageTitle,
+                tenant.Description,
+                tenant.Logo,
+                tenant.Category
+            );
         }
     }
 }
