@@ -52,6 +52,7 @@ namespace Infrastructure.Common.Services
                 DisablePayloadSigning = true,
                 InputStream = inputStream,
                 Key = key,
+                ContentType = file.ContentType
             };
 
             var response = await _s3Client.PutObjectAsync(request);

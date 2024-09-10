@@ -6,6 +6,8 @@ using Elastic.Serilog.Sinks;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Exceptions;
+using Serilog.Exceptions.Core;
+using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Filters;
 
 namespace Infrastructure.Common
@@ -18,7 +20,10 @@ namespace Infrastructure.Common
                 .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
-                .Enrich.WithExceptionDetails()
+                .Enrich.WithExceptionDetails(
+                    new DestructuringOptionsBuilder()
+                        .WithDefaultDestructurers()
+                        .WithDestructurers([new DbUpdateExceptionDestructurer()]))
                 .Enrich.WithEnvironmentName()
                 .Enrich.WithElasticApmCorrelationInfo()
                 .Enrich.WithProperty("Application", "pide-ahora-api")

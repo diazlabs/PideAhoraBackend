@@ -53,6 +53,8 @@ services:
       - pide.ahora.database
     networks:
      - database
+    volumes:
+     - ./.containers/pg_admin:/var/lib/pgadmin
 
   pide.ahora.elasticsearch:
     container_name: elasticsearch
