@@ -37,7 +37,7 @@ namespace Application.Products.Commands.CreateProduct
 
             _context.Products.Add(product);
 
-            _logger.LogInformation("Creatring product {product}", product);
+            _logger.LogInformation("Creatring product {@product}", product);
 
             using var transaaction = _context.Database.BeginTransaction();
             try
@@ -60,7 +60,7 @@ namespace Application.Products.Commands.CreateProduct
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, "Error when creating product {request}", request);
+                _logger.LogCritical(ex, "Error when creating product {@request}", request);
 
                 transaaction.Rollback();
                 return Result.Error("Error al guardar el producto, intenta de nuevo.");
@@ -72,7 +72,7 @@ namespace Application.Products.Commands.CreateProduct
 
         public async Task<Result> CreateChoices(List<ChoicesDto> choices, int productId, CancellationToken canellationToken)
         {
-            _logger.LogInformation("Creatring choices {choices} for productId {productId}", choices, productId);
+            _logger.LogInformation("Creatring choices {@choices} for productId {productId}", choices, productId);
             var productChoices = choices.Select(c => new ProductChoice
             {
                 Choice = c.Choice,

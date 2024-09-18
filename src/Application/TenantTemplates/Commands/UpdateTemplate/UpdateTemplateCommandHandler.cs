@@ -25,6 +25,7 @@ namespace Application.TenantTemplates.Commands.UpdateTemplate
                 Logo = request.Logo,
                 Header = request.Header,
                 TenantId = request.TenantId,
+                Name = request.Name,
                 Modifier = _currentUserProvider.GetUserId(),
                 TenantTemplateId = request.TenantTemplateId,
                 UpdatedAt = DateTime.UtcNow

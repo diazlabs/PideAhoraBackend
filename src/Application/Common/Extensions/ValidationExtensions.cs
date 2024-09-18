@@ -48,6 +48,13 @@ namespace Application.Common.Extensions
                 .Must(category => TenantCategory.Categories.Any(c => c.Code == category))
                 .WithMessage("{PropertyValue} no es una categoría válido");
         }
+        
+        public static IRuleBuilderOptions<T, string> ValidateTenantConfigType<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder
+                .Must(type => TenantConfigTypes.All.Any(x => x.Type == type))
+                .WithMessage("No es un tipo de configuracion valida");
+        }
 
         public static IRuleBuilderOptions<T, string?> ValidateRequiredProperty<T>
             (this IRuleBuilder<T, string?> ruleBuilder, string property, int min = 2, int max = 100)
@@ -75,9 +82,19 @@ namespace Application.Common.Extensions
             return ruleBuilder.GreaterThan(x => 0);
         }
 
-        public static IRuleBuilderOptions<T, IFormFile> ValidateImage<T>(this IRuleBuilder<T, IFormFile> ruleBuilder)
+        public static IRuleBuilderOptions<T, IFormFile> ValidateRequiredImage<T>(this IRuleBuilder<T, IFormFile> ruleBuilder)
         {
-            return ruleBuilder.NotNull().Must(x => Constants.ValidImagesExtensions.Contains(x.ContentType));
+            return ruleBuilder
+                .Must(file => Constants.ValidImagesExtensions.Contains(file.ContentType))
+                .WithMessage("No es una extension valida de imagen");
+        }
+
+        public static IRuleBuilderOptions<T, IFormFile?> ValidateImage<T>(this IRuleBuilder<T, IFormFile?> ruleBuilder)
+        {
+            return ruleBuilder
+                .Must(file => file == null || Constants.ValidImagesExtensions.Contains(file.ContentType))
+                .WithMessage("No es una extension valida de imagen")
+                .When(file => file != null);
         }
     }
 }

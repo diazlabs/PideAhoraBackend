@@ -31,7 +31,7 @@ namespace Application.Products.Commands.UpdateProduct
                 return Result.NotFound();
             }
 
-            _logger.LogInformation("Updating product {product} with request {request}", product, request);
+            _logger.LogInformation("Updating product {@product} with request {@request}", product, request);
 
             product.UpdatedAt = DateTime.UtcNow;
             product.Modifier = _currentUserProvider.GetUserId();
@@ -72,7 +72,7 @@ namespace Application.Products.Commands.UpdateProduct
             int rows = await _context.SaveChangesAsync(cancellationToken);
             if (rows > 0)
             {
-                _logger.LogInformation("Update product succeed {product}", product);
+                _logger.LogInformation("Update product succeed {@product}", product);
 
                 return new UpdateProductResponse();
             }

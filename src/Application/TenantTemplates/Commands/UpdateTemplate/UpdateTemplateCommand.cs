@@ -10,6 +10,7 @@ namespace Application.TenantTemplates.Commands.UpdateTemplate
         public Guid TenantId { get; set; }
         public Guid TenantTemplateId { get; set; }
         public string Header { get; set; } = default!;
+        public string Name { get; set; } = default!;
         public string Description { get; set; } = default!;
         public string Logo { get; set; } = default!;
     }
@@ -21,6 +22,7 @@ namespace Application.TenantTemplates.Commands.UpdateTemplate
             RuleFor(x => x.TenantId).RequireGuid();
             RuleFor(x => x.TenantTemplateId).RequireGuid();
             RuleFor(x => x.Header).ValidateRequiredProperty("el titulo del template");
+            RuleFor(x => x.Name).ValidateRequiredProperty("el nombre del template");
             RuleFor(x => x.Description).ValidateRequiredProperty("la descripción del template");
             RuleFor(x => x.Logo).ValidateRequiredProperty("el logo");
         }

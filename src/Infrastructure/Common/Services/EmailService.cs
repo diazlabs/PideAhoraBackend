@@ -37,7 +37,7 @@ namespace Infrastructure.Common.Services
                 return Result.Success();
             }
 
-            _logger.LogError("Error al enviar el confirmation email {to}, {messageId}, {messages}", to, response.MessageId, response.ErrorMessages);
+            _logger.LogError("Error al enviar el confirmation email {to}, {messageId}, {@messages}", to, response.MessageId, response.ErrorMessages);
 
             return Result.Error("Error al enviar el email");
         }
@@ -56,7 +56,7 @@ namespace Infrastructure.Common.Services
                 return Result.Success();
             }
 
-            _logger.LogError("Error al enviar el reset password email {to}, {messageId}, {messages}", to, response.MessageId, response.ErrorMessages);
+            _logger.LogError("Error al enviar el reset password email {to}, {messageId}, {@messages}", to, response.MessageId, response.ErrorMessages);
 
             return Result.Error("Error al enviar el email");
         }

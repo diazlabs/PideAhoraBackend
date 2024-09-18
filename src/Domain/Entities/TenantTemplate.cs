@@ -6,6 +6,7 @@ namespace Domain.Entities
     {
         public Guid TenantTemplateId { get; set; }
         public Guid TenantId { get; set; }
+        public string Name { get; set; } = default!;
         public string Header { get; set; } = default!;
         public string Description { get; set; } = default!;
         public string Logo { get; set; } = default!;

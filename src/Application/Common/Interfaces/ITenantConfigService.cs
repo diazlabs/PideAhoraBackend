@@ -9,5 +9,6 @@ namespace Application.Common.Interfaces
         Task<List<TenantConfig>> GetTenantConfigsByTenantId(Guid tenantId);
         Task<Result<TenantConfig>> Create(TenantConfig tenantConfig);
         Task<Result> ToggleConfig(Guid tenantConfigId, bool enabled);
+        Task<Result> Update(TenantConfig tenantConfig);
     }
 }

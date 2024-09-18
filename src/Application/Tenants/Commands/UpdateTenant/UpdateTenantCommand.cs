@@ -27,7 +27,7 @@ namespace Application.Tenants.Commands.UpdateTenant
             RuleFor(x => x.Name).ValidateRequiredProperty("el nombre de la página");
             RuleFor(x => x.Category).ValidateTenantCategory();
             RuleFor(x => x.Description).ValidateRequiredProperty("la descripción de la página");
-            RuleFor(x => x.Logo).Must(x => true).When(x => x.Logo != null);
+            RuleFor(x => x.Logo).ValidateImage();
         }
     }
 }

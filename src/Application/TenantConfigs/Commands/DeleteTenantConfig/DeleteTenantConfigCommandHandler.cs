@@ -3,7 +3,6 @@ using Application.Common.Persistence;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.TenantConfigs.Commands.DeleteTenantConfig
 {

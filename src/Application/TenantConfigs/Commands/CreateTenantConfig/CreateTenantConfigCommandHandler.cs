@@ -32,8 +32,10 @@ namespace Application.TenantConfigs.Commands.CreateTenantConfig
                 CreatedAt = DateTime.Now,
                 Creator = request.Creator,
                 Enabled = request.Enabled,
+                Visible = request.Visible,
                 TenantId = request.TenantId,
                 TenantConfigId = Guid.NewGuid(),
+                ConfigType = request.ConfigType
             };
 
             var result = await _tenantConfigService.Create(newConfig);

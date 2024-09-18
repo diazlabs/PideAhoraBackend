@@ -10,21 +10,32 @@ namespace Application.TenantTemplates.Commands.CreateTemplate
     {
         private readonly ITenantTemplateService _tenantTemplateService;
         private readonly ICurrentUserProvider _currentUserProvider;
-        public CreateTemplateCommandHandler(ITenantTemplateService tenantTemplateService, ICurrentUserProvider currentUserProvider)
+        private readonly IImageService _imageService;
+        public CreateTemplateCommandHandler(ITenantTemplateService tenantTemplateService, ICurrentUserProvider currentUserProvider, IImageService imageService)
         {
             _tenantTemplateService = tenantTemplateService;
             _currentUserProvider = currentUserProvider;
+            _imageService = imageService;
         }
 
         public async Task<Result<CreateTemplateResponse>> Handle(CreateTemplateCommand request, CancellationToken cancellationToken)
         {
-            TenantTemplate tenantTemplate = new()
+            Guid templateId = Guid.NewGuid();
+
+            if (request.Logo != null)
             {
-                CreatedAt = DateTime.UtcNow,
-                Creator = _currentUserProvider.GetUserId(),
-                Description = request.Description,
-                Logo = request.Logo,
+                var response = await _imageService.UploadImageAsync(request.Logo, templateId.ToString());
+            }
+
+            TenantTemplate tenantTemplate = new()   
+            {
+                TenantTemplateId = templateId,
                 Header = request.Header,
+                Name = request.Name,
+                Description = request.Description,
+                CreatedAt = DateTime.UtcNow,
+                Logo = request.Logo != null ? templateId.ToString() : request.TenantId.ToString(),
+                Creator = _currentUserProvider.GetUserId(),
                 TenantId = request.TenantId,
             };
 
