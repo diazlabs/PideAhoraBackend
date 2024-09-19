@@ -29,7 +29,7 @@ namespace Application.TenantConfigs.Commands.CreateTenantConfig
             {
                 ConfigName = request.ConfigName,
                 ConfigValue = request.ConfigValue,
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
                 Creator = request.Creator,
                 Enabled = request.Enabled,
                 Visible = request.Visible,

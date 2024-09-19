@@ -14,13 +14,15 @@ namespace Application.Products.Commands.UpdateProduct
         private readonly IProductService _productService;
         private readonly ILogger<UpdateProductCommandHandler> _logger;
         private readonly ICurrentUserProvider _currentUserProvider;
+        private readonly IImageService _imageService;
         public UpdateProductCommandHandler(
-            ApplicationContext context, IProductService productService, ILogger<UpdateProductCommandHandler> logger, ICurrentUserProvider currentUserProvider)
+            ApplicationContext context, IProductService productService, ILogger<UpdateProductCommandHandler> logger, ICurrentUserProvider currentUserProvider, IImageService imageService)
         {
             _context = context;
             _productService = productService;
             _logger = logger;
             _currentUserProvider = currentUserProvider;
+            _imageService = imageService;
         }
         public async Task<Result<UpdateProductResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
@@ -31,6 +33,11 @@ namespace Application.Products.Commands.UpdateProduct
                 return Result.NotFound();
             }
 
+            if (request.Image != null)
+            {
+                product.Image = await _imageService.UploadImageAsync(request.Image, product.ProductId.ToString());
+            }
+
             _logger.LogInformation("Updating product {@product} with request {@request}", product, request);
 
             product.UpdatedAt = DateTime.UtcNow;
@@ -39,7 +46,7 @@ namespace Application.Products.Commands.UpdateProduct
             product.ProductDescription = request.ProductDescription;
             product.ProductName = request.ProductName;
             product.Visible = request.Visible;
-            product.Image = request.Image;
+            product.ProductType = request.ProductType;
 
             product.ProductChoices = [];
 

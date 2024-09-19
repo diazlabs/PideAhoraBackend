@@ -25,6 +25,7 @@ namespace Application.Products.Queries.GetProductById
                 product.ProductId,
                 product.TenantId,
                 product.ProductName,
+                product.ProductType,
                 product.ProductDescription,
                 product.Image,
                 product.ProductPrice,

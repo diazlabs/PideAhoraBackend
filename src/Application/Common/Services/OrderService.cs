@@ -46,7 +46,7 @@ namespace Application.Common.Services
 
         public async Task<bool> ValidateDiscount(int productId, int discountId)
         {
-            var today = DateTime.Now;
+            var today = DateTime.UtcNow;
             var isValid = await _context.ProductDiscounts
                 .AnyAsync(x => x.ProductDiscountId == discountId && 
                     x.ProductId == productId && x.Enabled && 

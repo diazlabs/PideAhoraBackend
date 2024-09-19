@@ -4,6 +4,7 @@
         int ProductId,
         Guid TenantId,
         string ProductName,
+        string ProductType,
         string? ProductDescription,
         string? Image,
         double ProductPrice,

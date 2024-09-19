@@ -2,6 +2,7 @@
 using Ardalis.Result;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Products.Commands.CreateProduct
 {
@@ -10,7 +11,8 @@ namespace Application.Products.Commands.CreateProduct
         public Guid TenantId { get; set; }
         public string ProductName { get; set; } = default!;
         public string? ProductDescription { get; set; }
-        public string? Image { get; set; }
+        public string ProductType { get; set; } = default!;
+        public IFormFile? Image { get; set; }
         public double ProductPrice { get; set; }
         public bool Visible { get; set; }
         public List<ChoicesDto>? Choices { get; set; }
@@ -27,6 +29,7 @@ namespace Application.Products.Commands.CreateProduct
 
     public class ChoiceOptionDto
     {
+        public int ProductId { get; set; }
         public double OptionPrice { get; set; }
         public bool Visible { get; set; }
     }
@@ -40,6 +43,8 @@ namespace Application.Products.Commands.CreateProduct
             RuleFor(x => x.ProductDescription).MinimumLength(0).MaximumLength(500);
             RuleFor(x => x.ProductName).ValidateRequiredProperty("el nombre del producto");
             RuleFor(x => x.Visible).NotNull();
+            RuleFor(x => x.Image).ValidateImage();
+            RuleFor(x => x.ProductType).ValidateProductType();
 
             RuleForEach(x => x.Choices).SetValidator(new ChoiceValidator());
         }
@@ -67,6 +72,7 @@ namespace Application.Products.Commands.CreateProduct
         public ChoiceOptionValidator()
         {
             RuleFor(x => x.OptionPrice).GreaterThanOrEqualTo(0).WithMessage("El producto debe poseer un precio mayor o igual a 0");
+            RuleFor(x => x.ProductId).GreaterThan(0).WithMessage("El producto seleccionado es invalido");
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Domain.Entities
         public Guid TenantId { get; set; }
         public string ProductName { get; set; } = default!;
         public string? ProductDescription { get; set; }
+        public string ProductType { get; set; } = default!;
         public string? Image { get; set; }
         public double ProductPrice { get; set; }
         public bool Visible { get; set; }

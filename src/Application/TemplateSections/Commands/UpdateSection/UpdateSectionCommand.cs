@@ -29,13 +29,13 @@ namespace Application.TemplateSections.Commands.UpdateSection
             RuleFor(x => x.TenantId).RequireGuid();
             RuleFor(x => x.TenantTemplateId).RequireGuid();
 
-            RuleForEach(x => x.Products).SetValidator(new SectionProductValidator());
+            RuleForEach(x => x.Products).SetValidator(new UpdateSectionProductValidator());
         }
     }
 
-    public class SectionProductValidator : AbstractValidator<UpdateSectionProduct>
+    public class UpdateSectionProductValidator : AbstractValidator<UpdateSectionProduct>
     {
-        public SectionProductValidator()
+        public UpdateSectionProductValidator()
         {
             RuleFor(x => x.SectionProductId).GreaterThanOrEqualTo(0).WithMessage("El id de la sección no es válido");
             RuleFor(x => x.ProductId).GreaterThan(0).WithMessage("El id del producto no es válido");

@@ -96,5 +96,12 @@ namespace Application.Common.Extensions
                 .WithMessage("No es una extension valida de imagen")
                 .When(file => file != null);
         }
+
+        public static IRuleBuilderOptions<T, string> ValidateProductType<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder
+                .Must(x => ProductType.Types.Any(t => t.Type == x))
+                .WithMessage("{PropertyValue} no es un tipo de prodcuto válido");
+        }
     }
 }

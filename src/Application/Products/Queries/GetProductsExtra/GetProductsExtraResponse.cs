@@ -1,10 +1,9 @@
-﻿namespace Application.Products.Queries.GetProductById
+﻿namespace Application.Products.Queries.GetProductsExtra
 {
-    public record GetProductByIdResponse(
+    public record GetProductsExtraResponse(
         int ProductId,
         Guid TenantId,
         string ProductName,
-        string ProductType,
         string? ProductDescription,
         string? Image,
         double ProductPrice,

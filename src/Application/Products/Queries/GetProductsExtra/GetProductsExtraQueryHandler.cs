@@ -1,25 +1,27 @@
 ﻿using Application.Common.Persistence;
+using Domain.Common.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Products.Queries.GetProducts
+namespace Application.Products.Queries.GetProductsExtra
 {
-    public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, List<GetProductsResponse>>
+    public class GetProductsExtraQueryHandler : IRequestHandler<GetProductsExtraQuery, IEnumerable<GetProductsExtraResponse>>
     {
         private readonly ApplicationContext _context;
-        public GetProductsQueryHandler(ApplicationContext context)
+
+        public GetProductsExtraQueryHandler(ApplicationContext context)
         {
             _context = context;
         }
-        public async Task<List<GetProductsResponse>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+
+        public async Task<IEnumerable<GetProductsExtraResponse>> Handle(GetProductsExtraQuery request, CancellationToken cancellationToken)
         {
             var products = await _context.Products
-                .Where(x => x.TenantId == request.TenantId)
-                .Select(x => new GetProductsResponse(
+                .Where(x => x.TenantId == request.TenantId && x.ProductType == ProductType.Extra.Type)
+                .Select(x => new GetProductsExtraResponse(
                     x.ProductId,
                     x.TenantId,
                     x.ProductName,
-                    x.ProductType,
                     x.ProductDescription,
                     x.Image,
                     x.ProductPrice,
