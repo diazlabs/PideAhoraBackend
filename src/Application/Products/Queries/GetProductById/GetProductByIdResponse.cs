@@ -10,6 +10,26 @@
         double ProductPrice,
         bool Visible,
         DateTime CreatedAt,
-        DateTime? UpdatedAt
+        DateTime? UpdatedAt,
+        IEnumerable<ProductChoiceDto> Choices
+    );
+
+
+    public record ProductChoiceDto(
+        int ProductChoiceId,
+        int ProductId,
+        string Choice,
+        int Quantity,
+        bool Required,
+        bool Visible,  
+        IEnumerable<ProductChoiceOptionsDto> Options
+    );
+
+    public record ProductChoiceOptionsDto(
+        int ChoiceOptionId,
+        int ProductChoiceId,
+        int ProductId,
+        double OptionPrice,
+        bool Visible
     );
 }

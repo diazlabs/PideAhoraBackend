@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Application.Common.Persistence.Migrations
+namespace Application.Application.Common.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -245,6 +245,7 @@ namespace Application.Common.Persistence.Migrations
                     tenant_id = table.Column<Guid>(type: "uuid", nullable: false),
                     product_name = table.Column<string>(type: "text", nullable: false),
                     product_description = table.Column<string>(type: "text", nullable: true),
+                    product_type = table.Column<string>(type: "text", nullable: false),
                     image = table.Column<string>(type: "text", nullable: true),
                     product_price = table.Column<double>(type: "double precision", nullable: false),
                     visible = table.Column<bool>(type: "boolean", nullable: false),
@@ -275,7 +276,9 @@ namespace Application.Common.Persistence.Migrations
                     tenant_id = table.Column<Guid>(type: "uuid", nullable: false),
                     config_name = table.Column<string>(type: "text", nullable: false),
                     config_value = table.Column<string>(type: "text", nullable: false),
+                    config_type = table.Column<string>(type: "text", nullable: false),
                     enabled = table.Column<bool>(type: "boolean", nullable: false),
+                    visible = table.Column<bool>(type: "boolean", nullable: false),
                     creator = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     modifier = table.Column<Guid>(type: "uuid", nullable: true),
@@ -298,6 +301,7 @@ namespace Application.Common.Persistence.Migrations
                 {
                     tenant_template_id = table.Column<Guid>(type: "uuid", nullable: false),
                     tenant_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
                     header = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     logo = table.Column<string>(type: "text", nullable: false),
@@ -426,11 +430,10 @@ namespace Application.Common.Persistence.Migrations
                 {
                     choice_option_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    choice_id = table.Column<int>(type: "integer", nullable: false),
+                    product_choice_id = table.Column<int>(type: "integer", nullable: false),
                     product_id = table.Column<int>(type: "integer", nullable: false),
                     option_price = table.Column<double>(type: "double precision", nullable: false),
-                    visible = table.Column<bool>(type: "boolean", nullable: false),
-                    product_choice_id = table.Column<int>(type: "integer", nullable: false)
+                    visible = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -521,7 +524,6 @@ namespace Application.Common.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_section_products", x => x.section_product_id);
-                    table.UniqueConstraint("ak_section_products_order_product_id", x => new { x.order, x.product_id });
                     table.ForeignKey(
                         name: "fk_section_products_products_product_id",
                         column: x => x.product_id,
@@ -642,9 +644,16 @@ namespace Application.Common.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_section_configs_template_section_id",
+                name: "ix_section_configs_template_section_id_section_config_name",
                 table: "section_configs",
-                column: "template_section_id");
+                columns: new[] { "template_section_id", "section_config_name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_section_products_order_product_id",
+                table: "section_products",
+                columns: new[] { "order", "product_id" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_section_products_product_id",
@@ -662,14 +671,21 @@ namespace Application.Common.Persistence.Migrations
                 column: "tenant_template_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_tenant_configs_tenant_id",
+                name: "ix_tenant_configs_tenant_id_config_name",
                 table: "tenant_configs",
-                column: "tenant_id");
+                columns: new[] { "tenant_id", "config_name" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_tenant_templates_tenant_id",
                 table: "tenant_templates",
                 column: "tenant_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_tenants_path",
+                table: "tenants",
+                column: "path",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_tenants_user_id",

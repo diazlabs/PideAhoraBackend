@@ -55,7 +55,16 @@ namespace Application.Common.Persistence
                 .ToTable("user_tokens");
 
             builder.Entity<SectionProduct>()
-                .HasAlternateKey(x => new { x.Order, x.ProductId });
+                .HasIndex(x => new { x.Order, x.ProductId }).IsUnique();
+
+            builder.Entity<Tenant>()
+                .HasIndex(x => x.Path).IsUnique();
+
+            builder.Entity<TenantConfig>()
+                .HasIndex(x => new { x.TenantId, x.ConfigName }).IsUnique();
+
+            builder.Entity<SectionConfig>()
+                .HasIndex(x => new { x.TemplateSectionId, x.SectionConfigName }).IsUnique();
         }
     }
 }

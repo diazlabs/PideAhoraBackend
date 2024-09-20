@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Application.Common.Persistence.Migrations
+namespace Application.Application.Common.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240918232249_AddProductType")]
-    partial class AddProductType
+    [Migration("20240919181720_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,10 +33,6 @@ namespace Application.Common.Persistence.Migrations
                         .HasColumnName("choice_option_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ChoiceOptionId"));
-
-                    b.Property<int>("ChoiceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("choice_id");
 
                     b.Property<double>("OptionPrice")
                         .HasColumnType("double precision")
@@ -511,8 +507,9 @@ namespace Application.Common.Persistence.Migrations
                     b.HasKey("SectionConfigId")
                         .HasName("pk_section_configs");
 
-                    b.HasIndex("TemplateSectionId")
-                        .HasDatabaseName("ix_section_configs_template_section_id");
+                    b.HasIndex("TemplateSectionId", "SectionConfigName")
+                        .IsUnique()
+                        .HasDatabaseName("ix_section_configs_template_section_id_section_config_name");
 
                     b.ToTable("section_configs", (string)null);
                 });
@@ -541,14 +538,15 @@ namespace Application.Common.Persistence.Migrations
                     b.HasKey("SectionProductId")
                         .HasName("pk_section_products");
 
-                    b.HasAlternateKey("Order", "ProductId")
-                        .HasName("ak_section_products_order_product_id");
-
                     b.HasIndex("ProductId")
                         .HasDatabaseName("ix_section_products_product_id");
 
                     b.HasIndex("TemplateSectionId")
                         .HasDatabaseName("ix_section_products_template_section_id");
+
+                    b.HasIndex("Order", "ProductId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_section_products_order_product_id");
 
                     b.ToTable("section_products", (string)null);
                 });
@@ -699,6 +697,10 @@ namespace Application.Common.Persistence.Migrations
                     b.HasKey("TenantId")
                         .HasName("pk_tenants");
 
+                    b.HasIndex("Path")
+                        .IsUnique()
+                        .HasDatabaseName("ix_tenants_path");
+
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_tenants_user_id");
 
@@ -758,8 +760,9 @@ namespace Application.Common.Persistence.Migrations
                     b.HasKey("TenantConfigId")
                         .HasName("pk_tenant_configs");
 
-                    b.HasIndex("TenantId")
-                        .HasDatabaseName("ix_tenant_configs_tenant_id");
+                    b.HasIndex("TenantId", "ConfigName")
+                        .IsUnique()
+                        .HasDatabaseName("ix_tenant_configs_tenant_id_config_name");
 
                     b.ToTable("tenant_configs", (string)null);
                 });

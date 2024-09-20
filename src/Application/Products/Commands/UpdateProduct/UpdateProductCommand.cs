@@ -13,7 +13,6 @@ namespace Application.Products.Commands.UpdateProduct
         public string ProductName { get; set; } = default!;
         public string? ProductDescription { get; set; }
         public IFormFile? Image { get; set; }
-        public string ProductType { get; set; } = default!;
         public double ProductPrice { get; set; }
         public bool Visible { get; set; }
         public List<ChoicesDto>? Choices { get; set; }
@@ -33,6 +32,7 @@ namespace Application.Products.Commands.UpdateProduct
     {
         public int ChoiceOptionId { get; set; }
         public double OptionPrice { get; set; }
+        public int ProductId { get; set; }
         public bool Visible { get; set; }
     }
 
@@ -47,7 +47,6 @@ namespace Application.Products.Commands.UpdateProduct
             RuleFor(x => x.ProductName).ValidateRequiredProperty("el nombre del producto");
             RuleFor(x => x.Visible).NotNull();
             RuleFor(x => x.Image).ValidateImage();
-            RuleFor(x => x.ProductType).ValidateProductType();
 
             RuleForEach(x => x.Choices).SetValidator(new ChoiceValidator());
         }

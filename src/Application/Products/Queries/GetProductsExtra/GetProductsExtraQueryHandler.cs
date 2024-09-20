@@ -17,7 +17,7 @@ namespace Application.Products.Queries.GetProductsExtra
         public async Task<IEnumerable<GetProductsExtraResponse>> Handle(GetProductsExtraQuery request, CancellationToken cancellationToken)
         {
             var products = await _context.Products
-                .Where(x => x.TenantId == request.TenantId && x.ProductType == ProductType.Extra.Type)
+                .Where(x => x.TenantId == request.TenantId && x.ProductType == ProductType.Extra.Type && !x.Deleted)
                 .Select(x => new GetProductsExtraResponse(
                     x.ProductId,
                     x.TenantId,

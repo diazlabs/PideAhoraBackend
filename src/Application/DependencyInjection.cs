@@ -37,7 +37,23 @@ namespace Application
                 .UseNpgsql(configuration.GetConnectionString("Database"))
                 .UseSnakeCaseNamingConvention());
 
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<User, Role>(opts =>
+            {
+                opts.Password.RequiredLength = 8;
+                opts.Password.RequireNonAlphanumeric = true;
+                opts.Password.RequireDigit = true;
+                opts.Password.RequireLowercase = true;
+                opts.Password.RequireUppercase = true;
+
+                opts.User.RequireUniqueEmail = true;
+
+                opts.SignIn.RequireConfirmedPhoneNumber = true;
+                opts.SignIn.RequireConfirmedEmail = true;
+
+                opts.Lockout.MaxFailedAccessAttempts = 5;
+                opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                opts.Lockout.AllowedForNewUsers = true;
+            })
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddSignInManager<SignInManager<User>>()
                 .AddDefaultTokenProviders();

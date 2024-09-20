@@ -5,6 +5,7 @@ using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Application.Products.Commands.UpdateProduct
 {
@@ -38,7 +39,13 @@ namespace Application.Products.Commands.UpdateProduct
                 product.Image = await _imageService.UploadImageAsync(request.Image, product.ProductId.ToString());
             }
 
-            _logger.LogInformation("Updating product {@product} with request {@request}", product, request);
+            string productString = JsonConvert.SerializeObject(product, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                PreserveReferencesHandling = PreserveReferencesHandling.None
+            });
+
+            _logger.LogInformation("Updating product {@product} with request {@request}", productString, request);
 
             product.UpdatedAt = DateTime.UtcNow;
             product.Modifier = _currentUserProvider.GetUserId();
@@ -46,7 +53,6 @@ namespace Application.Products.Commands.UpdateProduct
             product.ProductDescription = request.ProductDescription;
             product.ProductName = request.ProductName;
             product.Visible = request.Visible;
-            product.ProductType = request.ProductType;
 
             product.ProductChoices = [];
 
@@ -65,8 +71,8 @@ namespace Application.Products.Commands.UpdateProduct
                         ChoiceOptions = choice.Options.Select(o => new ChoiceOption
                         {
                             Visible = o.Visible,
-                            ChoiceId = choice.ProductChoiceId,
-                            ProductId = product.ProductId,
+                            ProductChoiceId = choice.ProductChoiceId,
+                            ProductId = o.ProductId,
                             ChoiceOptionId = o.ChoiceOptionId,
                             OptionPrice = o.OptionPrice,
                         }).ToList()
@@ -79,7 +85,7 @@ namespace Application.Products.Commands.UpdateProduct
             int rows = await _context.SaveChangesAsync(cancellationToken);
             if (rows > 0)
             {
-                _logger.LogInformation("Update product succeed {@product}", product);
+                _logger.LogInformation("Update product succeed {productId}", product.ProductId);
 
                 return new UpdateProductResponse();
             }

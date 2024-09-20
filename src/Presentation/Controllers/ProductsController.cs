@@ -26,7 +26,6 @@ namespace Presentation.Controllers
             if (choices.Value.Count > 0)
             {
                 var value = choices.Value.ToString();
-                value = value.Substring(0, value.Length - 1);
                 command.Choices = JsonConvert.DeserializeObject<List<ChoicesDto>>(value);
             }   
             
@@ -40,6 +39,15 @@ namespace Presentation.Controllers
         {
             command.TenantId = tenantId;
             command.ProductId = productId;
+
+            var choices = Request.Form.FirstOrDefault(x => x.Key == "choices");
+
+            if (choices.Value.Count > 0)
+            {
+                var value = choices.Value.ToString();
+                command.Choices = JsonConvert.DeserializeObject<List<Application.Products.Commands.UpdateProduct.ChoicesDto>>(value);
+            }
+
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);

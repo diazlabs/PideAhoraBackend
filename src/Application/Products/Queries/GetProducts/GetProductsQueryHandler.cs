@@ -14,7 +14,7 @@ namespace Application.Products.Queries.GetProducts
         public async Task<List<GetProductsResponse>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
         {
             var products = await _context.Products
-                .Where(x => x.TenantId == request.TenantId)
+                .Where(x => x.TenantId == request.TenantId && !x.Deleted)
                 .Select(x => new GetProductsResponse(
                     x.ProductId,
                     x.TenantId,

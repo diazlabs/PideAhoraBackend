@@ -21,8 +21,8 @@ namespace Application.Common.Services
             if (includeChoices)
             {
                 productQuery = productQuery
-                    .Include(x => x.ProductChoices.Where(p => x.Visible))
-                    .ThenInclude(x => x.ChoiceOptions.Where(c => c.Visible));
+                    .Include(x => x.ProductChoices)
+                    .ThenInclude(x => x.ChoiceOptions);
             }
 
             Product? product = await productQuery.FirstOrDefaultAsync(cancellationToken);

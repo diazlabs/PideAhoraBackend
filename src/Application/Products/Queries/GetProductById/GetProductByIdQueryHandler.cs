@@ -31,7 +31,22 @@ namespace Application.Products.Queries.GetProductById
                 product.ProductPrice,
                 product.Visible,
                 product.CreatedAt,
-                product.UpdatedAt
+                product.UpdatedAt,
+                product.ProductChoices.Select(x => new ProductChoiceDto(
+                    x.ProductChoiceId,
+                    x.ProductId,
+                    x.Choice,
+                    x.Quantity,
+                    x.Required,
+                    x.Visible,
+                    x.ChoiceOptions.Select(y => new ProductChoiceOptionsDto(
+                        y.ChoiceOptionId,
+                        y.ProductChoiceId,
+                        y.ProductId,
+                        y.OptionPrice,
+                        y.Visible
+                    ))
+                ))
             );
         }
     }
