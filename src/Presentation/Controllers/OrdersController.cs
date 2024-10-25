@@ -1,5 +1,6 @@
 ﻿using Application.Orders.Commands.CreateOrder;
 using Application.Orders.Queries.GetOrdersByTenantId;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,13 @@ namespace Presentation.Controllers
         {
             var orders = await _mediator.Send(new GetOrdersByTenantIdQuery { TenantId = tenantId });
 
-            return Ok(orders);
+            var response = new Response<IEnumerable<GetOrdersByTenantIdResponse>>
+            {
+                Ok = true,
+                Data = orders
+            };
+
+            return Ok(response);
         }
     }
 }

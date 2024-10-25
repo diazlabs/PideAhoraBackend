@@ -23,13 +23,12 @@ namespace Application.Products.Commands.CreateProduct
         }
         public async Task<Result<CreateProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            Guid productId = Guid.NewGuid();
-
             string? imageId = null;
 
             if(request.Image != null)
             {
-                imageId = await _imageService.UploadImageAsync(request.Image, productId.ToString());
+                imageId = Guid.NewGuid().ToString();
+                await _imageService.UploadImageAsync(request.Image, imageId);
             }
             
             Product product = new()

@@ -36,7 +36,9 @@ namespace Application.Products.Commands.UpdateProduct
 
             if (request.Image != null)
             {
-                product.Image = await _imageService.UploadImageAsync(request.Image, product.ProductId.ToString());
+                string newImageId = Guid.NewGuid().ToString();
+                product.Image = newImageId;
+                await _imageService.UploadImageAsync(request.Image, product.Image);
             }
 
             string productString = JsonConvert.SerializeObject(product, new JsonSerializerSettings

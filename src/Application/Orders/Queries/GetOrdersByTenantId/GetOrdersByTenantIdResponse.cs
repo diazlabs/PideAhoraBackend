@@ -6,6 +6,7 @@
          string? Name,
          string? PhoneNumber,
          string? Email,
+         DateTime CreatedAt,
          Guid? UserId,
          string? OrderNotes,
          string DeliveryType,

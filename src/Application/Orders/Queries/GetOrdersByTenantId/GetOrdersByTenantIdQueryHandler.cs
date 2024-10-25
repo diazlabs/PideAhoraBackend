@@ -27,6 +27,7 @@ namespace Application.Orders.Queries.GetOrdersByTenantId
                     o.Name,
                     o.PhoneNumber,
                     o.Email,
+                    o.CreatedAt,
                     o.UserId,
                     o.OrderNotes,
                     o.DeliveryType,
