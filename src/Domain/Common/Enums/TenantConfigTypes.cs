@@ -4,9 +4,9 @@
     {
         public string Type { get; set; }
         public string Label { get; set; }
-        public static TenantConfigTypes Theming = new("Theming", "Theming");
-        public static TenantConfigTypes PaymentProcess = new("PaymentProcess", "Proceso de pago");
-        public static IEnumerable<TenantConfigTypes> All = [Theming, PaymentProcess];
+        public readonly static TenantConfigTypes Theming = new("Theming", "Theming");
+        public readonly static TenantConfigTypes PaymentProcess = new("PaymentProcess", "Proceso de pago");
+        public readonly static IEnumerable<TenantConfigTypes> All = [Theming, PaymentProcess];
         public TenantConfigTypes(string type, string label)
         {
             Type = type;

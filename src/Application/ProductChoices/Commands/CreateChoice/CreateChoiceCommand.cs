@@ -12,7 +12,6 @@ namespace Application.ProductChoices.Commands.CreateChoice
         public string Choice { get; set; } = default!;
         public int Quantity { get; set; }
         public bool Required { get; set; }
-        public Guid Creator { get; set; }
     }
 
     public class CreateChoiceValidator : AbstractValidator<CreateChoiceCommand>
@@ -22,7 +21,6 @@ namespace Application.ProductChoices.Commands.CreateChoice
             RuleFor(x => x.ProductId).GreaterThan(0).WithMessage("No es un producto válido");
             RuleFor(x => x.Choice).ValidateRequiredProperty("el texto de la elección");
             RuleFor(x => x.Quantity).GreaterThan(0).WithMessage("la cantidad minima es 1");
-            RuleFor(x => x.Creator).RequireGuid();
             RuleFor(x => x.TenantId).RequireGuid();
         }
     }

@@ -31,6 +31,13 @@ namespace Application.TenantConfigs.Commands.UpdateTenantConfigs
                 return Result<UpdateTenantConfigsResponse>.NotFound();
             }
 
+            _logger.LogInformation(
+                "Updating tenantConfigs {tenantId}, original {@originalConfigs}",
+                request.TenantId,
+                configs
+            );
+
+
             foreach (var config in request.Configs)
             {
                 var configToUpdate = configs.FirstOrDefault(x => x.TenantConfigId == config.Configid);
@@ -47,9 +54,8 @@ namespace Application.TenantConfigs.Commands.UpdateTenantConfigs
             }
 
             _logger.LogInformation(
-                "Updating tenantConfigs {tenantId}, original {@originalConfigs}, new {@newConfigs}",
+                "Updated tenantConfigs {tenantId}, with new {@newConfigs}",
                 request.TenantId,
-                configs,
                 request.Configs
             );
 

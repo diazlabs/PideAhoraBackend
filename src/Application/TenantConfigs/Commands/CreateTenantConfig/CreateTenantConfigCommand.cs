@@ -13,7 +13,6 @@ namespace Application.TenantConfigs.Commands.CreateTenantConfig
         public string ConfigType { get; set; } = default!;
         public bool Enabled { get; set; }
         public bool Visible { get; set; }
-        public Guid Creator { get; set; }
     }
 
     public class CreateTenantConfigValidator : AbstractValidator<CreateTenantConfigCommand>
@@ -22,7 +21,6 @@ namespace Application.TenantConfigs.Commands.CreateTenantConfig
         {
             RuleFor(x => x.ConfigValue).ValidateRequiredProperty("el valor de la configuración");
             RuleFor(x => x.ConfigName).ValidateRequiredProperty("el nombre de la configuración");
-            RuleFor(x => x.Creator).RequireGuid();
             RuleFor(x => x.TenantId).RequireGuid();
             RuleFor(x => x.ConfigType).ValidateTenantConfigType();
         }

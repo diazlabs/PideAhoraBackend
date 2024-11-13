@@ -73,7 +73,8 @@ namespace Presentation.Controllers
             return Ok(response);
         }
 
-        [HttpGet("types")]
+        [Route("/api/tenant-configuration/types")]
+        [HttpGet]
         public ActionResult GetConfigTypes()
         {
             var response = new Response<IEnumerable<TenantConfigTypes>>();

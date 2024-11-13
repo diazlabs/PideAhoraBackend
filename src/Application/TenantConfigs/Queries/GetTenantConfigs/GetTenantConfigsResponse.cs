@@ -1,8 +1,11 @@
 ﻿namespace Application.TenantConfigs.Queries.GeTenantConfigs
 {
     public record GetTenantConfigsResponse(
-        string Name,
-        string Value,
+        Guid TenantId,
+        Guid TenantConfigId,
+        string ConfigName,
+        string ConfigValue,
+        string ConfigType,
         bool Enabled
     );
 }

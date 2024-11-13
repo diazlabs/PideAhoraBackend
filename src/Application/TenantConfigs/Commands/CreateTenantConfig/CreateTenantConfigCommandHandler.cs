@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Persistence;
+using Application.Common.Security;
 using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
@@ -11,10 +12,12 @@ namespace Application.TenantConfigs.Commands.CreateTenantConfig
     {
         private readonly ITenantConfigService _tenantConfigService;
         private readonly ApplicationContext _context;
-        public CreateTenantConfigCommandHandler(ITenantConfigService tenantConfigService, ApplicationContext context)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public CreateTenantConfigCommandHandler(ITenantConfigService tenantConfigService, ApplicationContext context, ICurrentUserProvider currentUserProvider)
         {
             _tenantConfigService = tenantConfigService;
             _context = context;
+            _currentUserProvider = currentUserProvider;
         }
         public async Task<Result<CreateTenantConfigResponse>> Handle(CreateTenantConfigCommand request, CancellationToken cancellationToken)
         {
@@ -30,12 +33,12 @@ namespace Application.TenantConfigs.Commands.CreateTenantConfig
                 ConfigName = request.ConfigName,
                 ConfigValue = request.ConfigValue,
                 CreatedAt = DateTime.UtcNow,
-                Creator = request.Creator,
+                Creator = _currentUserProvider.GetUserId(),
                 Enabled = request.Enabled,
                 Visible = request.Visible,
                 TenantId = request.TenantId,
                 TenantConfigId = Guid.NewGuid(),
-                ConfigType = request.ConfigType
+                ConfigType = request.ConfigType,
             };
 
             var result = await _tenantConfigService.Create(newConfig);
