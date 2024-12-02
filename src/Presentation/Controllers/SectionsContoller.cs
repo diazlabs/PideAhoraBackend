@@ -1,5 +1,4 @@
-﻿using Application.TemplateSections.Commands.CreateSection;
-using Application.TemplateSections.Commands.DeleteSection;
+﻿using Application.TemplateSections.Commands.DeleteSection;
 using Application.TemplateSections.Commands.UpdateSection;
 using Application.TemplateSections.Queries.GetTemplateSections;
 using Domain.Common;
@@ -9,18 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers
 {
     [Route("api/[controller]/{tenantId:guid}")]
-    public class SectionsController(ISender _mediator) : ApiController
+    public class SectionsAdminController(ISender _mediator) : ApiController
     {
-        [HttpPost]
-        public async Task<ActionResult> Create(Guid tenantId, CreateSectionCommand command)
-        {
-            command.TenantId = tenantId;
-
-            var result = await _mediator.Send(command);
-
-            return ToActionResult(result);
-        }
-
         [HttpPut("{templateSectionId:int}")]
         public async Task<ActionResult> Update(Guid tenantId, int templateSectionId, UpdateSectionCommand command)
         {
@@ -50,7 +39,7 @@ namespace Presentation.Controllers
         public async Task<ActionResult> GetTemplateSections(Guid tenantId, Guid TenantTemplateId)
         {
             var command = new GetTemplateSectionsQuery();
-           
+
             command.TenantId = tenantId;
             command.TenantTemplateId = TenantTemplateId;
 

@@ -20,7 +20,13 @@ namespace Application.TenantTemplates.Queries.GetTemplateById
                 return Result.NotFound();
             }
 
-            return new GetTemplateByIdResponse();
-        }
+            return new GetTemplateByIdResponse(
+                template.TenantId,
+                template.TenantTemplateId,
+                template.Name,
+                template.Header,
+                template.Description,
+                template.Logo
+            );        }
     }
 }

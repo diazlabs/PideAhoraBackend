@@ -14,7 +14,14 @@ namespace Application.TenantTemplates.Queries.GetTemplates
         {
             var templates = await _tenantTemplateService.GetTenantTemplatesByTenantId(request.TenantId);
 
-            return templates.Select(x => new GetTemplatesResponse()).ToList();
+            return templates.Select(x => new GetTemplatesResponse(
+                x.TenantId,
+                x.TenantTemplateId,
+                x.Name,
+                x.Header,
+                x.Description,
+                x.Logo
+            )).ToList();
         }
     }
 }

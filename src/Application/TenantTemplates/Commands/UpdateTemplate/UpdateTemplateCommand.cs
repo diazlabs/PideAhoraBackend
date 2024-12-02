@@ -2,6 +2,7 @@
 using Ardalis.Result;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.TenantTemplates.Commands.UpdateTemplate
 {
@@ -12,7 +13,7 @@ namespace Application.TenantTemplates.Commands.UpdateTemplate
         public string Header { get; set; } = default!;
         public string Name { get; set; } = default!;
         public string Description { get; set; } = default!;
-        public string Logo { get; set; } = default!;
+        public IFormFile? Logo { get; set; }
     }
 
     public class UpdateTemplateValidator : AbstractValidator<UpdateTemplateCommand>
@@ -24,7 +25,7 @@ namespace Application.TenantTemplates.Commands.UpdateTemplate
             RuleFor(x => x.Header).ValidateRequiredProperty("el titulo del template");
             RuleFor(x => x.Name).ValidateRequiredProperty("el nombre del template");
             RuleFor(x => x.Description).ValidateRequiredProperty("la descripción del template");
-            RuleFor(x => x.Logo).ValidateRequiredProperty("el logo");
+            RuleFor(x => x.Logo).ValidateImage();
         }
     }
 }

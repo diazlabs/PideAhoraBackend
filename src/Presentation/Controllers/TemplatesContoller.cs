@@ -3,12 +3,13 @@ using Application.TenantTemplates.Commands.DeleteTemplate;
 using Application.TenantTemplates.Commands.UpdateTemplate;
 using Application.TenantTemplates.Queries.GetTemplateById;
 using Application.TenantTemplates.Queries.GetTemplates;
+using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
-    [Route("api/admin/[controller]/{tenantId:guid}")]
+    [Route("api/[controller]/{tenantId:guid}")]
     public class TemplatesController(ISender _mediator) : ApiController
     {
         [HttpPost]
@@ -20,31 +21,31 @@ namespace Presentation.Controllers
             return ToActionResult(result);
         }
 
-        [HttpPut("{TenantTemplateId:guid}")]
-        public async Task<ActionResult> Update(Guid tenantId, Guid TenantTemplateId, UpdateTemplateCommand command)
+        [HttpPut("{tenantTemplateId:guid}")]
+        public async Task<ActionResult> Update(Guid tenantId, Guid tenantTemplateId, UpdateTemplateCommand command)
         {
             command.TenantId = tenantId;
-            command.TenantTemplateId = TenantTemplateId;
+            command.TenantTemplateId = tenantTemplateId;
 
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> Delete(Guid tenantId, Guid TenantTemplateId)
+        [HttpDelete("{tenantTemplateId:guid}")]
+        public async Task<ActionResult> Delete(Guid tenantId, Guid tenantTemplateId)
         {
-            var command = new DeleteTemplateCommand(tenantId, TenantTemplateId);
+            var command = new DeleteTemplateCommand(tenantId, tenantTemplateId);
 
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);
         }
 
-        [HttpGet("{TenantTemplateId:int}")]
-        public async Task<ActionResult> GetTemplateById(Guid tenantId, Guid TenantTemplateId)
+        [HttpGet("{tenantTemplateId:guid}")]
+        public async Task<ActionResult> GetTemplateById(Guid tenantId, Guid tenantTemplateId)
         {
-            var command = new GetTemplateByIdQuery(TenantTemplateId, tenantId);
+            var command = new GetTemplateByIdQuery(tenantTemplateId, tenantId);
 
             var result = await _mediator.Send(command);
 
@@ -58,7 +59,13 @@ namespace Presentation.Controllers
 
             var templates = await _mediator.Send(command);
 
-            return Ok(templates);
+            var response = new Response<IEnumerable<GetTemplatesResponse>>()
+            {
+                Ok = true,
+                Data = templates,
+            };
+
+            return Ok(response);
         }
     }
 }

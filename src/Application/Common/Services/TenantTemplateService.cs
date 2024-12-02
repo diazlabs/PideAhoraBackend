@@ -59,7 +59,7 @@ namespace Application.Common.Services
         public async Task<List<TenantTemplate>> GetTenantTemplatesByTenantId(Guid tenantId)
         {
             var templates = await _context.TenantTemplates
-                .Where(x => x.TenantId == tenantId)
+                .Where(x => x.TenantId == tenantId && !x.Deleted)
                 .AsNoTracking()
                 .ToListAsync();
 
