@@ -20,23 +20,24 @@ namespace Application.TenantTemplates.Commands.UpdateTemplate
 
         public async Task<Result<UpdateTemplateResponse>> Handle(UpdateTemplateCommand request, CancellationToken cancellationToken)
         {
+            TenantTemplate? tenantTemplate = await _tenantTemplateService
+                .FindTenantTemplateById(request.TenantTemplateId, request.TenantId, cancellationToken);
+
+            if (tenantTemplate == null)
+            {
+                return Result.NotFound();
+            }
+
             if (request.Logo != null)
             {
                 var response = await _imageService.UploadImageAsync(request.Logo, request.TenantTemplateId.ToString());
             }
 
-            TenantTemplate tenantTemplate = new()
-            {
-                CreatedAt = DateTime.UtcNow,
-                Description = request.Description,
-                Logo = request.Logo != null ? request.TenantTemplateId.ToString() : request.TenantId.ToString(),
-                Header = request.Header,
-                TenantId = request.TenantId,
-                Name = request.Name,
-                Modifier = _currentUserProvider.GetUserId(),
-                TenantTemplateId = request.TenantTemplateId,
-                UpdatedAt = DateTime.UtcNow
-            };
+            tenantTemplate.UpdatedAt = DateTime.UtcNow;
+            tenantTemplate.Modifier = _currentUserProvider.GetUserId();
+            tenantTemplate.Header = request.Header;
+            tenantTemplate.Name = request.Name;
+            tenantTemplate.Description = request.Description;
 
             var result = await _tenantTemplateService.Update(tenantTemplate);
             if (result.IsSuccess)

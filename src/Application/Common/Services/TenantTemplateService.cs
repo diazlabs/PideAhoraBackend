@@ -70,12 +70,10 @@ namespace Application.Common.Services
         {
             TenantTemplate? entityToUpdate = await FindTenantTemplateById(tenantTemplate.TenantTemplateId, tenantTemplate.TenantId);
             if (entityToUpdate == null)
-            {
                 return Result.NotFound();
-            }
 
             entityToUpdate = tenantTemplate;
-            _context.TenantTemplates.Update(entityToUpdate);
+            _context.TenantTemplates.Update(tenantTemplate);
 
             int rows = await _context.SaveChangesAsync();
             if (rows > 0)
