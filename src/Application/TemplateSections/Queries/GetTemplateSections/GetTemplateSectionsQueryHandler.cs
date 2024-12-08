@@ -18,7 +18,9 @@ namespace Application.TemplateSections.Queries.GetTemplateSections
                 .Select(x => new GetTemplateSectionsResponse(
                     x.SectionVariantId,
                     x.Order,
-                    x.Visible
+                    x.Visible,
+                    x.SectionName,
+                    x.SectionDescription
                 )).ToListAsync();
 
             return templateSections;

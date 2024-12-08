@@ -7,6 +7,8 @@ namespace Domain.Entities
         public int TemplateSectionId { get; set; }
         public Guid TenantTemplateId { get; set; }
         public int SectionVariantId { get; set; }
+        public string SectionName { get; set; } = default!;
+        public string SectionDescription { get; set; } = default!;
         public int Order {  get; set; }
         public bool Visible { get; set; }
         public bool Deleted { get; set; }

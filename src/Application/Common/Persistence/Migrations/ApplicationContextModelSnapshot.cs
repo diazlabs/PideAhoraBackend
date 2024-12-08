@@ -3,24 +3,21 @@ using System;
 using Application.Common.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Application.Application.Common.Persistence.Migrations
+namespace Application.Common.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240919181720_Initial")]
-    partial class Initial
+    partial class ApplicationContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -544,9 +541,9 @@ namespace Application.Application.Common.Persistence.Migrations
                     b.HasIndex("TemplateSectionId")
                         .HasDatabaseName("ix_section_products_template_section_id");
 
-                    b.HasIndex("Order", "ProductId")
+                    b.HasIndex("Order", "ProductId", "TemplateSectionId")
                         .IsUnique()
-                        .HasDatabaseName("ix_section_products_order_product_id");
+                        .HasDatabaseName("ix_section_products_order_product_id_template_section_id");
 
                     b.ToTable("section_products", (string)null);
                 });
@@ -587,6 +584,16 @@ namespace Application.Application.Common.Persistence.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("integer")
                         .HasColumnName("order");
+
+                    b.Property<string>("SectionDescription")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("section_description");
+
+                    b.Property<string>("SectionName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("section_name");
 
                     b.Property<int>("SectionVariantId")
                         .HasColumnType("integer")

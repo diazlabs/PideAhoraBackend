@@ -15,7 +15,7 @@ namespace Application.Products.Commands.UpdateProduct
         public IFormFile? Image { get; set; }
         public double ProductPrice { get; set; }
         public bool Visible { get; set; }
-        public List<ChoicesDto>? Choices { get; set; }
+        public List<ChoicesDto> Choices { get; set; } = [];
     }
 
     public class ChoicesDto
@@ -25,7 +25,7 @@ namespace Application.Products.Commands.UpdateProduct
         public int Quantity { get; set; }
         public bool Required { get; set; }
         public bool Visible { get; set; }
-        public List<ChoiceOptionDto> Options { get; set; } = default!;
+        public List<ChoiceOptionDto> Options { get; set; } = [];
     }
 
     public class ChoiceOptionDto

@@ -5,6 +5,8 @@ using Ardalis.Result;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Application.TemplateSections.Commands.UpdateSection
 {
@@ -13,11 +15,13 @@ namespace Application.TemplateSections.Commands.UpdateSection
         private readonly ApplicationContext _context;
         private readonly ITenantTemplateService _tenantTemplateService;
         private readonly ICurrentUserProvider _currentUserProvider;
-        public UpdateSectionCommandHandler(ApplicationContext context, ITenantTemplateService tenantTemplateService, ICurrentUserProvider currentUserProvider)
+        private readonly ILogger<UpdateSectionCommandHandler> _logger;
+        public UpdateSectionCommandHandler(ApplicationContext context, ITenantTemplateService tenantTemplateService, ICurrentUserProvider currentUserProvider, ILogger<UpdateSectionCommandHandler> logger)
         {
             _context = context;
             _tenantTemplateService = tenantTemplateService;
             _currentUserProvider = currentUserProvider;
+            _logger = logger;
         }
         public async Task<Result<UpdateSectionResponse>> Handle(UpdateSectionCommand request, CancellationToken cancellationToken)
         {
@@ -28,6 +32,8 @@ namespace Application.TemplateSections.Commands.UpdateSection
             }
 
             var section = await _context.TemplateSections
+                .Include(x => x.SectionProducts)
+                .Include(x => x.SectionConfigs)
                 .Where(x => x.TemplateSectionId == request.TemplateSectionId && x.TenantTemplateId == request.TenantTemplateId)
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -36,9 +42,26 @@ namespace Application.TemplateSections.Commands.UpdateSection
                 return Result.NotFound();
             }
 
+            string sectionString = JsonConvert.SerializeObject(section, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                PreserveReferencesHandling = PreserveReferencesHandling.None
+            });
+
+            _logger.LogInformation(
+                "Updating section {tenantId}, {tenantTemplateId}, {templateSectionId}, original {@originalConfigs} and new values {@request}",
+                request.TenantId,
+                request.TenantTemplateId,
+                request.TemplateSectionId,
+                sectionString,
+                request
+            );
+
             section.Visible = request.Visible;
             section.Modifier = _currentUserProvider.GetUserId();
             section.UpdatedAt = DateTime.UtcNow;
+            section.SectionName = request.SectionName;
+            section.SectionDescription = request.SectionDescription ?? section.SectionDescription;
             section.SectionProducts = request.Products.Select(x => new SectionProduct
             {
                 ProductId = x.ProductId,
@@ -46,6 +69,21 @@ namespace Application.TemplateSections.Commands.UpdateSection
                 Order = x.Order,
                 TemplateSectionId = section.TemplateSectionId,
             }).ToList();
+
+            foreach (var config in request.Configs)
+            {
+                var configToUpdate = section.SectionConfigs.FirstOrDefault(x => x.SectionConfigId == config.SectionConfigId);
+
+                if (configToUpdate == null)
+                {
+                    continue;
+                }
+
+                configToUpdate.SectionConfigName = config.ConfigName;
+                configToUpdate.SectionConfigValue = config.ConfigValue;
+                configToUpdate.Modifier = _currentUserProvider.GetUserId();
+                configToUpdate.UpdatedAt = DateTime.UtcNow;
+            }
 
             int rows = await _context.SaveChangesAsync(cancellationToken);
             if (rows > 0)

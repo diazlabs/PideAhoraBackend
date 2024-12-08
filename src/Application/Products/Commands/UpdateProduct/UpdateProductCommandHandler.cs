@@ -27,7 +27,9 @@ namespace Application.Products.Commands.UpdateProduct
         }
         public async Task<Result<UpdateProductResponse>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            Product? product = await _productService.FindProductById(request.ProductId, request.TenantId, cancellationToken, true);
+            bool includeChoices = true;
+            Product? product = await _productService
+                .FindProductById(request.ProductId, request.TenantId, cancellationToken, includeChoices);
 
             if (product == null)
             {
@@ -58,30 +60,25 @@ namespace Application.Products.Commands.UpdateProduct
 
             product.ProductChoices = [];
 
-            if (request.Choices?.Count > 0)
+            if (request.Choices.Count > 0)
             {
-                foreach (var choice in request.Choices)
+                product.ProductChoices = request.Choices.Select(choice => new ProductChoice
                 {
-                    ProductChoice productChoice = new()
+                    ProductChoiceId = choice.ProductChoiceId,
+                    Choice = choice.Choice,
+                    ProductId = product.ProductId,
+                    Quantity = choice.Quantity,
+                    Required = choice.Required,
+                    Visible = choice.Visible,
+                    ChoiceOptions = choice.Options.Select(o => new ChoiceOption
                     {
+                        Visible = o.Visible,
                         ProductChoiceId = choice.ProductChoiceId,
-                        Choice = choice.Choice,
-                        ProductId = product.ProductId,
-                        Quantity = choice.Quantity,
-                        Required = choice.Required,
-                        Visible = choice.Visible,
-                        ChoiceOptions = choice.Options.Select(o => new ChoiceOption
-                        {
-                            Visible = o.Visible,
-                            ProductChoiceId = choice.ProductChoiceId,
-                            ProductId = o.ProductId,
-                            ChoiceOptionId = o.ChoiceOptionId,
-                            OptionPrice = o.OptionPrice,
-                        }).ToList()
-                    };
-
-                    product.ProductChoices.Add(productChoice);
-                }
+                        ProductId = o.ProductId,
+                        ChoiceOptionId = o.ChoiceOptionId,
+                        OptionPrice = o.OptionPrice,
+                    }).ToList()
+                }).ToList();
             }
 
             int rows = await _context.SaveChangesAsync(cancellationToken);

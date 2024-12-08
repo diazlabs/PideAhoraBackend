@@ -1,5 +1,6 @@
 ﻿using Application.TemplateSections.Commands.DeleteSection;
 using Application.TemplateSections.Commands.UpdateSection;
+using Application.TemplateSections.Queries.GetTemplateSectionById;
 using Application.TemplateSections.Queries.GetTemplateSections;
 using Domain.Common;
 using MediatR;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers
 {
     [Route("api/[controller]/{tenantId:guid}")]
-    public class SectionsAdminController(ISender _mediator) : ApiController
+    public class SectionsController(ISender _mediator) : ApiController
     {
         [HttpPut("{templateSectionId:int}")]
         public async Task<ActionResult> Update(Guid tenantId, int templateSectionId, UpdateSectionCommand command)
@@ -35,13 +36,28 @@ namespace Presentation.Controllers
             return ToActionResult(result);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetTemplateSections(Guid tenantId, Guid TenantTemplateId)
+        [HttpGet("{tenantTemplateId:guid}/{sectionId:int}")]
+        public async Task<ActionResult> GetSectionById(Guid tenantId, Guid tenantTemplateId, int sectionId)
+        {
+            var command = new GetTemplateSectionByIdQuery()
+            {
+                TemplateSectionId = sectionId,
+                TenantId = tenantId,
+                TenantTemplateId = tenantTemplateId
+            };
+
+            var result = await _mediator.Send(command);
+
+            return ToActionResult(result);
+        }
+
+        [HttpGet("{tenantTemplateId:guid}")]
+        public async Task<ActionResult> GetTemplateSections(Guid tenantId, Guid tenantTemplateId)
         {
             var command = new GetTemplateSectionsQuery();
 
             command.TenantId = tenantId;
-            command.TenantTemplateId = TenantTemplateId;
+            command.TenantTemplateId = tenantTemplateId;
 
             var sections = await _mediator.Send(command);
 

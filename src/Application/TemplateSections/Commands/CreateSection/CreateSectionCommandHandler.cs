@@ -28,22 +28,30 @@ namespace Application.TemplateSections.Commands.CreateSection
                 return Result.NotFound();
             }
 
-            var sections = await _context.TemplateSections.ToListAsync();
+            var sections = await _context.TemplateSections.Where(x => x.TenantTemplateId == request.TenantTemplateId).ToListAsync();
 
             TemplateSection section = new()
             {
                 CreatedAt = DateTime.UtcNow,
                 Creator = _currentUserProvider.GetUserId(),
-                Order = sections.Any() ? sections.Max(x => x.Order) + 1 : 0,
-                SectionVariantId = request.SectionVariantId,
+                Order = sections.Any() ? sections.Max(x => x.Order) + 1 : 1,
+                SectionVariantId = 0, //created by admin
                 TenantTemplateId = request.TenantTemplateId,
+                SectionDescription = request.SectionDescription,
+                SectionName = request.SectionName,
                 Visible = request.Visible,
-                SectionConfigs = [],
                 SectionProducts = request.Products.Select(x => new SectionProduct
                 {
                     Order = x.Order,
                     ProductId = x.ProductId,
-                }).ToList()
+                }).ToList(),
+                SectionConfigs = request.Configs.Select(x => new SectionConfig
+                {
+                    CreatedAt = DateTime.UtcNow,
+                    Creator = _currentUserProvider.GetUserId(),
+                    SectionConfigName = x.ConfigName,
+                    SectionConfigValue = x.ConfigValue
+                }).ToList(),
             };
 
             _context.TemplateSections.Add(section);

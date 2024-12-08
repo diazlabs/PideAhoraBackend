@@ -9,10 +9,11 @@ namespace Application.TemplateSections.Commands.CreateSection
     {
             public Guid TenantId { get; set; }
             public Guid TenantTemplateId { get; set; }
-            public int SectionVariantId { get; set; }
-            public int Order { get; set; }
             public bool Visible { get; set; }
+            public string SectionName { get; set; } = default!;
+            public string SectionDescription { get; set; } = default!;
             public List<CreateSectionProduct> Products { get; set; } = [];
+            public List<CreateSectionConfiguration> Configs { get; set; } = [];
     }
 
     public class  CreateSectionProduct
@@ -21,15 +22,23 @@ namespace Application.TemplateSections.Commands.CreateSection
         public int Order { get; set; }
     }
 
+    public class CreateSectionConfiguration
+    {
+        public string ConfigName { get; set; } = default!;
+        public string ConfigValue { get; set; } = default!;
+    }
+
     public class CreateSectionValidator : AbstractValidator<CreateSectionCommand>
     {
         public CreateSectionValidator()
         {
-            RuleFor(x => x.SectionVariantId).GreaterThan(0).WithMessage("La variante no esta definida");
             RuleFor(x => x.TenantId).RequireGuid();
             RuleFor(x => x.TenantTemplateId).RequireGuid();
+            RuleFor(x => x.SectionName).ValidateRequiredProperty("el nombre de la seccion");
+            RuleFor(x => x.SectionDescription).ValidateRequiredProperty("la descripcion de la seccion");
 
             RuleForEach(x => x.Products).SetValidator(new SectionProductValidator());
+            RuleForEach(x => x.Configs).SetValidator(new SectionConfigValidator());
         }
     }
 
@@ -39,6 +48,15 @@ namespace Application.TemplateSections.Commands.CreateSection
         {
             RuleFor(x => x.ProductId).GreaterThan(0).WithMessage("El id del producto no es válido");
             RuleFor(x => x.Order).GreaterThanOrEqualTo(0).WithMessage("El orden no es válido");
+        }
+    }
+
+    public class SectionConfigValidator : AbstractValidator<CreateSectionConfiguration>
+    {
+        public SectionConfigValidator()
+        {
+            RuleFor(x => x.ConfigName).ValidateRequiredProperty("el nombre de la configuracion", max: 30);
+            RuleFor(x => x.ConfigValue).ValidateRequiredProperty("el valor de la configuracion", max: 100);
         }
     }
 }

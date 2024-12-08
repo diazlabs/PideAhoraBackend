@@ -3,6 +3,8 @@
     public record GetTemplateSectionsResponse(
         int SectionVariantId,
         int Order,
-        bool Visible
+        bool Visible,
+        string SectionName,
+        string SectionDescription
     );
 }

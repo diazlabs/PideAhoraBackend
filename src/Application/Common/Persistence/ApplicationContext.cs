@@ -55,7 +55,7 @@ namespace Application.Common.Persistence
                 .ToTable("user_tokens");
 
             builder.Entity<SectionProduct>()
-                .HasIndex(x => new { x.Order, x.ProductId }).IsUnique();
+                .HasIndex(x => new { x.Order, x.ProductId, x.TemplateSectionId }).IsUnique();
 
             builder.Entity<Tenant>()
                 .HasIndex(x => x.Path).IsUnique();
