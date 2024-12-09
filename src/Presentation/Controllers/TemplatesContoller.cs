@@ -1,4 +1,5 @@
-﻿using Application.TenantTemplates.Commands.CreateTemplate;
+﻿using Application.TenantTemplates.Commands.ArrangeSectionsOrder;
+using Application.TenantTemplates.Commands.CreateTemplate;
 using Application.TenantTemplates.Commands.DeleteTemplate;
 using Application.TenantTemplates.Commands.UpdateTemplate;
 using Application.TenantTemplates.Queries.GetTemplateById;
@@ -37,6 +38,14 @@ namespace Presentation.Controllers
         {
             var command = new DeleteTemplateCommand(tenantId, tenantTemplateId);
 
+            var result = await _mediator.Send(command);
+
+            return ToActionResult(result);
+        }
+
+        [HttpPut("{tenantTemplateId:Guid}/arrange-order")]
+        public async Task<ActionResult> ArrangeSectionOrder(Guid tenantId, ArrangeSectionsOrderCommand command)
+        {
             var result = await _mediator.Send(command);
 
             return ToActionResult(result);

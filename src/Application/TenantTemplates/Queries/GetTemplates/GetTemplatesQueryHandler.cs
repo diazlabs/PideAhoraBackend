@@ -20,7 +20,14 @@ namespace Application.TenantTemplates.Queries.GetTemplates
                 x.Name,
                 x.Header,
                 x.Description,
-                x.Logo
+                x.Logo,
+                x.TemplateSections.Select(x => new TemplateSectionDto(
+                    x.TenantTemplateId,
+                    x.TemplateSectionId,
+                    x.SectionName,
+                    x.SectionDescription,
+                    x.Order
+                )).OrderBy(x => x.Order)
             )).ToList();
         }
     }

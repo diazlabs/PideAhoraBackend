@@ -37,6 +37,12 @@ namespace Application.TemplateSections.Commands.CreateSection
             RuleFor(x => x.SectionName).ValidateRequiredProperty("el nombre de la seccion");
             RuleFor(x => x.SectionDescription).ValidateRequiredProperty("la descripcion de la seccion");
 
+
+            RuleFor(x => x.Products).Must(
+                x => x.GroupBy(x => x.Order)
+                .Select(x => new { Order = x.Key, Products = x })
+                .All(x => x.Products.Count() == 1)
+            );
             RuleForEach(x => x.Products).SetValidator(new SectionProductValidator());
             RuleForEach(x => x.Configs).SetValidator(new SectionConfigValidator());
         }

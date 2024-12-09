@@ -6,6 +6,15 @@
         string Name,
         string Header,
         string Description,
-        string Logo
+        string Logo,
+        IEnumerable<TemplateSectionDto> Sections
+    );
+
+    public record TemplateSectionDto(
+        Guid TenantTemplateId,
+        int TemplateSectionId,
+        string SectionName,
+        string SectionDescription,
+        int Order
     );
 }
