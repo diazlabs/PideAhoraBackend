@@ -25,6 +25,7 @@ namespace Application.TemplateSections.Queries.GetTemplateSectionById
                     x.TemplateSectionId,
                     x.SectionName,
                     x.SectionDescription,
+                    x.Visible,
                     x.SectionProducts.Select(p => new SectionProductDto(
                         p.SectionProductId,
                         p.ProductId,

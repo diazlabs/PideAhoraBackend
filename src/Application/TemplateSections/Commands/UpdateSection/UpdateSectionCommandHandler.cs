@@ -79,7 +79,6 @@ namespace Application.TemplateSections.Commands.UpdateSection
                     continue;
                 }
 
-                configToUpdate.SectionConfigName = config.ConfigName;
                 configToUpdate.SectionConfigValue = config.ConfigValue;
                 configToUpdate.Modifier = _currentUserProvider.GetUserId();
                 configToUpdate.UpdatedAt = DateTime.UtcNow;

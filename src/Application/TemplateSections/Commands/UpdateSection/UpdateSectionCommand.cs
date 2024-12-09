@@ -27,7 +27,6 @@ namespace Application.TemplateSections.Commands.UpdateSection
     public class UpdateSectionConfig
     {
         public int SectionConfigId { get; set; }
-        public string ConfigName { get; set; } = default!;
         public string ConfigValue { get; set; } = default!;
     }
 
@@ -62,7 +61,6 @@ namespace Application.TemplateSections.Commands.UpdateSection
         public UpdateSectionConfigValidator()
         {
             RuleFor(x => x.SectionConfigId).GreaterThanOrEqualTo(0).WithMessage("El id de la configuracion no es válido");
-            RuleFor(x => x.ConfigName).ValidateRequiredProperty("el nombre de la configuracion", max: 30);
             RuleFor(x => x.ConfigValue).ValidateRequiredProperty("el valor de la configuracion", max: 100);
         }
     }

@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.EntityFrameworkCore.Storage;
+
 namespace Application.TemplateSections.Queries.GetTemplateSectionById
 {
     public record GetTemplateSectionByIdResponse(
@@ -7,6 +9,7 @@ namespace Application.TemplateSections.Queries.GetTemplateSectionById
         int TemplateSectionId, 
         string SectionName, 
         string SectionDescription,
+        bool Visible,
         IEnumerable<SectionProductDto> Products,
         IEnumerable<SectionConfigurationDto> Configurations
     );

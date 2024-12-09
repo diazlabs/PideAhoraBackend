@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class SectionConfig : IAudit
+    public class SectionConfig : IAudit, ISoftDelete
     {
         public int SectionConfigId { get; set; }
         public int TemplateSectionId { get; set; }
@@ -12,6 +12,9 @@ namespace Domain.Entities
         public DateTime CreatedAt { get; set; }
         public Guid? Modifier { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public Guid? DeletedBy { get; set; }
+        public bool Deleted { get; set; }
         public TemplateSection TemplateSection { get; set; } = default!;
     }
 }
